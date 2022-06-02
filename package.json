@@ -1,0 +1,31 @@
+{
+  "name": "actorservice",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "NnsDao Backend Service",
+  "main": "./index.js",
+  "exports": {
+    "./src/*": "./src/features/*.js"
+  },
+  "files": [
+    "./src/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "neptune:NnsDao/ActorService.git"
+  },
+  "keywords": [],
+  "author": "neptune0xf",
+  "license": "MIT",
+  "devDependencies": {
+    "@tsconfig/node16": "^1.0.2",
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/node": "^17.0.38",
+    "eslint": "^8.16.0",
+    "typescript": "^4.7.2"
+  }
+}
