@@ -7,7 +7,7 @@
   "main": "./index.js",
   "exports": {
     ".": "./index.js",
-    "./src/*": "./src/features/*.js"
+    "./src/*": "./src/*.js"
   },
   "files": [
     "./src/*"
