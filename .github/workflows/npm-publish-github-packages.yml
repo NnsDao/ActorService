@@ -19,27 +19,29 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          # node-version: 16
+          node-version-file: '.nvmrc'
       - run: npm ci
       - run: npm test
       - run: npm run build --if-present
 
   publish-github:
     needs: build
-    permissions:
-      contents: read
-      packages: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          # node-version: 16
+          always-auth: true,
+          node-version-file: '.nvmrc'
           registry-url: https://npm.pkg.github.com/
       - name: Update package version
         run: |
           npm i -g zx
           zx .github/workflows/update-npm-version.mjs
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       # - run: npm ci
       # - run: npm run build --if-present
       - run: npm publish --access=public
