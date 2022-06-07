@@ -1,7 +1,6 @@
 {
   "name": "@nnsdao/actorservice",
   "version": "1.0.0",
-  "private": false,
   "type": "module",
   "description": "NnsDao Backend Service",
   "main": "./index.js",
