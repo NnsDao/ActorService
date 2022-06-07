@@ -17,6 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Remove .npmrc
+        run: |
+          rm -rf .npmrc || true
+          echo "Remove project .npmrc"
       - uses: actions/setup-node@v3
         with:
           # node-version: 16
