@@ -17,10 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Remove .npmrc
-        run: |
-          rm -rf .npmrc || true
-          echo "Remove project .npmrc"
       - uses: actions/setup-node@v3
         with:
           # node-version: 16
@@ -37,6 +33,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Remove .npmrc
+        run: |
+          rm -rf .npmrc || true
+          echo "Remove project .npmrc"
       - uses: actions/setup-node@v3
         with:
           # node-version: 16
@@ -45,7 +45,6 @@ jobs:
       - name: Update package version
         run: |
           npm i -g zx
-          ls -alih
           cat .npmrc
           zx .github/workflows/update-npm-version.mjs
       # - run: npm ci
