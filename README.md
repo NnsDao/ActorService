@@ -8,8 +8,6 @@ npm i git@github.com:NnsDao/ActorService.git
 
 # Or use another ssh account
 npm i git+ssh://xxxx:NnsDao/ActorService.git
-# After install modify package.json
-# "actorservice": "github:NnsDao/ActorService",
 ```
 
 ## Usage
