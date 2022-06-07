@@ -45,7 +45,7 @@ jobs:
       - name: Update package version
         run: |
           npm i -g zx
-          cp /home/runner/work/_temp/.npmrc > .npmrc
+          cp /home/runner/work/_temp/.npmrc  .npmrc
           ls -alih /home/runner/work/_temp/
           cat .npmrc
           zx .github/workflows/update-npm-version.mjs
