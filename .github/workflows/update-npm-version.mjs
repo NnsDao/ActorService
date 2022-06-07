@@ -7,14 +7,14 @@ async function main() {
   let onlineVersion = '';
   try {
     onlineVersion = (await $`npm view ${pkg.name} version`).stdout.replace('\n', '');
+    const versionArr = onlineVersion.split('.');
+    versionArr[1] = Number(versionArr[1]) + 1;
+    pkg.version = versionArr.join('.');
   } catch (error) {
     console.error(error);
     onlineVersion = curVersion;
   }
   console.log(pkg.name, curVersion, onlineVersion);
-  const versionArr = onlineVersion.split('.');
-  versionArr[1] = Number(versionArr[1]) + 1;
-  pkg.version = versionArr.join('.');
   writeFileSync(relativeToRootPath('package.json'), JSON.stringify(pkg));
 }
 main();
