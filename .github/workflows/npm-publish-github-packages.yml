@@ -45,7 +45,6 @@ jobs:
       - name: Update package version
         run: |
           npm i -g zx
-          cat .npmrc
           zx .github/workflows/update-npm-version.mjs
       # - run: npm ci
       # - run: npm run build --if-present
