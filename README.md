@@ -1,6 +1,8 @@
-# NnsDao Backend Service
+# NnsDao Service
 
 ## Install
+
+### Install from Github
 
 ```sh
 # Use default ssh account
@@ -8,6 +10,32 @@ npm i git@github.com:NnsDao/ActorService.git
 
 # Or use another ssh account
 npm i git+ssh://xxxx:NnsDao/ActorService.git
+```
+
+### Install from npm
+
+Config registry
+
+```txt
+# .npmrc
+@nnsdao:registry=https://registry.npmjs.org/
+```
+
+```sh
+npm install @nnsdao/actorservice
+```
+
+### Install from Github packages
+
+Config registry
+
+```txt
+# .npmrc
+@nnsdao:registry=https://npm.pkg.github.com
+```
+
+```sh
+npm install @nnsdao/actorservice
 ```
 
 ## Usage
