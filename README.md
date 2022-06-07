@@ -15,11 +15,11 @@ npm i git+ssh://xxxx:NnsDao/ActorService.git
 ```js
 // import IDL
 // import { idlFactory as proxyIDL } from 'actorservice/xxxx/index';
-import { idlFactory as proxyIDL } from 'actorservice/market/index';
+import { idlFactory as proxyIDL } from '@nnsdao/actorservice/market/index';
 
 // import Service
 // import {xxx as xxx } from 'actorservice/xxx/xxx.did'
-import { _SERVICE as proxyActor } from 'actorservice/market/market.did';
+import { _SERVICE as proxyActor } from '@nnsdao/actorservice/market/market.did';
 ```
 
 ## Typescript warning
@@ -36,7 +36,7 @@ Config Path alias at `tsconfig.json`
     // xxx
     "paths": {
       // xxx
-      "actorservice/*": ["node_modules/actorservice/src/*"]
+      "@nnsdao/actorservice/*": ["./node_modules/@nnsdao/actorservice/src/*"]
     }
   }
 }
