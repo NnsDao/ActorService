@@ -37,6 +37,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           # node-version: 16
+          always-auth: true,
           node-version-file: '.nvmrc'
           registry-url: https://npm.pkg.github.com/
       - name: Update package version
