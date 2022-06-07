@@ -39,8 +39,6 @@ jobs:
       - name: Update package version
         run: |
           npm i -g zx
-          apt-get install tree || true
-          tree ./ || true
           zx .github/workflows/update-npm-version.mjs
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
