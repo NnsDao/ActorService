@@ -29,5 +29,5 @@ jobs:
           automatic_release_tag: 'release'
           # prerelease: true
           title: 'Production Release Build'
-          files: |
-            ./
+          # files: |
+          #   ./
