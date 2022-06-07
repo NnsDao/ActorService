@@ -39,6 +39,6 @@ jobs:
           zx .github/workflows/update-npm-version.mjs
       # - run: npm ci
       # - run: npm run build --if-present
-      - run: npm publish
+      - run: npm publish --access=public --tag release
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
