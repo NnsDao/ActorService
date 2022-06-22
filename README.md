@@ -36,19 +36,33 @@ npm install @nnsdao/nnsdao-kit
 
 ## Usage
 
-```js
-// import IDL
-// import { idlFactory as proxyIDL } from 'actorservice/xxxx/index';
-import { idlFactory as ProxyIDL } from '@nnsdao/nnsdao-kit/market/index';
+### Connect Plug && Stoic
 
-// import Service
-// import {xxx as xxx } from 'actorservice/xxx/xxx.did'
-import { _SERVICE as ProxyActor } from '@nnsdao/nnsdao-kit/market/market.did';
-```
+<details close>
+<summary>details</summary>
+ 
+```js
+// React Hooks
+const verifyConnection = async () => {
+  const connected = await window.ic.plug.isConnected();
+  if (!connected) await window.ic.plug.requestConnect({ whitelist, host });
+};
+
+useEffect(async () => {
+verifyConnection();
+}, []);
+
+````
+</details>
+
+
+### Actor
+```js
+import { idlFactory as xxx } from '@nnsdao/nnsdao-kit/market/index';
+import type { _SERVICE as xxx } from '@nnsdao/nnsdao-kit/market/market.did';
+````
 
 ## Config Typescript Path Alias
-
-![path warning](./static/path-alias.jpg)
 
 Config Path alias at `tsconfig.json`
 
