@@ -1,15 +1,11 @@
-# NnsDao Service
+# Nnsdao Kit
 
 ## Install
 
 ### Install from Github
 
 ```sh
-# Use default ssh account
-npm i git@github.com:NnsDao/ActorService.git
-
-# Or use another ssh account
-npm i git+ssh://xxxx:NnsDao/ActorService.git
+npm i https://github.com/NnsDao/nnsdao-kit.git
 ```
 
 ### Install from npm
@@ -22,7 +18,7 @@ Config registry
 ```
 
 ```sh
-npm install @nnsdao/actorservice
+npm install @nnsdao/nnsdao-kit
 ```
 
 ### Install from Github packages
@@ -35,7 +31,7 @@ Config registry
 ```
 
 ```sh
-npm install @nnsdao/actorservice
+npm install @nnsdao/nnsdao-kit
 ```
 
 ## Usage
@@ -43,16 +39,14 @@ npm install @nnsdao/actorservice
 ```js
 // import IDL
 // import { idlFactory as proxyIDL } from 'actorservice/xxxx/index';
-import { idlFactory as proxyIDL } from '@nnsdao/actorservice/market/index';
+import { idlFactory as ProxyIDL } from '@nnsdao/nnsdao-kit/market/index';
 
 // import Service
 // import {xxx as xxx } from 'actorservice/xxx/xxx.did'
-import { _SERVICE as proxyActor } from '@nnsdao/actorservice/market/market.did';
+import { _SERVICE as ProxyActor } from '@nnsdao/nnsdao-kit/market/market.did';
 ```
 
-## Typescript warning
-
-If you got this warning
+## Config Typescript Path Alias
 
 ![path warning](./static/path-alias.jpg)
 
