@@ -58,7 +58,7 @@ Config Path alias at `tsconfig.json`
     // xxx
     "paths": {
       // xxx
-      "@nnsdao/actorservice/*": ["./node_modules/@nnsdao/actorservice/src/*"]
+      "@nnsdao/nnsdao-kit/*": ["./node_modules/@nnsdao/nnsdao-kit/src/*"]
     }
   }
 }
