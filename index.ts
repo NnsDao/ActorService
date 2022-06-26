@@ -1,2 +1,2 @@
-export { plugLogin, plugLogout } from './src/login/plug';
-export { stoicLogin, stoicLogout } from './src/login/stoic';
+export { plugLogin, plugLogout } from './src/helper/plug';
+export { stoicLogin, stoicLogout } from './src/helper/stoic';

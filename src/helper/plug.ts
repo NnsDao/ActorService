@@ -1,12 +1,12 @@
-import { HttpAgent } from '@dfinity/agent';
+import type { HttpAgent } from '@dfinity/agent';
 
 interface PlugLoginRes {
   agent: Omit<HttpAgent, 'invalidateIdentity' | 'replaceIdentity'>;
   principalId: string;
   accountId: string;
-  createActor: (params: PlugCreateActorParams) => any;
 }
 let persistTimer: any = null;
+
 export async function plugLogin(whitelist: string[]): Promise<PlugLoginRes | null> {
   if (!globalThis?.ic?.plug) {
     console.error('Please make sure the Plug extension is installed!');
@@ -47,12 +47,10 @@ export async function plugLogin(whitelist: string[]): Promise<PlugLoginRes | nul
       persistConnect();
     }, 3e3);
   };
+  persistConnect();
   console.log('Plug login', globalThis.ic.plug.sessionManager);
 
-  return {
-    ...globalThis.ic.plug.sessionManager.sessionData,
-    createActor: globalThis.ic.plug.createActor,
-  };
+  return globalThis.ic.plug.sessionManager.sessionData;
 }
 
 export async function plugLogout(): Promise<void> {

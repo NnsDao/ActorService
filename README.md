@@ -56,10 +56,10 @@ verifyConnection();
 </details>
 
 
-### Actor
+### Import Actor,Actor Instance Type
 ```js
-import { idlFactory as xxx } from '@nnsdao/nnsdao-kit/market/index';
-import type { _SERVICE as xxx } from '@nnsdao/nnsdao-kit/market/market.did';
+import { idlFactory } from '@nnsdao/nnsdao-kit/market/index';
+import type { _SERVICE } from '@nnsdao/nnsdao-kit/market/market.did';
 ````
 
 ## Config Typescript Path Alias
