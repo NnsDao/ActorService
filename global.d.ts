@@ -4,6 +4,7 @@ declare namespace ic {
     static requestConnect: (params: PlugConnectParams) => string;
     static createAgent: (params: PlugConnectParams) => string;
     static agent: HttpAgent;
+    static createActor: (params: PlugCreateActorParams) => any;
     static sessionManager: {
       sessionData: {
         agent: HttpAgent;
@@ -24,4 +25,9 @@ interface PlugConnectParams {
 declare module 'ic-stoic-identity' {
   const StoicIdentity: any;
   const load: (any) => any;
+}
+
+interface PlugCreateActorParams {
+  canisterId: string;
+  interfaceFactory: () => any;
 }

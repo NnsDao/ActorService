@@ -1,12 +1,12 @@
 {
-  "name": "@nnsdao/nnsdao-kit",
+  "name": "@nnsdao-kit",
   "version": "1.1.1",
   "type": "module",
   "description": "NnsDao Kit",
   "main": "./index.ts",
   "exports": {
     ".": "./index.ts",
-    "./*": "./src/*."
+    "./*": "./src/*"
   },
   "scripts": {
     "test": "echo test done!"
@@ -26,7 +26,7 @@
     "@tsconfig/recommended": "^1.0.1",
     "@types/node": "^17.0.38",
     "eslint": "^8.16.0",
-    "typescript": "^4.7.2"
+    "typescript": "^4.7.4"
   },
   "peerDependencies": {
     "@dfinity/agent": "*",

@@ -4,6 +4,7 @@ interface PlugLoginRes {
   agent: Omit<HttpAgent, 'invalidateIdentity' | 'replaceIdentity'>;
   principalId: string;
   accountId: string;
+  createActor: (params: PlugCreateActorParams) => any;
 }
 let persistTimer: any = null;
 export async function plugLogin(whitelist: string[]): Promise<PlugLoginRes | null> {
@@ -48,7 +49,10 @@ export async function plugLogin(whitelist: string[]): Promise<PlugLoginRes | nul
   };
   console.log('Plug login', globalThis.ic.plug.sessionManager);
 
-  return globalThis.ic.plug.sessionManager.sessionData;
+  return {
+    ...globalThis.ic.plug.sessionManager.sessionData,
+    createActor: globalThis.ic.plug.createActor,
+  };
 }
 
 export async function plugLogout(): Promise<void> {
