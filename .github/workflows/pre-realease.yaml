@@ -7,6 +7,7 @@ on:
       - master
       - 'dev/**'
       - 'pre-release'
+  workflow_dispatch:
 
 jobs:
   build:
