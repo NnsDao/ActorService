@@ -1,9 +1,13 @@
 import { Actor, HttpAgent } from '@dfinity/agent';
+import { idlFactory as getCandidIDL } from '../get-candid/index.js';
 import storage from './storage';
 
-export const agent = new HttpAgent();
+//  online IC  host
+const onlineHost = 'https://ic0.app';
+export const agent = new HttpAgent({ host: onlineHost });
+
 // anonymous agent can more efficient then auth agent;
-export const anonymousAgent: HttpAgent = new HttpAgent();
+export const anonymousAgent: HttpAgent = new HttpAgent({ host: onlineHost });
 
 export async function getActor(props: getActorProps): Promise<typeof Actor> {
   let { cid, idl, needAuth = true } = props;
@@ -15,12 +19,19 @@ export async function getActor(props: getActorProps): Promise<typeof Actor> {
   return actor;
 }
 
-export const toHexString = (byteArray: any) => {
+export function toHexString(byteArray: any) {
   return Array.from(byteArray, function (byte: any) {
     return ('0' + (byte & 0xff).toString(16)).slice(-2);
   }).join('');
-};
+}
 
+export async function getCandid(cid: string) {
+  const actor = Actor.createActor(getCandidIDL, {
+    agent: anonymousAgent,
+    canisterId: cid,
+  });
+  return await actor.__get_candid_interface_tmp_hack();
+}
 // Type
 interface getActorProps {
   needAuth?: boolean;
