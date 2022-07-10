@@ -42,6 +42,7 @@ export interface Listing {
 export interface LocalSaleStats { 'icp' : Stats, 'ndp' : Stats }
 export interface LockInfo {
   'buyer_subaccount' : [] | [Array<number>],
+  'sold' : boolean,
   'locked' : bigint,
   'buyer' : Principal,
   'transaction_subaccount' : Array<number>,
@@ -50,12 +51,13 @@ export interface LogMessageData { 'timeNanos' : bigint, 'message' : string }
 export interface MarketService {
   'last_settle_cron' : bigint,
   'nfts' : Array<[string, NFT]>,
+  'last_list_cron' : bigint,
   'nft_project_list' : Array<[string, Array<[Token, NftInfo]>]>,
 }
 export interface NFT {
-  'owners' : Array<[number, string]>,
   'listings' : Array<[number, Listing]>,
   'canister_id' : string,
+  'pendding_listings' : Array<[number, Listing]>,
   'stats' : LocalSaleStats,
 }
 export interface NftInfo {
@@ -67,8 +69,10 @@ export type Result = { 'Ok' : [Principal, number] } |
 export type Result_1 = { 'Ok' : null } |
   { 'Err' : CommonError };
 export type Result_2 = { 'Ok' : string } |
+  { 'Err' : string };
+export type Result_3 = { 'Ok' : string } |
   { 'Err' : CommonError };
-export type Result_3 = {
+export type Result_4 = {
     'Ok' : Array<[number, [] | [Listing], [] | [number]]>
   } |
   { 'Err' : CommonError };
@@ -100,20 +104,31 @@ export interface _SERVICE {
     [GetLogMessagesParameters],
     CanisterLogMessages,
   >,
+  'get_market_nft' : ActorMethod<
+    [Principal, [] | [string]],
+    [] | [Array<[string, Array<number>]>],
+  >,
   'get_nft' : ActorMethod<[string], [] | [NFT]>,
   'get_nft_project' : ActorMethod<[string], [] | [Array<[Token, NftInfo]>]>,
   'get_owner' : ActorMethod<[], Array<Principal>>,
+  'handle_disbursement' : ActorMethod<[Disbursement], Result_2>,
+  'handle_failed_disbursements' : ActorMethod<
+    [],
+    [[] | [Disbursement], Result_2],
+  >,
   'list' : ActorMethod<
     [string, [] | [Array<number>], string, Amount],
-    Result_1,
+    Result_3,
   >,
   'listings' : ActorMethod<[string], Array<[number, Listing]>>,
   'lock' : ActorMethod<
     [string, string, Amount, Principal, [] | [Array<number>]],
-    Result_2,
+    Result_3,
   >,
-  'pre_list' : ActorMethod<[string, string], Result_2>,
+  'restore_disburse' : ActorMethod<[DisburseService], undefined>,
+  'restore_market' : ActorMethod<[MarketService], undefined>,
+  'return_back' : ActorMethod<[string, string, [] | [string]], Result_3>,
   'settle' : ActorMethod<[string, string], Result_1>,
   'stats' : ActorMethod<[string], [Stats, Stats]>,
-  'tokens_ext' : ActorMethod<[string, string], Result_3>,
+  'tokens_ext' : ActorMethod<[string, string], Result_4>,
 }

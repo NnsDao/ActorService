@@ -37,6 +37,7 @@ type Listing = record {
 type LocalSaleStats = record { icp : Stats; ndp : Stats };
 type LockInfo = record {
   buyer_subaccount : opt vec nat8;
+  sold : bool;
   locked : nat64;
   buyer : principal;
   transaction_subaccount : vec nat8;
@@ -45,12 +46,13 @@ type LogMessageData = record { timeNanos : nat64; message : text };
 type MarketService = record {
   last_settle_cron : nat64;
   nfts : vec record { text; NFT };
+  last_list_cron : nat64;
   nft_project_list : vec record { text; vec record { Token; NftInfo } };
 };
 type NFT = record {
-  owners : vec record { nat32; text };
   listings : vec record { nat32; Listing };
   canister_id : text;
+  pendding_listings : vec record { nat32; Listing };
   stats : LocalSaleStats;
 };
 type NftInfo = record {
@@ -59,8 +61,9 @@ type NftInfo = record {
 };
 type Result = variant { Ok : record { principal; nat32 }; Err : text };
 type Result_1 = variant { Ok; Err : CommonError };
-type Result_2 = variant { Ok : text; Err : CommonError };
-type Result_3 = variant {
+type Result_2 = variant { Ok : text; Err : text };
+type Result_3 = variant { Ok : text; Err : CommonError };
+type Result_4 = variant {
   Ok : vec record { nat32; opt Listing; opt nat8 };
   Err : CommonError;
 };
@@ -87,14 +90,21 @@ service : {
   delist : (text, opt vec nat8, text) -> (Result_1);
   encode_token : (principal, nat32) -> (text) query;
   get_canister_log : (GetLogMessagesParameters) -> (CanisterLogMessages) query;
+  get_market_nft : (principal, opt text) -> (
+      opt vec record { text; vec nat32 },
+    ) query;
   get_nft : (text) -> (opt NFT) query;
   get_nft_project : (text) -> (opt vec record { Token; NftInfo }) query;
   get_owner : () -> (vec principal) query;
-  list : (text, opt vec nat8, text, Amount) -> (Result_1);
+  handle_disbursement : (Disbursement) -> (Result_2);
+  handle_failed_disbursements : () -> (opt Disbursement, Result_2);
+  list : (text, opt vec nat8, text, Amount) -> (Result_3);
   listings : (text) -> (vec record { nat32; Listing }) query;
-  lock : (text, text, Amount, principal, opt vec nat8) -> (Result_2);
-  pre_list : (text, text) -> (Result_2);
+  lock : (text, text, Amount, principal, opt vec nat8) -> (Result_3);
+  restore_disburse : (DisburseService) -> () query;
+  restore_market : (MarketService) -> () query;
+  return_back : (text, text, opt text) -> (Result_3);
   settle : (text, text) -> (Result_1);
   stats : (text) -> (record { Stats; Stats }) query;
-  tokens_ext : (text, text) -> (Result_3);
+  tokens_ext : (text, text) -> (Result_4);
 }
