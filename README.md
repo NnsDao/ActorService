@@ -77,3 +77,7 @@ Config Path alias at `tsconfig.json`
   }
 }
 ```
+
+TODO
+
+1. auto download candid ,binding to another language,update local file
