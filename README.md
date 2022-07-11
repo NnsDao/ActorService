@@ -2,13 +2,23 @@
 
 ## Install
 
-### Install from Github
+### Local dev,install latest
+
+Tag `#latest` must provide
+
+```sh
+npm i https://github.com/NnsDao/nnsdao-kit.git#latest
+```
+
+### Online prod
+
+#### Install from Github
 
 ```sh
 npm i https://github.com/NnsDao/nnsdao-kit.git
 ```
 
-### Install from npm
+#### Install from npm
 
 Config registry
 
@@ -21,7 +31,7 @@ Config registry
 npm install @nnsdao/nnsdao-kit
 ```
 
-### Install from Github packages
+#### Install from Github packages
 
 Config registry
 
