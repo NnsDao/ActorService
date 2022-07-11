@@ -1,4 +1,4 @@
-export default ({ IDL }) => {
+export const idlFactory = ({ IDL }) => {
   const Proposal = IDL.Rec();
   const NeuronId = IDL.Record({ id: IDL.Nat64 });
   const Followees = IDL.Record({ followees: IDL.Vec(NeuronId) });
