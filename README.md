@@ -68,7 +68,7 @@ verifyConnection();
 
 ### Import Actor,Actor Instance Type
 ```js
-import { idlFactory } from '@nnsdao/nnsdao-kit/market/market';
+import { idlFactory } from '@nnsdao/nnsdao-kit/market/index';
 import type { _SERVICE } from '@nnsdao/nnsdao-kit/market/types';
 ````
 
