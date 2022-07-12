@@ -1,5 +1,5 @@
 import { Actor, HttpAgent } from '@dfinity/agent';
-import { idlFactory as getCandidIDL } from '../get-candid/get-candid.did';
+import { idlFactory as getCandidIDL } from '../get-candid';
 import storage from './storage';
 
 //  online IC  host
