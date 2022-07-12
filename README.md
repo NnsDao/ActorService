@@ -4,10 +4,10 @@
 
 ### Local dev,install latest
 
-Tag `#latest` must provide
+Tag `#dev` must provide
 
 ```sh
-npm i https://github.com/NnsDao/nnsdao-kit.git#latest
+npm i https://github.com/NnsDao/nnsdao-kit.git#dev
 ```
 
 ### Online prod
