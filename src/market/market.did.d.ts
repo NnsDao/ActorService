@@ -1,5 +1,5 @@
-import type { ActorMethod } from '@dfinity/agent';
 import type { Principal } from '@dfinity/principal';
+import type { ActorMethod } from '@dfinity/agent';
 
 export type Amount = { ICP: bigint } | { NDP: bigint };
 export interface CanisterLogMessages {
@@ -43,7 +43,6 @@ export interface LocalSaleStats {
 }
 export interface LockInfo {
   buyer_subaccount: [] | [Array<number>];
-  sold: boolean;
   locked: bigint;
   buyer: Principal;
   transaction_subaccount: Array<number>;
@@ -55,13 +54,12 @@ export interface LogMessageData {
 export interface MarketService {
   last_settle_cron: bigint;
   nfts: Array<[string, NFT]>;
-  last_list_cron: bigint;
   nft_project_list: Array<[string, Array<[Token, NftInfo]>]>;
 }
 export interface NFT {
+  owners: Array<[number, string]>;
   listings: Array<[number, Listing]>;
   canister_id: string;
-  pendding_listings: Array<[number, Listing]>;
   stats: LocalSaleStats;
 }
 export interface NftInfo {
@@ -99,16 +97,22 @@ export interface _SERVICE {
   delete_nft_project: ActorMethod<[string], undefined>;
   delist: ActorMethod<[string, [] | [Array<number>], string], Result_1>;
   encode_token: ActorMethod<[Principal, number], string>;
-  get_canister_log: ActorMethod<[GetLogMessagesParameters], CanisterLogMessages>;
-  get_market_nft: ActorMethod<[Principal, [] | [string]], [] | [Array<[string, Array<number>]>]>;
+  get_canister_log: ActorMethod<
+    [GetLogMessagesParameters],
+    CanisterLogMessages
+  >;
   get_nft: ActorMethod<[string], [] | [NFT]>;
   get_nft_project: ActorMethod<[string], [] | [Array<[Token, NftInfo]>]>;
   get_owner: ActorMethod<[], Array<Principal>>;
   handle_disbursement: ActorMethod<[Disbursement], Result_2>;
   handle_failed_disbursements: ActorMethod<[], [[] | [Disbursement], Result_2]>;
-  list: ActorMethod<[string, [] | [Array<number>], string, Amount], Result_3>;
+  list: ActorMethod<[string, [] | [Array<number>], string, Amount], Result_1>;
   listings: ActorMethod<[string], Array<[number, Listing]>>;
-  lock: ActorMethod<[string, string, Amount, Principal, [] | [Array<number>]], Result_3>;
+  lock: ActorMethod<
+    [string, string, Amount, Principal, [] | [Array<number>]],
+    Result_3
+  >;
+  pre_list: ActorMethod<[string, string], Result_3>;
   restore_disburse: ActorMethod<[DisburseService], undefined>;
   restore_market: ActorMethod<[MarketService], undefined>;
   return_back: ActorMethod<[string, string, [] | [string]], Result_3>;
