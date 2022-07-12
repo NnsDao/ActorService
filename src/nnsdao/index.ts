@@ -1,146 +1,66 @@
 export const idlFactory = ({ IDL }) => {
-  const Token = IDL.Variant({ 'Icp' : IDL.Null, 'Ndp' : IDL.Null });
-  const Standard = IDL.Variant({ 'Ext' : IDL.Null, 'DIP20' : IDL.Null });
-  const NftInfo = IDL.Record({
-    'commission' : IDL.Vec(IDL.Tuple(IDL.Principal, IDL.Nat64)),
-    'standard' : Standard,
+  const Votes = IDL.Variant({ No: IDL.Nat64, Yes: IDL.Nat64 });
+  const ProposalState = IDL.Variant({
+    Failed: IDL.Text,
+    Open: IDL.Null,
+    Executing: IDL.Null,
+    Rejected: IDL.Null,
+    Succeeded: IDL.Null,
+    Accepted: IDL.Null
   });
-  const Amount = IDL.Variant({ 'ICP' : IDL.Nat64, 'NDP' : IDL.Nat64 });
-  const Disbursement = IDL.Record({
-    'to' : IDL.Principal,
-    'to_subaccount' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-    'try_num' : IDL.Nat8,
-    'from_subaccount' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-    'canister' : IDL.Text,
-    'token_idf' : IDL.Text,
-    'amount' : Amount,
+  const Proposal = IDL.Record({
+    id: IDL.Nat64,
+    title: IDL.Text,
+    content: IDL.Text,
+    vote_data: IDL.Vec(IDL.Tuple(IDL.Principal, Votes)),
+    end_time: IDL.Nat64,
+    timestamp: IDL.Nat64,
+    proposer: IDL.Principal,
+    proposal_state: ProposalState
   });
-  const DisburseService = IDL.Record({
-    'subaccount_num' : IDL.Nat,
-    'disbursements_process_lock' : IDL.Bool,
-    'failed_disbursements' : IDL.Vec(Disbursement),
-    'disbursements_queue' : IDL.Vec(Disbursement),
+  const Result = IDL.Variant({ Ok: Proposal, Err: IDL.Text });
+  const ProposalArg = IDL.Record({
+    title: IDL.Text,
+    content: IDL.Text,
+    end_time: IDL.Nat64,
+    proposer: IDL.Principal
   });
-  const LockInfo = IDL.Record({
-    'buyer_subaccount' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-    'locked' : IDL.Nat64,
-    'buyer' : IDL.Principal,
-    'transaction_subaccount' : IDL.Vec(IDL.Nat8),
+  const Result_1 = IDL.Variant({ Ok: IDL.Null, Err: IDL.Text });
+  const Social = IDL.Record({ key: IDL.Text, link: IDL.Text });
+  const JoinDaoParams = IDL.Record({
+    nickname: IDL.Text,
+    social: IDL.Vec(Social),
+    intro: IDL.Text,
+    avatar: IDL.Text
   });
-  const Listing = IDL.Record({
-    'seller_subaccount' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-    'seller' : IDL.Principal,
-    'lock_info' : IDL.Opt(LockInfo),
-    'price' : Amount,
+  const MemberItems = IDL.Record({
+    nickname: IDL.Text,
+    social: IDL.Vec(Social),
+    intro: IDL.Text,
+    status_code: IDL.Int8,
+    avatar: IDL.Text
   });
-  const Stats = IDL.Record({
-    'floor' : IDL.Nat64,
-    'listings' : IDL.Nat64,
-    'sales' : IDL.Nat64,
-    'highest_price_sale' : IDL.Nat64,
-    'lowest_price_sale' : IDL.Nat64,
-    'supply' : IDL.Nat64,
-    'total_volume' : IDL.Nat64,
-  });
-  const LocalSaleStats = IDL.Record({ 'icp' : Stats, 'ndp' : Stats });
-  const NFT = IDL.Record({
-    'owners' : IDL.Vec(IDL.Tuple(IDL.Nat32, IDL.Text)),
-    'listings' : IDL.Vec(IDL.Tuple(IDL.Nat32, Listing)),
-    'canister_id' : IDL.Text,
-    'stats' : LocalSaleStats,
-  });
-  const MarketService = IDL.Record({
-    'last_settle_cron' : IDL.Nat64,
-    'nfts' : IDL.Vec(IDL.Tuple(IDL.Text, NFT)),
-    'nft_project_list' : IDL.Vec(
-      IDL.Tuple(IDL.Text, IDL.Vec(IDL.Tuple(Token, NftInfo)))
-    ),
-  });
-  const Result = IDL.Variant({
-    'Ok' : IDL.Tuple(IDL.Principal, IDL.Nat32),
-    'Err' : IDL.Text,
-  });
-  const CommonError = IDL.Variant({
-    'InvalidToken' : IDL.Text,
-    'Other' : IDL.Text,
-  });
-  const Result_1 = IDL.Variant({ 'Ok' : IDL.Null, 'Err' : CommonError });
-  const GetLogMessagesFilter = IDL.Record({
-    'messageRegex' : IDL.Opt(IDL.Text),
-    'messageContains' : IDL.Opt(IDL.Text),
-  });
-  const GetLogMessagesParameters = IDL.Record({
-    'count' : IDL.Nat32,
-    'filter' : IDL.Opt(GetLogMessagesFilter),
-    'fromTimeNanos' : IDL.Opt(IDL.Nat64),
-  });
-  const LogMessageData = IDL.Record({
-    'timeNanos' : IDL.Nat64,
-    'message' : IDL.Text,
-  });
-  const CanisterLogMessages = IDL.Record({
-    'data' : IDL.Vec(LogMessageData),
-    'lastAnalyzedMessageTimeNanos' : IDL.Opt(IDL.Nat64),
-  });
-  const Result_2 = IDL.Variant({ 'Ok' : IDL.Text, 'Err' : CommonError });
+  const Result_2 = IDL.Variant({ Ok: MemberItems, Err: IDL.Text });
   const Result_3 = IDL.Variant({
-    'Ok' : IDL.Vec(IDL.Tuple(IDL.Nat32, IDL.Opt(Listing), IDL.Opt(IDL.Nat8))),
-    'Err' : CommonError,
+    Ok: IDL.Vec(MemberItems),
+    Err: IDL.Text
   });
+  const Result_4 = IDL.Variant({
+    Ok: IDL.Vec(IDL.Tuple(IDL.Nat64, Proposal)),
+    Err: IDL.Text
+  });
+  const Result_5 = IDL.Variant({ Ok: IDL.Bool, Err: IDL.Text });
+  const UserVoteArgs = IDL.Record({ id: IDL.Nat64, vote: Votes });
   return IDL.Service({
-    'add_nft_project' : IDL.Func(
-        [IDL.Text, IDL.Vec(IDL.Tuple(Token, NftInfo))],
-        [],
-        [],
-      ),
-    'address' : IDL.Func([IDL.Opt(IDL.Principal)], [IDL.Text], ['query']),
-    'admin_kill_heartbeat' : IDL.Func([], [], []),
-    'admin_start_heartbeat' : IDL.Func([], [], []),
-    'backup_disburse' : IDL.Func([], [DisburseService], ['query']),
-    'backup_market' : IDL.Func([], [MarketService], ['query']),
-    'decode_token' : IDL.Func([IDL.Text], [Result], ['query']),
-    'delete_nft_project' : IDL.Func([IDL.Text], [], []),
-    'delist' : IDL.Func(
-        [IDL.Text, IDL.Opt(IDL.Vec(IDL.Nat8)), IDL.Text],
-        [Result_1],
-        [],
-      ),
-    'encode_token' : IDL.Func(
-        [IDL.Principal, IDL.Nat32],
-        [IDL.Text],
-        ['query'],
-      ),
-    'get_canister_log' : IDL.Func(
-        [GetLogMessagesParameters],
-        [CanisterLogMessages],
-        ['query'],
-      ),
-    'get_nft' : IDL.Func([IDL.Text], [IDL.Opt(NFT)], ['query']),
-    'get_nft_project' : IDL.Func(
-        [IDL.Text],
-        [IDL.Opt(IDL.Vec(IDL.Tuple(Token, NftInfo)))],
-        ['query'],
-      ),
-    'get_owner' : IDL.Func([], [IDL.Vec(IDL.Principal)], ['query']),
-    'list' : IDL.Func(
-        [IDL.Text, IDL.Opt(IDL.Vec(IDL.Nat8)), IDL.Text, Amount],
-        [Result_1],
-        [],
-      ),
-    'listings' : IDL.Func(
-        [IDL.Text],
-        [IDL.Vec(IDL.Tuple(IDL.Nat32, Listing))],
-        ['query'],
-      ),
-    'lock' : IDL.Func(
-        [IDL.Text, IDL.Text, Amount, IDL.Principal, IDL.Opt(IDL.Vec(IDL.Nat8))],
-        [Result_2],
-        [],
-      ),
-    'pre_list' : IDL.Func([IDL.Text, IDL.Text], [Result_2], []),
-    'settle' : IDL.Func([IDL.Text, IDL.Text], [Result_1], []),
-    'stats' : IDL.Func([IDL.Text], [IDL.Tuple(Stats, Stats)], ['query']),
-    'tokens_ext' : IDL.Func([IDL.Text, IDL.Text], [Result_3], []),
+    get_proposal: IDL.Func([IDL.Nat64], [Result], ['query']),
+    initiate_proposal: IDL.Func([ProposalArg], [Result_1], []),
+    join: IDL.Func([JoinDaoParams], [Result_2], []),
+    member_list: IDL.Func([], [Result_3], []),
+    proposal_list: IDL.Func([], [Result_4], ['query']),
+    quit: IDL.Func([], [Result_5], []),
+    votes: IDL.Func([UserVoteArgs], [Result_1], [])
   });
 };
-export const init = ({ IDL }) => { return []; };
+export const init = ({ IDL }) => {
+  return [];
+};

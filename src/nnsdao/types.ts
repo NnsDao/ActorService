@@ -1,110 +1,63 @@
-import type { ActorMethod } from '@dfinity/agent';
 import type { Principal } from '@dfinity/principal';
+import type { ActorMethod } from '@dfinity/agent';
 
-export type Amount = { ICP: bigint } | { NDP: bigint };
-export interface CanisterLogMessages {
-  data: Array<LogMessageData>;
-  lastAnalyzedMessageTimeNanos: [] | [bigint];
+export interface JoinDaoParams {
+  nickname: string;
+  social: Array<Social>;
+  intro: string;
+  avatar: string;
 }
-export type CommonError = { InvalidToken: string } | { Other: string };
-export interface DisburseService {
-  subaccount_num: bigint;
-  disbursements_process_lock: boolean;
-  failed_disbursements: Array<Disbursement>;
-  disbursements_queue: Array<Disbursement>;
+export interface MemberItems {
+  nickname: string;
+  social: Array<Social>;
+  intro: string;
+  status_code: number;
+  avatar: string;
 }
-export interface Disbursement {
-  to: Principal;
-  to_subaccount: [] | [Array<number>];
-  try_num: number;
-  from_subaccount: [] | [Array<number>];
-  canister: string;
-  token_idf: string;
-  amount: Amount;
+export interface Proposal {
+  id: bigint;
+  title: string;
+  content: string;
+  vote_data: Array<[Principal, Votes]>;
+  end_time: bigint;
+  timestamp: bigint;
+  proposer: Principal;
+  proposal_state: ProposalState;
 }
-export interface GetLogMessagesFilter {
-  messageRegex: [] | [string];
-  messageContains: [] | [string];
+export interface ProposalArg {
+  title: string;
+  content: string;
+  end_time: bigint;
+  proposer: Principal;
 }
-export interface GetLogMessagesParameters {
-  count: number;
-  filter: [] | [GetLogMessagesFilter];
-  fromTimeNanos: [] | [bigint];
+export type ProposalState =
+  | { Failed: string }
+  | { Open: null }
+  | { Executing: null }
+  | { Rejected: null }
+  | { Succeeded: null }
+  | { Accepted: null };
+export type Result = { Ok: Proposal } | { Err: string };
+export type Result_1 = { Ok: null } | { Err: string };
+export type Result_2 = { Ok: MemberItems } | { Err: string };
+export type Result_3 = { Ok: Array<MemberItems> } | { Err: string };
+export type Result_4 = { Ok: Array<[bigint, Proposal]> } | { Err: string };
+export type Result_5 = { Ok: boolean } | { Err: string };
+export interface Social {
+  key: string;
+  link: string;
 }
-export interface Listing {
-  seller_subaccount: [] | [Array<number>];
-  seller: Principal;
-  lock_info: [] | [LockInfo];
-  price: Amount;
+export interface UserVoteArgs {
+  id: bigint;
+  vote: Votes;
 }
-export interface LocalSaleStats {
-  icp: Stats;
-  ndp: Stats;
-}
-export interface LockInfo {
-  buyer_subaccount: [] | [Array<number>];
-  locked: bigint;
-  buyer: Principal;
-  transaction_subaccount: Array<number>;
-}
-export interface LogMessageData {
-  timeNanos: bigint;
-  message: string;
-}
-export interface MarketService {
-  last_settle_cron: bigint;
-  nfts: Array<[string, NFT]>;
-  nft_project_list: Array<[string, Array<[Token, NftInfo]>]>;
-}
-export interface NFT {
-  owners: Array<[number, string]>;
-  listings: Array<[number, Listing]>;
-  canister_id: string;
-  stats: LocalSaleStats;
-}
-export interface NftInfo {
-  commission: Array<[Principal, bigint]>;
-  standard: Standard;
-}
-export type Result = { Ok: [Principal, number] } | { Err: string };
-export type Result_1 = { Ok: null } | { Err: CommonError };
-export type Result_2 = { Ok: string } | { Err: CommonError };
-export type Result_3 =
-  | {
-      Ok: Array<[number, [] | [Listing], [] | [number]]>;
-    }
-  | { Err: CommonError };
-export type Standard = { Ext: null } | { DIP20: null };
-export interface Stats {
-  floor: bigint;
-  listings: bigint;
-  sales: bigint;
-  highest_price_sale: bigint;
-  lowest_price_sale: bigint;
-  supply: bigint;
-  total_volume: bigint;
-}
-export type Token = { Icp: null } | { Ndp: null };
+export type Votes = { No: bigint } | { Yes: bigint };
 export interface _SERVICE {
-  add_nft_project: ActorMethod<[string, Array<[Token, NftInfo]>], undefined>;
-  address: ActorMethod<[[] | [Principal]], string>;
-  admin_kill_heartbeat: ActorMethod<[], undefined>;
-  admin_start_heartbeat: ActorMethod<[], undefined>;
-  backup_disburse: ActorMethod<[], DisburseService>;
-  backup_market: ActorMethod<[], MarketService>;
-  decode_token: ActorMethod<[string], Result>;
-  delete_nft_project: ActorMethod<[string], undefined>;
-  delist: ActorMethod<[string, [] | [Array<number>], string], Result_1>;
-  encode_token: ActorMethod<[Principal, number], string>;
-  get_canister_log: ActorMethod<[GetLogMessagesParameters], CanisterLogMessages>;
-  get_nft: ActorMethod<[string], [] | [NFT]>;
-  get_nft_project: ActorMethod<[string], [] | [Array<[Token, NftInfo]>]>;
-  get_owner: ActorMethod<[], Array<Principal>>;
-  list: ActorMethod<[string, [] | [Array<number>], string, Amount], Result_1>;
-  listings: ActorMethod<[string], Array<[number, Listing]>>;
-  lock: ActorMethod<[string, string, Amount, Principal, [] | [Array<number>]], Result_2>;
-  pre_list: ActorMethod<[string, string], Result_2>;
-  settle: ActorMethod<[string, string], Result_1>;
-  stats: ActorMethod<[string], [Stats, Stats]>;
-  tokens_ext: ActorMethod<[string, string], Result_3>;
+  get_proposal: ActorMethod<[bigint], Result>;
+  initiate_proposal: ActorMethod<[ProposalArg], Result_1>;
+  join: ActorMethod<[JoinDaoParams], Result_2>;
+  member_list: ActorMethod<[], Result_3>;
+  proposal_list: ActorMethod<[], Result_4>;
+  quit: ActorMethod<[], Result_5>;
+  votes: ActorMethod<[UserVoteArgs], Result_1>;
 }
