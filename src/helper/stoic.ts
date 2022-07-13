@@ -1,4 +1,5 @@
 import { StoicIdentity } from 'ic-stoic-identity';
+import { agent } from './agent';
 interface loginRes {
   principalId: string;
   accountId: string;
@@ -14,6 +15,8 @@ export async function stoicLogin(): Promise<loginRes | null> {
       identity = await StoicIdentity.connect();
       // return identity.getPrincipal().toText();
     }
+    // update auth agent
+    agent.replaceIdentity(identity);
     return identity
       .accounts()
       .then((res: string) => {
