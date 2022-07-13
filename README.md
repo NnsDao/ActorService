@@ -81,8 +81,12 @@ Config Path alias at `tsconfig.json`
   "compilerOptions": {
     // xxx
     "paths": {
-      // xxx
       "@nnsdao/nnsdao-kit/*": ["./node_modules/@nnsdao/nnsdao-kit/src/*"]
+      // WARNING
+      // if you already have @** config ,then @nnsdao must place before @/*
+      // such as
+      // "@nnsdao/nnsdao-kit/*": ["./node_modules/@nnsdao/nnsdao-kit/src/*"],
+      // "@/*": ["./src/*"],
     }
   }
 }
