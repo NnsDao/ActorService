@@ -59,5 +59,6 @@ export interface _SERVICE {
   member_list: ActorMethod<[], Result_3>;
   proposal_list: ActorMethod<[], Result_4>;
   quit: ActorMethod<[], Result_5>;
+  user_info: ActorMethod<[], Result_2>;
   votes: ActorMethod<[UserVoteArgs], Result_1>;
 }

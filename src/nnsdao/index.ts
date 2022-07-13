@@ -58,6 +58,7 @@ export const idlFactory = ({ IDL }) => {
     member_list: IDL.Func([], [Result_3], []),
     proposal_list: IDL.Func([], [Result_4], ['query']),
     quit: IDL.Func([], [Result_5], []),
+    user_info: IDL.Func([], [Result_2], []),
     votes: IDL.Func([UserVoteArgs], [Result_1], [])
   });
 };
