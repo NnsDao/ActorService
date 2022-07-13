@@ -51,5 +51,6 @@ service : {
   member_list : () -> (Result_3);
   proposal_list : () -> (Result_4) query;
   quit : () -> (Result_5);
+  user_info : () -> (Result_2);
   votes : (UserVoteArgs) -> (Result_1);
 }
