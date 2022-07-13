@@ -10,7 +10,7 @@ export const agent = new HttpAgent({ host: onlineHost });
 export const anonymousAgent: HttpAgent = new HttpAgent({ host: onlineHost });
 
 export async function getActor(props: getActorProps): Promise<typeof Actor> {
-  let { cid, idl, needAuth = true } = props;
+  let { cid, idl, needAuth = false } = props;
   const loginType = storage.get('loginType');
   const actor =
     loginType === 'plug'
@@ -33,7 +33,7 @@ export async function getCandid(cid: string) {
   return await actor.__get_candid_interface_tmp_hack();
 }
 // Type
-interface getActorProps {
+export interface getActorProps {
   needAuth?: boolean;
   idl?: any;
   cid: string;
