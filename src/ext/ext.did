@@ -1,46 +1,393 @@
-type ICP = record {
-     e8s : nat64;
-};
-
-type TimeStamp = record {
-    timestamp_nanos: nat64;
-};
-
-type Address = blob;
-
-type SubAccount = blob;
-
-type BlockIndex = nat64;
-
-type Memo = nat64;
-
-type TransferArgs = record {
-    memo: Memo;
-    amount: ICP;
-    fee: ICP;
-    from_subaccount: opt SubAccount;
-    to: Address;
-    created_at_time: opt TimeStamp;
-};
-
-type TransferError = variant {
-    BadFee : record { expected_fee : ICP; };
-    InsufficientFunds : record { balance: ICP; };
-    TxTooOld : record { allowed_window_nanos: nat64 };
-    TxCreatedInFuture : null;
-    TxDuplicate : record { duplicate_of: BlockIndex; }
-};
-
-type TransferResult = variant {
-    Ok : BlockIndex;
-    Err : TransferError;
-};
-
-type AccountBalanceArgs = record {
-    account: Address;
-};
-
+type Wearable = 
+ record {
+   accessory: opt record {
+                    nat32;
+                    nat32;
+                  };
+   eyewear: opt record {
+                  nat32;
+                  nat32;
+                };
+   hat: opt record {
+              nat32;
+              nat32;
+            };
+   pet: opt record {
+              nat32;
+              nat32;
+            };
+ };
+type User__1 = 
+ variant {
+   address: AccountIdentifier;
+   "principal": principal;
+ };
+type User = 
+ variant {
+   address: AccountIdentifier;
+   "principal": principal;
+ };
+type TransferResponse = 
+ variant {
+   err:
+    variant {
+      CannotNotify: AccountIdentifier;
+      InsufficientBalance;
+      InvalidToken: TokenIdentifier;
+      Other: text;
+      Rejected;
+      Unauthorized: AccountIdentifier;
+    };
+   ok: Balance;
+ };
+type TransferRequest = 
+ record {
+   amount: Balance;
+   from: User;
+   memo: Memo;
+   notify: bool;
+   subaccount: opt SubAccount;
+   to: User;
+   token: TokenIdentifier;
+ };
+type Transaction2 = 
+ record {
+   buyer: AccountIdentifier__1;
+   price: nat64;
+   seller: principal;
+   time: Time;
+   token: TokenIdentifier__1;
+ };
+type TokenIndex = nat32;
+type TokenIdentifier__1 = text;
+type TokenIdentifier = text;
+type Time = int;
+type SubAccount__1 = vec nat8;
+type SubAccount = vec nat8;
+type SireRequest = 
+ record {
+   from_subaccount: opt SubAccount__1;
+   price: opt Balance__1;
+   token: TokenIdentifier__1;
+ };
+type Sire = 
+ record {
+   breedData: BreedData;
+   index: TokenIndex;
+   metadata: opt blob;
+ };
+type Settlement = 
+ record {
+   buyer: AccountIdentifier__1;
+   price: nat64;
+   seller: principal;
+   subaccount: SubAccount__1;
+ };
+type SaleTransaction = 
+ record {
+   buyer: AccountIdentifier__1;
+   price: nat64;
+   seller: principal;
+   time: Time;
+   token: TokenIndex;
+ };
+type Sale = 
+ record {
+   buyer: AccountIdentifier__1;
+   expires: Time;
+   price: nat64;
+   subaccount: SubAccount__1;
+   token: TokenIndex;
+ };
+type Result_9 = 
+ variant {
+   err: CommonError;
+   ok: record {
+         AccountIdentifier__1;
+         opt Listing;
+       };
+ };
+type Result_8 = 
+ variant {
+   err: CommonError;
+   ok: TokenIndex;
+ };
+type Result_7 = 
+ variant {
+   err: CommonError;
+   ok: AccountIdentifier__1;
+ };
+type Result_6 = 
+ variant {
+   err: CommonError;
+   ok: Metadata;
+ };
+type Result_5 = 
+ variant {
+   err: text;
+   ok: record {
+         AccountIdentifier__1;
+         nat64;
+       };
+ };
+type Result_4 = 
+ variant {
+   err: text;
+   ok;
+ };
+type Result_3 = 
+ variant {
+   err: CommonError;
+   ok;
+ };
+type Result_2 = 
+ variant {
+   err: CommonError;
+   ok: Balance__1;
+ };
+type Result_1 = 
+ variant {
+   err: CommonError;
+   ok: vec TokenIndex;
+ };
+type Result = 
+ variant {
+   err: CommonError;
+   ok: vec record {
+             TokenIndex;
+             opt Listing;
+             opt blob;
+             opt BreedData;
+           };
+ };
+type NotifyLog = 
+ record {
+   amount: Balance__1;
+   memo: Memo__1;
+   tokenid: TokenIdentifier__1;
+   user: User__1;
+ };
+type MintRequest = 
+ record {
+   metadata: opt blob;
+   to: User;
+ };
+type Metadata = 
+ variant {
+   fungible:
+    record {
+      decimals: nat8;
+      metadata: opt blob;
+      name: text;
+      symbol: text;
+    };
+   nonfungible: record {metadata: opt blob;};
+ };
+type Memo__1 = blob;
+type Memo = blob;
+type Listing = 
+ record {
+   locked: opt Time;
+   price: nat64;
+   seller: principal;
+ };
+type ListRequest = 
+ record {
+   from_subaccount: opt SubAccount__1;
+   price: opt nat64;
+   token: TokenIdentifier__1;
+ };
+type HttpResponse = 
+ record {
+   body: blob;
+   headers: vec HeaderField;
+   status_code: nat16;
+ };
+type HttpRequest = 
+ record {
+   body: blob;
+   headers: vec HeaderField;
+   method: text;
+   url: text;
+ };
+type HeaderField = 
+ record {
+   text;
+   text;
+ };
+type Generation = nat8;
+type Extension = text;
+type CommonError__1 = 
+ variant {
+   InvalidToken: TokenIdentifier;
+   Other: text;
+ };
+type CommonError = 
+ variant {
+   InvalidToken: TokenIdentifier;
+   Other: text;
+ };
+type BreedId = nat32;
+type BreedData = 
+ record {
+   breedTime: opt Time;
+   canBreed: bool;
+   cost: Balance__1;
+   fee: opt Balance__1;
+   generation: Generation;
+ };
+type Balance__1 = nat;
+type BalanceResponse = 
+ variant {
+   err: CommonError__1;
+   ok: Balance;
+ };
+type BalanceRequest = 
+ record {
+   token: TokenIdentifier;
+   user: User;
+ };
+type Balance = nat;
+type AccountIdentifier__1 = text;
+type AccountIdentifier = text;
 service : {
-  transfer : (TransferArgs) -> (TransferResult);
-  account_balance : (AccountBalanceArgs) -> (ICP) query;
+  acceptCycles: () -> ();
+  adminKillHeartbeat: () -> ();
+  adminStartHeartbeat: () -> ();
+  allPayments: () -> (vec record {
+                            principal;
+                            vec SubAccount__1;
+                          }) query;
+  allSettlements: () -> (vec record {
+                               TokenIndex;
+                               Settlement;
+                             }) query;
+  availableCycles: () -> (nat) query;
+  backup: () -> (vec record {
+                       TokenIndex;
+                       AccountIdentifier__1;
+                     }, vec record {
+                              AccountIdentifier__1;
+                              vec TokenIndex;
+                            }, vec record {
+                                     TokenIndex;
+                                     Metadata;
+                                   }) query;
+  balance: (BalanceRequest) -> (BalanceResponse) query;
+  bearer: (TokenIdentifier__1) -> (Result_7) query;
+  clearPayments: (principal, vec SubAccount__1) -> ();
+  crnDetails: () -> (nat, Balance__1, nat,
+   vec record {
+         AccountIdentifier__1;
+         Balance__1;
+       }) query;
+  cronCapEvents: () -> ();
+  cronDisbursements: () -> ();
+  cronSettlements: () -> ();
+  details: (TokenIdentifier__1) -> (Result_9) query;
+  disbursements: () ->
+   (vec record {
+          TokenIndex;
+          AccountIdentifier__1;
+          SubAccount__1;
+          nat64;
+        }) query;
+  extensions: () -> (vec Extension) query;
+  failedSales: () -> (vec record {
+                            AccountIdentifier__1;
+                            SubAccount__1;
+                          }) query;
+  generations: () ->
+   (vec record {
+          TokenIndex;
+          record {
+            Generation;
+            BreedId;
+          };
+        }) query;
+  getAllPayments: () -> (vec record {
+                               principal;
+                               vec SubAccount__1;
+                             }) query;
+  getAllWearables: () -> (vec record {
+                                TokenIndex;
+                                Wearable;
+                              }) query;
+  getBestPrice: (TokenIndex) -> (opt nat64) query;
+  getBuyers: () -> (vec record {
+                          AccountIdentifier__1;
+                          vec TokenIndex;
+                        }) query;
+  getMinted: () -> (TokenIndex) query;
+  getMinter: () -> (principal) query;
+  getRegistry: () -> (vec record {
+                            TokenIndex;
+                            AccountIdentifier__1;
+                          }) query;
+  getSold: () -> (TokenIndex) query;
+  getTokens: () -> (vec record {
+                          TokenIndex;
+                          Metadata;
+                        }) query;
+  getTransactions: (opt nat) -> (vec Transaction2) query;
+  historicExport: () -> (bool);
+  http_request: (HttpRequest) -> (HttpResponse) query;
+  index: (TokenIdentifier__1) -> (Result_8) query;
+  initCap: () -> ();
+  list: (ListRequest) -> (Result_3);
+  listings: () -> (vec record {
+                         TokenIndex;
+                         Listing;
+                         Metadata;
+                       }) query;
+  lock: (TokenIdentifier__1, nat64, AccountIdentifier__1, SubAccount__1) ->
+   (Result_7);
+  metadata: (TokenIdentifier__1) -> (Result_6) query;
+  mintNFT: (MintRequest) -> (TokenIndex);
+  notifications: () -> (vec NotifyLog) query;
+  payments: () -> (opt vec SubAccount__1) query;
+  receiveWearable: (TokenIndex, TokenIndex, vec nat8,
+   AccountIdentifier__1) -> (variant {
+                               failed;
+                               replaced: TokenIndex;
+                               success;
+                             });
+  refresh: () -> ();
+  refunds: () -> (opt vec SubAccount__1) query;
+  removeRefunds: (vec SubAccount__1) -> ();
+  reserve: (TokenIdentifier__1, nat64, AccountIdentifier__1,
+   SubAccount__1) -> (Result_5);
+  retreive: (AccountIdentifier__1) -> (Result_4);
+  retreiveSnapshot: (text) -> (vec AccountIdentifier__1);
+  salesSettlements: () -> (vec record {
+                                 AccountIdentifier__1;
+                                 Sale;
+                               }) query;
+  salesStats: () -> (bool, vec record {
+                                 TokenIndex;
+                                 Time;
+                                 Metadata;
+                               }, nat) query;
+  salesTransactions: () -> (vec SaleTransaction) query;
+  setMinter: (principal) -> ();
+  settings: () -> (bool, vec nat8, Time, Time, Time, vec Balance__1,
+   principal) query;
+  settle: (TokenIdentifier__1) -> (Result_3);
+  settlements: () ->
+   (vec record {
+          TokenIndex;
+          AccountIdentifier__1;
+          nat64;
+        }) query;
+  sire: (SireRequest) -> (Result_3);
+  sires: () -> (vec Sire) query;
+  stats: () -> (nat64, nat64, nat64, nat64, nat, nat, nat) query;
+  supply: (TokenIdentifier__1) -> (Result_2) query;
+  takeSnapshot: (text) -> (nat);
+  tokenTransferNotification: (TokenIdentifier__1, User__1, Balance__1,
+   Memo__1) -> (opt Balance__1);
+  tokens: (AccountIdentifier__1) -> (Result_1) query;
+  tokens_ext: (AccountIdentifier__1) -> (Result) query;
+  transactions: () -> (vec Transaction2) query;
+  transfer: (TransferRequest) -> (TransferResponse);
 }
