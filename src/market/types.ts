@@ -43,6 +43,7 @@ export interface LocalSaleStats {
 }
 export interface LockInfo {
   buyer_subaccount: [] | [Array<number>];
+  sold: boolean;
   locked: bigint;
   buyer: Principal;
   transaction_subaccount: Array<number>;
@@ -54,23 +55,29 @@ export interface LogMessageData {
 export interface MarketService {
   last_settle_cron: bigint;
   nfts: Array<[string, NFT]>;
+  last_list_cron: bigint;
   nft_project_list: Array<[string, Array<[Token, NftInfo]>]>;
 }
 export interface NFT {
-  owners: Array<[number, string]>;
   listings: Array<[number, Listing]>;
   canister_id: string;
+  pendding_listings: Array<[number, Listing]>;
   stats: LocalSaleStats;
 }
 export interface NftInfo {
   commission: Array<[Principal, bigint]>;
   standard: Standard;
 }
-export type Result = { Ok: [Principal, number] } | { Err: string };
-export type Result_1 = { Ok: null } | { Err: CommonError };
+export type Result = { Ok: null } | { Err: CommonError };
+export type Result_1 = { Ok: [Principal, number] } | { Err: string };
 export type Result_2 = { Ok: string } | { Err: string };
 export type Result_3 = { Ok: string } | { Err: CommonError };
 export type Result_4 =
+  | {
+      Ok: Array<[string, Array<[number, [] | [Listing], [] | [number]]>]>;
+    }
+  | { Err: CommonError };
+export type Result_5 =
   | {
       Ok: Array<[number, [] | [Listing], [] | [number]]>;
     }
@@ -91,11 +98,12 @@ export interface _SERVICE {
   address: ActorMethod<[[] | [Principal]], string>;
   admin_kill_heartbeat: ActorMethod<[], undefined>;
   admin_start_heartbeat: ActorMethod<[], undefined>;
+  auto_list: ActorMethod<[string, string], Result>;
   backup_disburse: ActorMethod<[], DisburseService>;
   backup_market: ActorMethod<[], MarketService>;
-  decode_token: ActorMethod<[string], Result>;
+  decode_token: ActorMethod<[string], Result_1>;
   delete_nft_project: ActorMethod<[string], undefined>;
-  delist: ActorMethod<[string, [] | [Array<number>], string], Result_1>;
+  delist: ActorMethod<[string, [] | [Array<number>], string], Result>;
   encode_token: ActorMethod<[Principal, number], string>;
   get_canister_log: ActorMethod<
     [GetLogMessagesParameters],
@@ -106,17 +114,17 @@ export interface _SERVICE {
   get_owner: ActorMethod<[], Array<Principal>>;
   handle_disbursement: ActorMethod<[Disbursement], Result_2>;
   handle_failed_disbursements: ActorMethod<[], [[] | [Disbursement], Result_2]>;
-  list: ActorMethod<[string, [] | [Array<number>], string, Amount], Result_1>;
+  list: ActorMethod<[string, [] | [Array<number>], string, Amount], Result_3>;
   listings: ActorMethod<[string], Array<[number, Listing]>>;
   lock: ActorMethod<
     [string, string, Amount, Principal, [] | [Array<number>]],
     Result_3
   >;
-  pre_list: ActorMethod<[string, string], Result_3>;
+  market_tokens_ext: ActorMethod<[string, [] | [string]], Result_4>;
   restore_disburse: ActorMethod<[DisburseService], undefined>;
   restore_market: ActorMethod<[MarketService], undefined>;
   return_back: ActorMethod<[string, string, [] | [string]], Result_3>;
-  settle: ActorMethod<[string, string], Result_1>;
+  settle: ActorMethod<[string, string], Result>;
   stats: ActorMethod<[string], [Stats, Stats]>;
-  tokens_ext: ActorMethod<[string, string], Result_4>;
+  tokens_ext: ActorMethod<[string, string], Result_5>;
 }
