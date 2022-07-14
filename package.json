@@ -1,22 +1,24 @@
 {
-  "name": "@nnsdao/actorservice",
-  "version": "1.0.0",
-  "private": false,
+  "name": "@nnsdao/nnsdao-kit",
+  "version": "1.1.1",
   "type": "module",
-  "description": "NnsDao Backend Service",
-  "main": "./index.js",
+  "description": "NnsDao Kit",
+  "main": "./index.ts",
   "exports": {
-    ".": "./index.js",
-    "./*": "./src/*.js"
+    ".": "./index.ts",
+    "./*": "./src/*"
   },
   "scripts": {
-    "test": "echo Done!"
+    "test": "echo test done!"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:NnsDao/ActorService.git"
+    "url": "git@github.com:NnsDao/nnsdao-kit.git"
   },
-  "keywords": [],
+  "keywords": [
+    "nnsdao",
+    "kit"
+  ],
   "author": "neptune0xf",
   "license": "MIT",
   "devDependencies": {
@@ -24,6 +26,11 @@
     "@tsconfig/recommended": "^1.0.1",
     "@types/node": "^17.0.38",
     "eslint": "^8.16.0",
-    "typescript": "^4.7.2"
+    "typescript": "^4.7.4"
+  },
+  "peerDependencies": {
+    "@dfinity/agent": "*",
+    "@dfinity/principal": "*",
+    "ic-stoic-identity": "*"
   }
 }

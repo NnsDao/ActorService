@@ -1,32 +1,78 @@
-# NnsDao Backend Service
+# Nnsdao Kit
 
 ## Install
 
-```sh
-# Use default ssh account
-npm i git@github.com:NnsDao/ActorService.git
+### Local dev,install latest
 
-# Or use another ssh account
-npm i git+ssh://xxxx:NnsDao/ActorService.git
+Tag `#dev` must provide
+
+```sh
+npm i https://github.com/NnsDao/nnsdao-kit.git#dev
+```
+
+### Online prod
+
+#### Install from Github
+
+```sh
+npm i https://github.com/NnsDao/nnsdao-kit.git
+```
+
+#### Install from npm
+
+Config registry
+
+```txt
+# .npmrc
+@nnsdao:registry=https://registry.npmjs.org/
+```
+
+```sh
+npm install @nnsdao/nnsdao-kit
+```
+
+#### Install from Github packages
+
+Config registry
+
+```txt
+# .npmrc
+@nnsdao:registry=https://npm.pkg.github.com
+```
+
+```sh
+npm install @nnsdao/nnsdao-kit
 ```
 
 ## Usage
 
+### Connect Plug && Stoic
+
+<details close>
+<summary>details</summary>
+ 
 ```js
-// import IDL
-// import { idlFactory as proxyIDL } from 'actorservice/xxxx/index';
-import { idlFactory as proxyIDL } from '@nnsdao/actorservice/market/index';
+// React Hooks
+const verifyConnection = async () => {
+  const connected = await window.ic.plug.isConnected();
+  if (!connected) await window.ic.plug.requestConnect({ whitelist, host });
+};
 
-// import Service
-// import {xxx as xxx } from 'actorservice/xxx/xxx.did'
-import { _SERVICE as proxyActor } from '@nnsdao/actorservice/market/market.did';
-```
+useEffect(async () => {
+verifyConnection();
+}, []);
 
-## Typescript warning
+````
+</details>
 
-If you got this warning
 
-![path warning](./static/path-alias.jpg)
+### Import Actor,Actor Instance Type
+```js
+import { idlFactory } from '@nnsdao/nnsdao-kit/market/index';
+import type { _SERVICE } from '@nnsdao/nnsdao-kit/market/types';
+````
+
+## Config Typescript Path Alias
 
 Config Path alias at `tsconfig.json`
 
@@ -35,9 +81,17 @@ Config Path alias at `tsconfig.json`
   "compilerOptions": {
     // xxx
     "paths": {
-      // xxx
-      "@nnsdao/actorservice/*": ["./node_modules/@nnsdao/actorservice/src/*"]
+      "@nnsdao/nnsdao-kit/*": ["./node_modules/@nnsdao/nnsdao-kit/src/*"]
+      // WARNING
+      // if you already have @** config ,then @nnsdao must place before @/*
+      // such as
+      // "@nnsdao/nnsdao-kit/*": ["./node_modules/@nnsdao/nnsdao-kit/src/*"],
+      // "@/*": ["./src/*"],
     }
   }
 }
 ```
+
+TODO
+
+1. auto download candid ,binding to another language,update local file
