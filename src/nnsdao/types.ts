@@ -24,11 +24,11 @@ export interface Proposal {
   proposer: Principal;
   proposal_state: ProposalState;
 }
-export interface ProposalArg {
+export interface ProposalContent {
   title: string;
   content: string;
+  sub_account: Array<number>;
   end_time: bigint;
-  proposer: Principal;
 }
 export type ProposalState =
   | { Failed: string }
@@ -37,12 +37,13 @@ export type ProposalState =
   | { Rejected: null }
   | { Succeeded: null }
   | { Accepted: null };
-export type Result = { Ok: Proposal } | { Err: string };
-export type Result_1 = { Ok: null } | { Err: string };
+export type Result = { Ok: string } | { Err: string };
+export type Result_1 = { Ok: Proposal } | { Err: string };
 export type Result_2 = { Ok: MemberItems } | { Err: string };
 export type Result_3 = { Ok: Array<MemberItems> } | { Err: string };
 export type Result_4 = { Ok: Array<[bigint, Proposal]> } | { Err: string };
 export type Result_5 = { Ok: boolean } | { Err: string };
+export type Result_6 = { Ok: null } | { Err: string };
 export interface Social {
   key: string;
   link: string;
@@ -53,12 +54,13 @@ export interface UserVoteArgs {
 }
 export type Votes = { No: bigint } | { Yes: bigint };
 export interface _SERVICE {
-  get_proposal: ActorMethod<[bigint], Result>;
-  initiate_proposal: ActorMethod<[ProposalArg], Result_1>;
+  get_pay_address: ActorMethod<[], Result>;
+  get_proposal: ActorMethod<[bigint], Result_1>;
+  initiate_proposal: ActorMethod<[ProposalContent], Result_1>;
   join: ActorMethod<[JoinDaoParams], Result_2>;
   member_list: ActorMethod<[], Result_3>;
   proposal_list: ActorMethod<[], Result_4>;
   quit: ActorMethod<[], Result_5>;
   user_info: ActorMethod<[], Result_2>;
-  votes: ActorMethod<[UserVoteArgs], Result_1>;
+  votes: ActorMethod<[UserVoteArgs], Result_6>;
 }
