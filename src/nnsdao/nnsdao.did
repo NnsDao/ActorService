@@ -24,7 +24,6 @@ type Proposal = record {
 type ProposalContent = record {
   title : text;
   content : text;
-  sub_account : vec nat8;
   end_time : nat64;
 };
 type ProposalState = variant {
@@ -35,24 +34,26 @@ type ProposalState = variant {
   Succeeded;
   Accepted;
 };
-type Result = variant { Ok : text; Err : text };
-type Result_1 = variant { Ok : Proposal; Err : text };
+type Result = variant { Ok : Proposal; Err : text };
+type Result_1 = variant { Ok : vec record { nat64; Proposal }; Err : text };
 type Result_2 = variant { Ok : MemberItems; Err : text };
 type Result_3 = variant { Ok : vec MemberItems; Err : text };
-type Result_4 = variant { Ok : vec record { nat64; Proposal }; Err : text };
-type Result_5 = variant { Ok : bool; Err : text };
-type Result_6 = variant { Ok; Err : text };
+type Result_4 = variant { Ok : bool; Err : text };
+type Result_5 = variant { Ok; Err : text };
 type Social = record { key : text; link : text };
-type UserVoteArgs = record { id : nat64; vote : Votes };
+type UserVoteArgs = record {
+  id : nat64;
+  "principal" : opt principal;
+  vote : Votes;
+};
 type Votes = variant { No : nat64; Yes : nat64 };
 service : {
-  get_pay_address : () -> (Result) query;
-  get_proposal : (nat64) -> (Result_1) query;
-  initiate_proposal : (ProposalContent) -> (Result_1);
+  get_proposal : (nat64) -> (Result) query;
+  get_proposal_list : () -> (Result_1) query;
+  initiate_proposal : (ProposalContent) -> (Result);
   join : (JoinDaoParams) -> (Result_2);
   member_list : () -> (Result_3);
-  proposal_list : () -> (Result_4) query;
-  quit : () -> (Result_5);
+  quit : () -> (Result_4);
   user_info : () -> (Result_2);
-  votes : (UserVoteArgs) -> (Result_6);
+  vote : (UserVoteArgs) -> (Result_5);
 }

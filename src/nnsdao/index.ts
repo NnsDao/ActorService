@@ -1,5 +1,4 @@
 export const idlFactory = ({ IDL }) => {
-  const Result = IDL.Variant({ Ok: IDL.Text, Err: IDL.Text });
   const Votes = IDL.Variant({ No: IDL.Nat64, Yes: IDL.Nat64 });
   const ProposalState = IDL.Variant({
     Failed: IDL.Text,
@@ -19,11 +18,14 @@ export const idlFactory = ({ IDL }) => {
     proposer: IDL.Principal,
     proposal_state: ProposalState
   });
-  const Result_1 = IDL.Variant({ Ok: Proposal, Err: IDL.Text });
+  const Result = IDL.Variant({ Ok: Proposal, Err: IDL.Text });
+  const Result_1 = IDL.Variant({
+    Ok: IDL.Vec(IDL.Tuple(IDL.Nat64, Proposal)),
+    Err: IDL.Text
+  });
   const ProposalContent = IDL.Record({
     title: IDL.Text,
     content: IDL.Text,
-    sub_account: IDL.Vec(IDL.Nat8),
     end_time: IDL.Nat64
   });
   const Social = IDL.Record({ key: IDL.Text, link: IDL.Text });
@@ -45,23 +47,22 @@ export const idlFactory = ({ IDL }) => {
     Ok: IDL.Vec(MemberItems),
     Err: IDL.Text
   });
-  const Result_4 = IDL.Variant({
-    Ok: IDL.Vec(IDL.Tuple(IDL.Nat64, Proposal)),
-    Err: IDL.Text
+  const Result_4 = IDL.Variant({ Ok: IDL.Bool, Err: IDL.Text });
+  const UserVoteArgs = IDL.Record({
+    id: IDL.Nat64,
+    principal: IDL.Opt(IDL.Principal),
+    vote: Votes
   });
-  const Result_5 = IDL.Variant({ Ok: IDL.Bool, Err: IDL.Text });
-  const UserVoteArgs = IDL.Record({ id: IDL.Nat64, vote: Votes });
-  const Result_6 = IDL.Variant({ Ok: IDL.Null, Err: IDL.Text });
+  const Result_5 = IDL.Variant({ Ok: IDL.Null, Err: IDL.Text });
   return IDL.Service({
-    get_pay_address: IDL.Func([], [Result], ['query']),
-    get_proposal: IDL.Func([IDL.Nat64], [Result_1], ['query']),
-    initiate_proposal: IDL.Func([ProposalContent], [Result_1], []),
+    get_proposal: IDL.Func([IDL.Nat64], [Result], ['query']),
+    get_proposal_list: IDL.Func([], [Result_1], ['query']),
+    initiate_proposal: IDL.Func([ProposalContent], [Result], []),
     join: IDL.Func([JoinDaoParams], [Result_2], []),
     member_list: IDL.Func([], [Result_3], []),
-    proposal_list: IDL.Func([], [Result_4], ['query']),
-    quit: IDL.Func([], [Result_5], []),
+    quit: IDL.Func([], [Result_4], []),
     user_info: IDL.Func([], [Result_2], []),
-    votes: IDL.Func([UserVoteArgs], [Result_6], [])
+    vote: IDL.Func([UserVoteArgs], [Result_5], [])
   });
 };
 export const init = ({ IDL }) => {
