@@ -38,10 +38,11 @@ export type ProposalState =
   | { Accepted: null };
 export type Result = { Ok: Proposal } | { Err: string };
 export type Result_1 = { Ok: Array<[bigint, Proposal]> } | { Err: string };
-export type Result_2 = { Ok: MemberItems } | { Err: string };
-export type Result_3 = { Ok: Array<MemberItems> } | { Err: string };
-export type Result_4 = { Ok: boolean } | { Err: string };
-export type Result_5 = { Ok: null } | { Err: string };
+export type Result_2 = { Ok: [Proposal, [bigint]] } | { Err: string };
+export type Result_3 = { Ok: MemberItems } | { Err: string };
+export type Result_4 = { Ok: Array<MemberItems> } | { Err: string };
+export type Result_5 = { Ok: boolean } | { Err: string };
+export type Result_6 = { Ok: null } | { Err: string };
 export interface Social {
   key: string;
   link: string;
@@ -55,10 +56,10 @@ export type Votes = { No: bigint } | { Yes: bigint };
 export interface _SERVICE {
   get_proposal: ActorMethod<[bigint], Result>;
   get_proposal_list: ActorMethod<[], Result_1>;
-  initiate_proposal: ActorMethod<[ProposalContent], Result>;
-  join: ActorMethod<[JoinDaoParams], Result_2>;
-  member_list: ActorMethod<[], Result_3>;
-  quit: ActorMethod<[], Result_4>;
-  user_info: ActorMethod<[], Result_2>;
-  vote: ActorMethod<[UserVoteArgs], Result_5>;
+  initiate_proposal: ActorMethod<[ProposalContent], Result_2>;
+  join: ActorMethod<[JoinDaoParams], Result_3>;
+  member_list: ActorMethod<[], Result_4>;
+  quit: ActorMethod<[], Result_5>;
+  user_info: ActorMethod<[], Result_3>;
+  vote: ActorMethod<[UserVoteArgs], Result_6>;
 }

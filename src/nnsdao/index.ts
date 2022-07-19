@@ -28,6 +28,10 @@ export const idlFactory = ({ IDL }) => {
     content: IDL.Text,
     end_time: IDL.Nat64
   });
+  const Result_2 = IDL.Variant({
+    Ok: IDL.Tuple(Proposal, IDL.Tuple(IDL.Nat)),
+    Err: IDL.Text
+  });
   const Social = IDL.Record({ key: IDL.Text, link: IDL.Text });
   const JoinDaoParams = IDL.Record({
     nickname: IDL.Text,
@@ -42,27 +46,27 @@ export const idlFactory = ({ IDL }) => {
     status_code: IDL.Int8,
     avatar: IDL.Text
   });
-  const Result_2 = IDL.Variant({ Ok: MemberItems, Err: IDL.Text });
-  const Result_3 = IDL.Variant({
+  const Result_3 = IDL.Variant({ Ok: MemberItems, Err: IDL.Text });
+  const Result_4 = IDL.Variant({
     Ok: IDL.Vec(MemberItems),
     Err: IDL.Text
   });
-  const Result_4 = IDL.Variant({ Ok: IDL.Bool, Err: IDL.Text });
+  const Result_5 = IDL.Variant({ Ok: IDL.Bool, Err: IDL.Text });
   const UserVoteArgs = IDL.Record({
     id: IDL.Nat64,
     principal: IDL.Opt(IDL.Principal),
     vote: Votes
   });
-  const Result_5 = IDL.Variant({ Ok: IDL.Null, Err: IDL.Text });
+  const Result_6 = IDL.Variant({ Ok: IDL.Null, Err: IDL.Text });
   return IDL.Service({
     get_proposal: IDL.Func([IDL.Nat64], [Result], ['query']),
     get_proposal_list: IDL.Func([], [Result_1], ['query']),
-    initiate_proposal: IDL.Func([ProposalContent], [Result], []),
-    join: IDL.Func([JoinDaoParams], [Result_2], []),
-    member_list: IDL.Func([], [Result_3], []),
-    quit: IDL.Func([], [Result_4], []),
-    user_info: IDL.Func([], [Result_2], []),
-    vote: IDL.Func([UserVoteArgs], [Result_5], [])
+    initiate_proposal: IDL.Func([ProposalContent], [Result_2], []),
+    join: IDL.Func([JoinDaoParams], [Result_3], []),
+    member_list: IDL.Func([], [Result_4], []),
+    quit: IDL.Func([], [Result_5], []),
+    user_info: IDL.Func([], [Result_3], []),
+    vote: IDL.Func([UserVoteArgs], [Result_6], [])
   });
 };
 export const init = ({ IDL }) => {
