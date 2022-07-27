@@ -50,9 +50,9 @@ type Votes = variant { No : nat64; Yes : nat64 };
 service : {
   get_proposal : (nat64) -> (Result) query;
   get_proposal_list : () -> (Result_1) query;
-  initiate_proposal : (ProposalContent) -> (Result);
   join : (JoinDaoParams) -> (Result_2);
   member_list : () -> (Result_3);
+  propose : (ProposalContent) -> (Result);
   quit : () -> (Result_4);
   user_info : () -> (Result_2);
   vote : (UserVoteArgs) -> (Result_5);

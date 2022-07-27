@@ -55,9 +55,9 @@ export type Votes = { No: bigint } | { Yes: bigint };
 export interface _SERVICE {
   get_proposal: ActorMethod<[bigint], Result>;
   get_proposal_list: ActorMethod<[], Result_1>;
-  initiate_proposal: ActorMethod<[ProposalContent], Result>;
   join: ActorMethod<[JoinDaoParams], Result_2>;
   member_list: ActorMethod<[], Result_3>;
+  propose: ActorMethod<[ProposalContent], Result>;
   quit: ActorMethod<[], Result_4>;
   user_info: ActorMethod<[], Result_2>;
   vote: ActorMethod<[UserVoteArgs], Result_5>;
