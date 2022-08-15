@@ -25,6 +25,7 @@ type ProposalContent = record {
   title : text;
   content : text;
   end_time : nat64;
+  property : opt vec record { text; text };
 };
 type ProposalState = variant {
   Failed : text;

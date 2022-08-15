@@ -46,7 +46,8 @@ export const idlFactory = ({ IDL }) => {
   const ProposalContent = IDL.Record({
     title: IDL.Text,
     content: IDL.Text,
-    end_time: IDL.Nat64
+    end_time: IDL.Nat64,
+    property: IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)))
   });
   const Result_5 = IDL.Variant({ Ok: IDL.Bool, Err: IDL.Text });
   const UserVoteArgs = IDL.Record({

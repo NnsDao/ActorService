@@ -28,6 +28,7 @@ export interface ProposalContent {
   title: string;
   content: string;
   end_time: bigint;
+  property: [] | [Array<[string, string]>];
 }
 export type ProposalState =
   | { Failed: string }
