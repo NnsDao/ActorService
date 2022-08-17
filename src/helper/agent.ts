@@ -35,6 +35,6 @@ export async function getCandid(cid: string) {
 // Type
 export interface getActorProps {
   needAuth?: boolean;
-  idl?: any;
+  idl: (...arg: any[]) => any;
   cid: string;
 }
