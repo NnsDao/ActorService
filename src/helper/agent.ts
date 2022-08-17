@@ -9,7 +9,7 @@ export const agent = new HttpAgent({ host: onlineHost });
 // anonymous agent can more efficient then auth agent;
 export const anonymousAgent: HttpAgent = new HttpAgent({ host: onlineHost });
 
-export async function getActor(props: getActorProps): Promise<typeof Actor> {
+export async function getActor<T>(props: getActorProps): Promise<T> {
   let { cid, idl, needAuth = false } = props;
   const loginType = storage.get('loginType');
   const actor =
