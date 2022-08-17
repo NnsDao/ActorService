@@ -1,0 +1,27 @@
+type ControllerAction = variant { add : principal; remove : principal; clear };
+type CreateDaoInfo = record {
+  option : opt vec record { text; text };
+  name : text;
+  tags : vec text;
+  intro : text;
+  avatar : text;
+  poster : text;
+};
+type DaoInfo = record {
+  id : nat64;
+  controller : vec principal;
+  status : DaoStatusCode;
+  owner : principal;
+  canister_id : principal;
+  dao_type : text;
+};
+type DaoStatusCode = variant { Closed; Normal };
+type Result = variant { Ok; Err : text };
+service : {
+  add_dao : (nat64, principal) -> (Result);
+  create_dao : (CreateDaoInfo) -> (Result);
+  dao_list : () -> (vec DaoInfo) query;
+  get_owner : () -> (vec principal) query;
+  greet : (text) -> (text) query;
+  update_dao_controller : (nat64, ControllerAction) -> (Result);
+}
