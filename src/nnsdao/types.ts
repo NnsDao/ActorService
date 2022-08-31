@@ -21,6 +21,7 @@ export interface Proposal {
   vote_data: Array<[Principal, Votes]>;
   end_time: bigint;
   timestamp: bigint;
+  property: [] | [Array<[string, string]>];
   proposer: Principal;
   proposal_state: ProposalState;
 }
@@ -42,8 +43,7 @@ export type Result_1 = { Ok: Proposal } | { Err: string };
 export type Result_2 = { Ok: Array<[bigint, Proposal]> } | { Err: string };
 export type Result_3 = { Ok: MemberItems } | { Err: string };
 export type Result_4 = { Ok: Array<MemberItems> } | { Err: string };
-export type Result_5 = { Ok: boolean } | { Err: string };
-export type Result_6 = { Ok: null } | { Err: string };
+export type Result_5 = { Ok: null } | { Err: string };
 export interface Social {
   key: string;
   link: string;
@@ -61,7 +61,7 @@ export interface _SERVICE {
   join: ActorMethod<[JoinDaoParams], Result_3>;
   member_list: ActorMethod<[], Result_4>;
   propose: ActorMethod<[ProposalContent], Result_1>;
-  quit: ActorMethod<[], Result_5>;
+  quit: ActorMethod<[], Result_3>;
   user_info: ActorMethod<[], Result_3>;
-  vote: ActorMethod<[UserVoteArgs], Result_6>;
+  vote: ActorMethod<[UserVoteArgs], Result_5>;
 }
