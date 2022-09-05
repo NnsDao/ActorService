@@ -1,3 +1,10 @@
+type CanisterStatusResponse = record {
+  status : Status;
+  memory_size : nat;
+  cycles : nat;
+  settings : DefiniteCanisterSettings;
+  module_hash : opt vec nat8;
+};
 type ControllerAction = variant { add : principal; remove : principal; clear };
 type CreateDaoInfo = record {
   option : opt vec record { text; text };
@@ -8,20 +15,40 @@ type CreateDaoInfo = record {
   poster : text;
 };
 type DaoInfo = record {
-  id : nat64;
+  id : nat;
   controller : vec principal;
   status : DaoStatusCode;
   owner : principal;
+  tags : vec text;
   canister_id : principal;
-  dao_type : text;
 };
 type DaoStatusCode = variant { Closed; Normal };
-type Result = variant { Ok; Err : text };
+type DefiniteCanisterSettings = record {
+  freezing_threshold : nat;
+  controllers : vec principal;
+  memory_allocation : nat;
+  compute_allocation : nat;
+};
+type RejectionCode = variant {
+  NoError;
+  CanisterError;
+  SysTransient;
+  DestinationInvalid;
+  Unknown;
+  SysFatal;
+  CanisterReject;
+};
+type Result = variant { Ok : DaoInfo; Err : text };
+type Result_1 = variant {
+  Ok : CanisterStatusResponse;
+  Err : record { RejectionCode; text };
+};
+type Status = variant { stopped; stopping; running };
 service : {
-  add_dao : (nat64, principal) -> (Result);
+  add_dao : (text, CreateDaoInfo) -> (Result);
   create_dao : (CreateDaoInfo) -> (Result);
   dao_list : () -> (vec DaoInfo) query;
+  dao_status : (text) -> (Result_1) query;
   get_owner : () -> (vec principal) query;
-  greet : (text) -> (text) query;
-  update_dao_controller : (nat64, ControllerAction) -> (Result);
+  update_dao_controller : (nat, ControllerAction) -> (Result);
 }

@@ -1,6 +1,13 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 
+export interface CanisterStatusResponse {
+  status: Status;
+  memory_size: bigint;
+  cycles: bigint;
+  settings: DefiniteCanisterSettings;
+  module_hash: [] | [Array<number>];
+}
 export type ControllerAction =
   | { add: Principal }
   | { remove: Principal }
@@ -18,16 +25,34 @@ export interface DaoInfo {
   controller: Array<Principal>;
   status: DaoStatusCode;
   owner: Principal;
+  tags: Array<string>;
   canister_id: Principal;
-  dao_type: string;
 }
 export type DaoStatusCode = { Closed: null } | { Normal: null };
-export type Result = { Ok: null } | { Err: string };
+export interface DefiniteCanisterSettings {
+  freezing_threshold: bigint;
+  controllers: Array<Principal>;
+  memory_allocation: bigint;
+  compute_allocation: bigint;
+}
+export type RejectionCode =
+  | { NoError: null }
+  | { CanisterError: null }
+  | { SysTransient: null }
+  | { DestinationInvalid: null }
+  | { Unknown: null }
+  | { SysFatal: null }
+  | { CanisterReject: null };
+export type Result = { Ok: DaoInfo } | { Err: string };
+export type Result_1 =
+  | { Ok: CanisterStatusResponse }
+  | { Err: [RejectionCode, string] };
+export type Status = { stopped: null } | { stopping: null } | { running: null };
 export interface _SERVICE {
-  add_dao: ActorMethod<[bigint, Principal], Result>;
+  add_dao: ActorMethod<[string, CreateDaoInfo], Result>;
   create_dao: ActorMethod<[CreateDaoInfo], Result>;
   dao_list: ActorMethod<[], Array<DaoInfo>>;
+  dao_status: ActorMethod<[string], Result_1>;
   get_owner: ActorMethod<[], Array<Principal>>;
-  greet: ActorMethod<[string], string>;
   update_dao_controller: ActorMethod<[bigint, ControllerAction], Result>;
 }
