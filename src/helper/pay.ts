@@ -25,7 +25,7 @@ export async function payWithICP(amount: number, receiver: string, memo?: bigint
     const ledger = LedgerCanister.create({ agent });
     const params: any = {
       to: AccountIdentifier.fromHex(receiver),
-      amount: ICP.fromE8s(BigInt(amount)),
+      amount: ICP.fromE8s(BigInt(amount * 1e8)),
     };
     if (memo) {
       params.memo = memo;
