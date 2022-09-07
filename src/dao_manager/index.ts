@@ -1,5 +1,5 @@
 export const idlFactory = ({ IDL }) => {
-  const CreateDaoInfo = IDL.Record({
+  const AddDaoInfo = IDL.Record({
     option: IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))),
     name: IDL.Text,
     tags: IDL.Vec(IDL.Text),
@@ -20,6 +20,16 @@ export const idlFactory = ({ IDL }) => {
     canister_id: IDL.Principal
   });
   const Result = IDL.Variant({ Ok: DaoInfo, Err: IDL.Text });
+  const CreateDaoInfo = IDL.Record({
+    option: IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))),
+    memo: IDL.Nat64,
+    name: IDL.Text,
+    tags: IDL.Vec(IDL.Text),
+    intro: IDL.Text,
+    block_height: IDL.Nat64,
+    avatar: IDL.Text,
+    poster: IDL.Text
+  });
   const Status = IDL.Variant({
     stopped: IDL.Null,
     stopping: IDL.Null,
@@ -51,17 +61,26 @@ export const idlFactory = ({ IDL }) => {
     Ok: CanisterStatusResponse,
     Err: IDL.Tuple(RejectionCode, IDL.Text)
   });
+  const TransactionItem = IDL.Record({
+    to: IDL.Text,
+    status: IDL.Nat8,
+    from: IDL.Text,
+    memo: IDL.Nat64,
+    amount: IDL.Nat64
+  });
+  const Result_2 = IDL.Variant({ Ok: TransactionItem, Err: IDL.Text });
   const ControllerAction = IDL.Variant({
     add: IDL.Principal,
     remove: IDL.Principal,
     clear: IDL.Null
   });
   return IDL.Service({
-    add_dao: IDL.Func([IDL.Text, CreateDaoInfo], [Result], []),
+    add_dao: IDL.Func([IDL.Text, AddDaoInfo], [Result], []),
     create_dao: IDL.Func([CreateDaoInfo], [Result], []),
     dao_list: IDL.Func([], [IDL.Vec(DaoInfo)], ['query']),
     dao_status: IDL.Func([IDL.Text], [Result_1], ['query']),
     get_owner: IDL.Func([], [IDL.Vec(IDL.Principal)], ['query']),
+    get_pay_info: IDL.Func([], [Result_2], ['query']),
     update_dao_controller: IDL.Func([IDL.Nat, ControllerAction], [Result], [])
   });
 };

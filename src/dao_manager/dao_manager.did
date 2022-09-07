@@ -1,3 +1,11 @@
+type AddDaoInfo = record {
+  option : opt vec record { text; text };
+  name : text;
+  tags : vec text;
+  intro : text;
+  avatar : text;
+  poster : text;
+};
 type CanisterStatusResponse = record {
   status : Status;
   memory_size : nat;
@@ -8,9 +16,11 @@ type CanisterStatusResponse = record {
 type ControllerAction = variant { add : principal; remove : principal; clear };
 type CreateDaoInfo = record {
   option : opt vec record { text; text };
+  memo : nat64;
   name : text;
   tags : vec text;
   intro : text;
+  block_height : nat64;
   avatar : text;
   poster : text;
 };
@@ -43,12 +53,21 @@ type Result_1 = variant {
   Ok : CanisterStatusResponse;
   Err : record { RejectionCode; text };
 };
+type Result_2 = variant { Ok : TransactionItem; Err : text };
 type Status = variant { stopped; stopping; running };
+type TransactionItem = record {
+  to : text;
+  status : nat8;
+  from : text;
+  memo : nat64;
+  amount : nat64;
+};
 service : {
-  add_dao : (text, CreateDaoInfo) -> (Result);
+  add_dao : (text, AddDaoInfo) -> (Result);
   create_dao : (CreateDaoInfo) -> (Result);
   dao_list : () -> (vec DaoInfo) query;
   dao_status : (text) -> (Result_1) query;
   get_owner : () -> (vec principal) query;
+  get_pay_info : () -> (Result_2) query;
   update_dao_controller : (nat, ControllerAction) -> (Result);
 }
