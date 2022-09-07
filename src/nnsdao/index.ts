@@ -16,6 +16,7 @@ export const idlFactory = ({ IDL }) => {
     vote_data: IDL.Vec(IDL.Tuple(IDL.Principal, Votes)),
     end_time: IDL.Nat64,
     timestamp: IDL.Nat64,
+    property: IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))),
     proposer: IDL.Principal,
     proposal_state: ProposalState
   });
@@ -49,13 +50,12 @@ export const idlFactory = ({ IDL }) => {
     end_time: IDL.Nat64,
     property: IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)))
   });
-  const Result_5 = IDL.Variant({ Ok: IDL.Bool, Err: IDL.Text });
   const UserVoteArgs = IDL.Record({
     id: IDL.Nat64,
     principal: IDL.Opt(IDL.Principal),
     vote: Votes
   });
-  const Result_6 = IDL.Variant({ Ok: IDL.Null, Err: IDL.Text });
+  const Result_5 = IDL.Variant({ Ok: IDL.Null, Err: IDL.Text });
   return IDL.Service({
     get_handled_proposal: IDL.Func(
       [],
@@ -67,9 +67,9 @@ export const idlFactory = ({ IDL }) => {
     join: IDL.Func([JoinDaoParams], [Result_3], []),
     member_list: IDL.Func([], [Result_4], []),
     propose: IDL.Func([ProposalContent], [Result_1], []),
-    quit: IDL.Func([], [Result_5], []),
+    quit: IDL.Func([], [Result_3], []),
     user_info: IDL.Func([], [Result_3], []),
-    vote: IDL.Func([UserVoteArgs], [Result_6], [])
+    vote: IDL.Func([UserVoteArgs], [Result_5], [])
   });
 };
 export const init = ({ IDL }) => {

@@ -1,5 +1,4 @@
-type ControllerAction = variant { add : principal; remove : principal; clear };
-type CreateDaoInfo = record {
+type AddDaoInfo = record {
   option : opt vec record { text; text };
   name : text;
   tags : vec text;
@@ -7,21 +6,68 @@ type CreateDaoInfo = record {
   avatar : text;
   poster : text;
 };
+type CanisterStatusResponse = record {
+  status : Status;
+  memory_size : nat;
+  cycles : nat;
+  settings : DefiniteCanisterSettings;
+  module_hash : opt vec nat8;
+};
+type ControllerAction = variant { add : principal; remove : principal; clear };
+type CreateDaoInfo = record {
+  option : opt vec record { text; text };
+  memo : nat64;
+  name : text;
+  tags : vec text;
+  intro : text;
+  block_height : nat64;
+  avatar : text;
+  poster : text;
+};
 type DaoInfo = record {
-  id : nat64;
+  id : nat;
   controller : vec principal;
   status : DaoStatusCode;
   owner : principal;
+  tags : vec text;
   canister_id : principal;
-  dao_type : text;
 };
 type DaoStatusCode = variant { Closed; Normal };
-type Result = variant { Ok; Err : text };
+type DefiniteCanisterSettings = record {
+  freezing_threshold : nat;
+  controllers : vec principal;
+  memory_allocation : nat;
+  compute_allocation : nat;
+};
+type RejectionCode = variant {
+  NoError;
+  CanisterError;
+  SysTransient;
+  DestinationInvalid;
+  Unknown;
+  SysFatal;
+  CanisterReject;
+};
+type Result = variant { Ok : DaoInfo; Err : text };
+type Result_1 = variant {
+  Ok : CanisterStatusResponse;
+  Err : record { RejectionCode; text };
+};
+type Result_2 = variant { Ok : TransactionItem; Err : text };
+type Status = variant { stopped; stopping; running };
+type TransactionItem = record {
+  to : text;
+  status : nat8;
+  from : text;
+  memo : nat64;
+  amount : nat64;
+};
 service : {
-  add_dao : (nat64, principal) -> (Result);
+  add_dao : (text, AddDaoInfo) -> (Result);
   create_dao : (CreateDaoInfo) -> (Result);
   dao_list : () -> (vec DaoInfo) query;
+  dao_status : (text) -> (Result_1) query;
   get_owner : () -> (vec principal) query;
-  greet : (text) -> (text) query;
-  update_dao_controller : (nat64, ControllerAction) -> (Result);
+  get_pay_info : () -> (Result_2);
+  update_dao_controller : (nat, ControllerAction) -> (Result);
 }
