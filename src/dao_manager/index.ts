@@ -80,7 +80,7 @@ export const idlFactory = ({ IDL }) => {
     dao_list: IDL.Func([], [IDL.Vec(DaoInfo)], ['query']),
     dao_status: IDL.Func([IDL.Text], [Result_1], ['query']),
     get_owner: IDL.Func([], [IDL.Vec(IDL.Principal)], ['query']),
-    get_pay_info: IDL.Func([], [Result_2], ['query']),
+    get_pay_info: IDL.Func([], [Result_2], []),
     update_dao_controller: IDL.Func([IDL.Nat, ControllerAction], [Result], [])
   });
 };
