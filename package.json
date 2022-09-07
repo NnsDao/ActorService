@@ -31,6 +31,7 @@
   "peerDependencies": {
     "@dfinity/agent": "*",
     "@dfinity/principal": "*",
-    "ic-stoic-identity": "*"
+    "ic-stoic-identity": "*",
+    "@dfinity/nns": "*"
   }
 }
