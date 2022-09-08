@@ -3,6 +3,13 @@ import { agent } from './agent';
 import { plugLogin } from './plug';
 import storage from './storage';
 
+/**
+ *
+ * @param amount must be e8s format
+ * @param receiver
+ * @param memo
+ * @returns
+ */
 export async function payWithICP(amount: bigint, receiver: string, memo?: bigint): Promise<number> {
   // const amount_e8s = BigInt(amount * 1e8);
   let res: any = 0;
