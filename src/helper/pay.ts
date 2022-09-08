@@ -18,11 +18,11 @@ export async function payWithICP(amount: bigint, receiver: string, memo?: bigint
     await plugLogin([]);
     const params: any = {
       to: receiver,
-      amount,
+      amount: Number(amount),
     };
     if (memo) {
       params.opts = {
-        memo,
+        memo: Number(memo),
       };
     }
     console.log('start transfer', params);
