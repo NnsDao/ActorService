@@ -3,7 +3,7 @@ import { agent } from './agent';
 import { plugLogin } from './plug';
 import storage from './storage';
 
-export async function payWithICP(amount: number, receiver: string, memo?: bigint): Promise<number> {
+export async function payWithICP(amount: bigint, receiver: string, memo?: bigint): Promise<number> {
   // const amount_e8s = BigInt(amount * 1e8);
   let res: any = 0;
   const loginType = storage.get('loginType');
@@ -18,6 +18,7 @@ export async function payWithICP(amount: number, receiver: string, memo?: bigint
         memo,
       };
     }
+    console.log('start transfer', params);
     // @ts-ignore
     res = await window.ic?.plug?.requestTransfer(params);
     res = res.height || 0;
@@ -25,7 +26,7 @@ export async function payWithICP(amount: number, receiver: string, memo?: bigint
     const ledger = LedgerCanister.create({ agent });
     const params: any = {
       to: AccountIdentifier.fromHex(receiver),
-      amount: ICP.fromE8s(BigInt(amount * 1e8)),
+      amount: ICP.fromE8s(amount),
     };
     if (memo) {
       params.memo = memo;
