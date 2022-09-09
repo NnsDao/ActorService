@@ -45,7 +45,7 @@ export async function plugLogin(whitelist: string[]): Promise<PlugLoginRes | nul
     persistTimer = setTimeout(async () => {
       await autoConnect();
       persistConnect();
-    }, 3e3);
+    }, 6e4);
   };
   persistConnect();
   console.log('Plug login', globalThis.ic.plug.sessionManager);
