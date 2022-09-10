@@ -1,6 +1,8 @@
 import { StoicIdentity } from 'ic-stoic-identity';
 import { agent } from './agent';
+import storage from './storage';
 interface loginRes {
+  [key: string]: any;
   principalId: string;
   accountId: string;
 }
@@ -37,5 +39,7 @@ export async function stoicLogin(): Promise<loginRes | null> {
 
 export async function stoicLogout() {
   //Disconnect after
-  await StoicIdentity.disconnect();
+  storage.remove('userInfo');
+  storage.remove('loginType');
+  // await StoicIdentity.disconnect();
 }

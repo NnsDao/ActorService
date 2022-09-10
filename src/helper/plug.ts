@@ -1,4 +1,5 @@
 import type { HttpAgent } from '@dfinity/agent';
+import storage from './storage';
 
 interface PlugLoginRes {
   agent: Omit<HttpAgent, 'invalidateIdentity' | 'replaceIdentity'>;
@@ -54,8 +55,10 @@ export async function plugLogin(whitelist: string[]): Promise<PlugLoginRes | nul
 }
 
 export async function plugLogout(): Promise<void> {
+  storage.remove('loginType');
+  storage.remove('userInfo');
   // @ts-ignore
-  await globalThis.ic.plug.disconnect();
+  // await globalThis.ic.plug.disconnect();
   persistTimer && clearTimeout(persistTimer);
   //Disconnect after
 }

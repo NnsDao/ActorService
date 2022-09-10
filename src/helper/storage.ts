@@ -29,7 +29,18 @@ class Storage {
 
 export default new Storage();
 
-// Type
+// ========================================
+// Type Definition
+// ========================================
 type Store = {
   loginType: undefined | 'stoic' | 'plug';
+  userInfo: LoginUserInfo;
 };
+
+interface LoginUserInfo {
+  [key: string]: any;
+  loginType: string;
+  principalId: string;
+  accountId: string;
+  isLogin: boolean;
+}
