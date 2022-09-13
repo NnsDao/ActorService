@@ -1,3 +1,11 @@
+type DaoInfo = record {
+  option : opt vec record { text; text };
+  name : text;
+  tags : vec text;
+  intro : text;
+  avatar : text;
+  poster : text;
+};
 type JoinDaoParams = record {
   nickname : text;
   social : vec Social;
@@ -36,12 +44,13 @@ type ProposalState = variant {
   Succeeded;
   Accepted;
 };
-type Result = variant { Ok : text; Err : text };
-type Result_1 = variant { Ok : Proposal; Err : text };
-type Result_2 = variant { Ok : vec record { nat64; Proposal }; Err : text };
-type Result_3 = variant { Ok : MemberItems; Err : text };
-type Result_4 = variant { Ok : vec MemberItems; Err : text };
-type Result_5 = variant { Ok; Err : text };
+type Result = variant { Ok : DaoInfo; Err : text };
+type Result_1 = variant { Ok : text; Err : text };
+type Result_2 = variant { Ok : Proposal; Err : text };
+type Result_3 = variant { Ok : vec record { nat64; Proposal }; Err : text };
+type Result_4 = variant { Ok : MemberItems; Err : text };
+type Result_5 = variant { Ok : vec MemberItems; Err : text };
+type Result_6 = variant { Ok; Err : text };
 type Social = record { key : text; link : text };
 type UserVoteArgs = record {
   id : nat64;
@@ -50,13 +59,14 @@ type UserVoteArgs = record {
 };
 type Votes = variant { No : nat64; Yes : nat64 };
 service : {
-  get_handled_proposal : () -> (vec record { nat64; Result }) query;
-  get_proposal : (nat64) -> (Result_1) query;
-  get_proposal_list : () -> (Result_2) query;
-  join : (JoinDaoParams) -> (Result_3);
-  member_list : () -> (Result_4);
-  propose : (ProposalContent) -> (Result_1);
-  quit : () -> (Result_3);
-  user_info : () -> (Result_3);
-  vote : (UserVoteArgs) -> (Result_5);
+  dao_info : () -> (Result);
+  get_handled_proposal : () -> (vec record { nat64; Result_1 }) query;
+  get_proposal : (nat64) -> (Result_2) query;
+  get_proposal_list : () -> (Result_3) query;
+  join : (JoinDaoParams) -> (Result_4);
+  member_list : () -> (Result_5);
+  propose : (ProposalContent) -> (Result_2);
+  quit : () -> (Result_4);
+  user_info : () -> (Result_4);
+  vote : (UserVoteArgs) -> (Result_6);
 }

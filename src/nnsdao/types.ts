@@ -1,6 +1,14 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 
+export interface DaoInfo {
+  option: [] | [Array<[string, string]>];
+  name: string;
+  tags: Array<string>;
+  intro: string;
+  avatar: string;
+  poster: string;
+}
 export interface JoinDaoParams {
   nickname: string;
   social: Array<Social>;
@@ -38,12 +46,13 @@ export type ProposalState =
   | { Rejected: null }
   | { Succeeded: null }
   | { Accepted: null };
-export type Result = { Ok: string } | { Err: string };
-export type Result_1 = { Ok: Proposal } | { Err: string };
-export type Result_2 = { Ok: Array<[bigint, Proposal]> } | { Err: string };
-export type Result_3 = { Ok: MemberItems } | { Err: string };
-export type Result_4 = { Ok: Array<MemberItems> } | { Err: string };
-export type Result_5 = { Ok: null } | { Err: string };
+export type Result = { Ok: DaoInfo } | { Err: string };
+export type Result_1 = { Ok: string } | { Err: string };
+export type Result_2 = { Ok: Proposal } | { Err: string };
+export type Result_3 = { Ok: Array<[bigint, Proposal]> } | { Err: string };
+export type Result_4 = { Ok: MemberItems } | { Err: string };
+export type Result_5 = { Ok: Array<MemberItems> } | { Err: string };
+export type Result_6 = { Ok: null } | { Err: string };
 export interface Social {
   key: string;
   link: string;
@@ -55,13 +64,14 @@ export interface UserVoteArgs {
 }
 export type Votes = { No: bigint } | { Yes: bigint };
 export interface _SERVICE {
-  get_handled_proposal: ActorMethod<[], Array<[bigint, Result]>>;
-  get_proposal: ActorMethod<[bigint], Result_1>;
-  get_proposal_list: ActorMethod<[], Result_2>;
-  join: ActorMethod<[JoinDaoParams], Result_3>;
-  member_list: ActorMethod<[], Result_4>;
-  propose: ActorMethod<[ProposalContent], Result_1>;
-  quit: ActorMethod<[], Result_3>;
-  user_info: ActorMethod<[], Result_3>;
-  vote: ActorMethod<[UserVoteArgs], Result_5>;
+  dao_info: ActorMethod<[], Result>;
+  get_handled_proposal: ActorMethod<[], Array<[bigint, Result_1]>>;
+  get_proposal: ActorMethod<[bigint], Result_2>;
+  get_proposal_list: ActorMethod<[], Result_3>;
+  join: ActorMethod<[JoinDaoParams], Result_4>;
+  member_list: ActorMethod<[], Result_5>;
+  propose: ActorMethod<[ProposalContent], Result_2>;
+  quit: ActorMethod<[], Result_4>;
+  user_info: ActorMethod<[], Result_4>;
+  vote: ActorMethod<[UserVoteArgs], Result_6>;
 }
