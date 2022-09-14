@@ -72,6 +72,7 @@ export interface _SERVICE {
   member_list: ActorMethod<[], Result_5>;
   propose: ActorMethod<[ProposalContent], Result_2>;
   quit: ActorMethod<[], Result_4>;
+  update_dao_info: ActorMethod<[DaoInfo], Result>;
   user_info: ActorMethod<[], Result_4>;
   vote: ActorMethod<[UserVoteArgs], Result_6>;
 }

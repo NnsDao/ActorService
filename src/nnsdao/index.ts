@@ -78,6 +78,7 @@ export const idlFactory = ({ IDL }) => {
     member_list: IDL.Func([], [Result_5], []),
     propose: IDL.Func([ProposalContent], [Result_2], []),
     quit: IDL.Func([], [Result_4], []),
+    update_dao_info: IDL.Func([DaoInfo], [Result], []),
     user_info: IDL.Func([], [Result_4], []),
     vote: IDL.Func([UserVoteArgs], [Result_6], [])
   });
