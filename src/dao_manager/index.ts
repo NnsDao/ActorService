@@ -20,15 +20,10 @@ export const idlFactory = ({ IDL }) => {
     canister_id: IDL.Principal
   });
   const Result = IDL.Variant({ Ok: DaoInfo, Err: IDL.Text });
-  const CreateDaoInfo = IDL.Record({
-    option: IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))),
+  const CreateDaoOptions = IDL.Record({
     memo: IDL.Nat64,
-    name: IDL.Text,
     tags: IDL.Vec(IDL.Text),
-    intro: IDL.Text,
-    block_height: IDL.Nat64,
-    avatar: IDL.Text,
-    poster: IDL.Text
+    block_height: IDL.Nat64
   });
   const Status = IDL.Variant({
     stopped: IDL.Null,
@@ -80,7 +75,7 @@ export const idlFactory = ({ IDL }) => {
   });
   return IDL.Service({
     add_dao: IDL.Func([IDL.Text, AddDaoInfo], [Result], []),
-    create_dao: IDL.Func([CreateDaoInfo], [Result], []),
+    create_dao: IDL.Func([CreateDaoOptions], [Result], []),
     dao_list: IDL.Func([], [IDL.Vec(DaoInfo)], ['query']),
     dao_status: IDL.Func([IDL.Text], [Result_1], ['query']),
     get_owner: IDL.Func([], [IDL.Vec(IDL.Principal)], ['query']),

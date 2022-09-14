@@ -14,15 +14,10 @@ type CanisterStatusResponse = record {
   module_hash : opt vec nat8;
 };
 type ControllerAction = variant { add : principal; remove : principal; clear };
-type CreateDaoInfo = record {
-  option : opt vec record { text; text };
+type CreateDaoOptions = record {
   memo : nat64;
-  name : text;
   tags : vec text;
-  intro : text;
   block_height : nat64;
-  avatar : text;
-  poster : text;
 };
 type DaoInfo = record {
   id : nat;
@@ -65,7 +60,7 @@ type TransactionItem = record {
 };
 service : {
   add_dao : (text, AddDaoInfo) -> (Result);
-  create_dao : (CreateDaoInfo) -> (Result);
+  create_dao : (CreateDaoOptions) -> (Result);
   dao_list : () -> (vec DaoInfo) query;
   dao_status : (text) -> (Result_1) query;
   get_owner : () -> (vec principal) query;

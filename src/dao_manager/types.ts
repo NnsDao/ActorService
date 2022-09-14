@@ -20,15 +20,10 @@ export type ControllerAction =
   | { add: Principal }
   | { remove: Principal }
   | { clear: null };
-export interface CreateDaoInfo {
-  option: [] | [Array<[string, string]>];
+export interface CreateDaoOptions {
   memo: bigint;
-  name: string;
   tags: Array<string>;
-  intro: string;
   block_height: bigint;
-  avatar: string;
-  poster: string;
 }
 export interface DaoInfo {
   id: bigint;
@@ -69,7 +64,7 @@ export interface TransactionItem {
 }
 export interface _SERVICE {
   add_dao: ActorMethod<[string, AddDaoInfo], Result>;
-  create_dao: ActorMethod<[CreateDaoInfo], Result>;
+  create_dao: ActorMethod<[CreateDaoOptions], Result>;
   dao_list: ActorMethod<[], Array<DaoInfo>>;
   dao_status: ActorMethod<[string], Result_1>;
   get_owner: ActorMethod<[], Array<Principal>>;
