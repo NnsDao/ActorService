@@ -54,6 +54,7 @@ type Result_1 = variant {
   Err : record { RejectionCode; text };
 };
 type Result_2 = variant { Ok : TransactionItem; Err : text };
+type Result_3 = variant { Ok; Err : record { RejectionCode; text } };
 type Status = variant { stopped; stopping; running };
 type TransactionItem = record {
   to : text;
@@ -69,5 +70,7 @@ service : {
   dao_status : (text) -> (Result_1) query;
   get_owner : () -> (vec principal) query;
   get_pay_info : () -> (Result_2);
+  transaction_log : () -> (vec TransactionItem) query;
   update_dao_controller : (nat, ControllerAction) -> (Result);
+  upgrade_canister : () -> (Result_3);
 }

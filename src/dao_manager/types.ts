@@ -58,6 +58,7 @@ export type Result_1 =
   | { Ok: CanisterStatusResponse }
   | { Err: [RejectionCode, string] };
 export type Result_2 = { Ok: TransactionItem } | { Err: string };
+export type Result_3 = { Ok: null } | { Err: [RejectionCode, string] };
 export type Status = { stopped: null } | { stopping: null } | { running: null };
 export interface TransactionItem {
   to: string;
@@ -73,5 +74,7 @@ export interface _SERVICE {
   dao_status: ActorMethod<[string], Result_1>;
   get_owner: ActorMethod<[], Array<Principal>>;
   get_pay_info: ActorMethod<[], Result_2>;
+  transaction_log: ActorMethod<[], Array<TransactionItem>>;
   update_dao_controller: ActorMethod<[bigint, ControllerAction], Result>;
+  upgrade_canister: ActorMethod<[], Result_3>;
 }

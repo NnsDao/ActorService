@@ -74,6 +74,10 @@ export const idlFactory = ({ IDL }) => {
     remove: IDL.Principal,
     clear: IDL.Null
   });
+  const Result_3 = IDL.Variant({
+    Ok: IDL.Null,
+    Err: IDL.Tuple(RejectionCode, IDL.Text)
+  });
   return IDL.Service({
     add_dao: IDL.Func([IDL.Text, AddDaoInfo], [Result], []),
     create_dao: IDL.Func([CreateDaoInfo], [Result], []),
@@ -81,7 +85,9 @@ export const idlFactory = ({ IDL }) => {
     dao_status: IDL.Func([IDL.Text], [Result_1], ['query']),
     get_owner: IDL.Func([], [IDL.Vec(IDL.Principal)], ['query']),
     get_pay_info: IDL.Func([], [Result_2], []),
-    update_dao_controller: IDL.Func([IDL.Nat, ControllerAction], [Result], [])
+    transaction_log: IDL.Func([], [IDL.Vec(TransactionItem)], ['query']),
+    update_dao_controller: IDL.Func([IDL.Nat, ControllerAction], [Result], []),
+    upgrade_canister: IDL.Func([], [Result_3], [])
   });
 };
 export const init = ({ IDL }) => {
