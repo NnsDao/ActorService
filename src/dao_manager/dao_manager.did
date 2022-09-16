@@ -65,6 +65,7 @@ service : {
   dao_status : (text) -> (Result_1) query;
   get_owner : () -> (vec principal) query;
   get_pay_info : () -> (Result_2);
+  reinstall_canister : () -> (Result_3);
   transaction_log : () -> (vec TransactionItem) query;
   update_dao_controller : (nat, ControllerAction) -> (Result);
   upgrade_canister : () -> (Result_3);

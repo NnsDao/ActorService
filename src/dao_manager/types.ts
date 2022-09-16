@@ -69,6 +69,7 @@ export interface _SERVICE {
   dao_status: ActorMethod<[string], Result_1>;
   get_owner: ActorMethod<[], Array<Principal>>;
   get_pay_info: ActorMethod<[], Result_2>;
+  reinstall_canister: ActorMethod<[], Result_3>;
   transaction_log: ActorMethod<[], Array<TransactionItem>>;
   update_dao_controller: ActorMethod<[bigint, ControllerAction], Result>;
   upgrade_canister: ActorMethod<[], Result_3>;
