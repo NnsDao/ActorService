@@ -42,6 +42,7 @@ export const idlFactory = ({ IDL }) => {
     avatar: IDL.Text
   });
   const MemberItems = IDL.Record({
+    principal: IDL.Principal,
     nickname: IDL.Text,
     social: IDL.Vec(Social),
     intro: IDL.Text,
@@ -79,7 +80,7 @@ export const idlFactory = ({ IDL }) => {
     propose: IDL.Func([ProposalContent], [Result_2], []),
     quit: IDL.Func([], [Result_4], []),
     update_dao_info: IDL.Func([DaoInfo], [Result], []),
-    user_info: IDL.Func([], [Result_4], []),
+    user_info: IDL.Func([IDL.Opt(IDL.Principal)], [Result_4], []),
     vote: IDL.Func([UserVoteArgs], [Result_6], [])
   });
 };

@@ -16,6 +16,7 @@ export interface JoinDaoParams {
   avatar: string;
 }
 export interface MemberItems {
+  principal: Principal;
   nickname: string;
   social: Array<Social>;
   intro: string;
@@ -73,6 +74,6 @@ export interface _SERVICE {
   propose: ActorMethod<[ProposalContent], Result_2>;
   quit: ActorMethod<[], Result_4>;
   update_dao_info: ActorMethod<[DaoInfo], Result>;
-  user_info: ActorMethod<[], Result_4>;
+  user_info: ActorMethod<[[] | [Principal]], Result_4>;
   vote: ActorMethod<[UserVoteArgs], Result_6>;
 }

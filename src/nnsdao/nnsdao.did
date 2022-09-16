@@ -13,6 +13,7 @@ type JoinDaoParams = record {
   avatar : text;
 };
 type MemberItems = record {
+  "principal" : principal;
   nickname : text;
   social : vec Social;
   intro : text;
@@ -68,6 +69,6 @@ service : {
   propose : (ProposalContent) -> (Result_2);
   quit : () -> (Result_4);
   update_dao_info : (DaoInfo) -> (Result);
-  user_info : () -> (Result_4);
+  user_info : (opt principal) -> (Result_4);
   vote : (UserVoteArgs) -> (Result_6);
 }
