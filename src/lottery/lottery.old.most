@@ -1,0 +1,50 @@
+// Version: 1.0.0
+type Award = {#five; #four; #jackpot; #losing; #one; #three; #two};
+type Lottery = {red : ?Nat8; white : [Nat8]};
+type LotteryData =
+  {
+    award : ?Award;
+    buyer : Principal;
+    lottery : Lottery;
+    timestamp : Time;
+    winnerAmount : ?WinnerAmount
+  };
+type LotteryData__1 = LotteryData;
+type LotteryId = Nat;
+type LotteryId__1 = LotteryId;
+type LotteryType = Lottery;
+type Schedule = Nat;
+type Schedule__1 = Schedule;
+type Time = Int;
+type WinnerAmount = Nat64;
+type WinnerAmount__1 = WinnerAmount;
+type WinningData = {amount : Nat64; num : Nat64};
+type WinningRecord =
+  {
+    five : WinningData;
+    four : WinningData;
+    jackpot : WinningData;
+    losing : WinningData;
+    one : WinningData;
+    three : WinningData;
+    two : WinningData
+  };
+type WinningRecord__1 = WinningRecord;
+actor {
+  stable var bonusPool : Nat64;
+  stable var currentSchedule : Nat;
+  stable var jackpotBonusEntries : [(Schedule__1, WinnerAmount__1)];
+  stable var lotteryIndexDataEntries : [(LotteryId__1, LotteryData__1)];
+  stable var lotteryLock : Bool;
+  stable var lotteryRecordEntries : [(Schedule__1, LotteryType)];
+  stable var nextSchedule : Nat;
+  stable var poundage : Nat64;
+  stable var saleIndex : Nat;
+  stable var saleLotteryIndexEntries : [(Schedule__1, [LotteryId__1])];
+  stable var step : {#final; #first; #notBegin; #second};
+  stable var userCumulativeAmountEntries : [(Principal, WinnerAmount__1)];
+  stable var userLotteryIndexEntries : [(Principal, [LotteryId__1])];
+  stable var userTotalBonusEntries : [(Principal, WinnerAmount__1)];
+  stable var whiteBallool : [Nat8];
+  stable var winningRecordEntries : [(Schedule__1, WinningRecord__1)]
+};
