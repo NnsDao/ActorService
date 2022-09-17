@@ -14,15 +14,10 @@ type CanisterStatusResponse = record {
   module_hash : opt vec nat8;
 };
 type ControllerAction = variant { add : principal; remove : principal; clear };
-type CreateDaoInfo = record {
-  option : opt vec record { text; text };
+type CreateDaoOptions = record {
   memo : nat64;
-  name : text;
   tags : vec text;
-  intro : text;
   block_height : nat64;
-  avatar : text;
-  poster : text;
 };
 type DaoInfo = record {
   id : nat;
@@ -54,6 +49,7 @@ type Result_1 = variant {
   Err : record { RejectionCode; text };
 };
 type Result_2 = variant { Ok : TransactionItem; Err : text };
+type Result_3 = variant { Ok; Err : record { RejectionCode; text } };
 type Status = variant { stopped; stopping; running };
 type TransactionItem = record {
   to : text;
@@ -64,10 +60,13 @@ type TransactionItem = record {
 };
 service : {
   add_dao : (text, AddDaoInfo) -> (Result);
-  create_dao : (CreateDaoInfo) -> (Result);
+  create_dao : (CreateDaoOptions) -> (Result);
   dao_list : () -> (vec DaoInfo) query;
   dao_status : (text) -> (Result_1) query;
   get_owner : () -> (vec principal) query;
   get_pay_info : () -> (Result_2);
+  reinstall_canister : () -> (Result_3);
+  transaction_log : () -> (vec TransactionItem) query;
   update_dao_controller : (nat, ControllerAction) -> (Result);
+  upgrade_canister : () -> (Result_3);
 }
