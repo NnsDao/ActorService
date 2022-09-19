@@ -1,6 +1,7 @@
 import { Principal } from '@dfinity/principal';
 import { getCrc32 } from '@dfinity/principal/lib/esm/utils/getCrc';
 import { sha224 } from '@dfinity/principal/lib/esm/utils/sha224';
+import { Buffer } from 'buffer';
 
 export function validPrincipalId(principalId: string) {
   try {
@@ -16,9 +17,7 @@ export function validAccountId(accountId: string) {
 }
 
 export const principalIdToAccountId = (p: string, s = 0) => {
-  // const padding = new Buffer('\x0Aaccount-id');
-  // @ts-ignore
-  const padding = Uint8Array.from(p.split('').map(item => item.codePointAt(0))); //
+  const padding = Buffer.from('\x0Aaccount-id');
   const array = new Uint8Array([...padding, ...Principal.fromText(p).toUint8Array(), ...getSubAccountArray(s)]);
   const hash = sha224(array);
   const checksum = to32bits(getCrc32(hash));
@@ -27,7 +26,7 @@ export const principalIdToAccountId = (p: string, s = 0) => {
   return toHexString(array2);
 };
 
-export const getSubAccountArray = s => {
+export const getSubAccountArray = (s: number = 0) => {
   if (Array.isArray(s)) {
     return s.concat(Array(32 - s.length).fill(0));
   } else {
