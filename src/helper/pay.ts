@@ -1,5 +1,6 @@
 import { AccountIdentifier, ICP, LedgerCanister } from '@dfinity/nns';
-import { agent } from './agent';
+import { Principal } from '@dfinity/principal';
+import { agent, getNDPActor } from './agent';
 import { plugLogin } from './plug';
 import storage from './storage';
 
@@ -42,4 +43,19 @@ export async function payWithICP(amount: bigint, receiver: string, memo?: bigint
     res = Number(res);
   }
   return res as number;
+}
+
+export async function payWithNDP() {
+  //
+  throw new Error('Unimplemented');
+}
+
+export async function getBalanceOfICP(principal: Principal) {
+  //
+}
+
+// es8 bigint type
+export async function getBalanceOfNDP(principal: Principal) {
+  const actor = await getNDPActor(true);
+  return actor.balanceOf(principal);
 }

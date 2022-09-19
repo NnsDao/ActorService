@@ -1,5 +1,7 @@
 import { Actor, HttpAgent } from '@dfinity/agent';
+import NDPActor from '../dip20/types';
 import { idlFactory as getCandidIDL } from '../get-candid';
+import { ActorMap } from './constants';
 import storage from './storage';
 
 //  online IC  host
@@ -32,6 +34,14 @@ export async function getCandid(cid: string) {
   });
   return await actor.__get_candid_interface_tmp_hack();
 }
+
+/**
+ * NDP actor
+ */
+export async function getNDPActor(needAuth: boolean = false) {
+  return getActor<NDPActor>({ needAuth, ...ActorMap.ndp });
+}
+
 // Type
 export interface getActorProps {
   needAuth?: boolean;
