@@ -20,24 +20,26 @@ type UserWinnerAmountTuples =
    principal;
    WinnerAmount;
  };
-type TxReceipt = 
+type TransferResult = 
  variant {
-   Err:
-    variant {
-      AmountTooSmall;
-      BlockUsed;
-      ErrorOperationStyle;
-      ErrorTo;
-      InsufficientAllowance;
-      InsufficientBalance;
-      LedgerTrap;
-      Other: text;
-      Unauthorized;
-    };
-   Ok: nat;
+   Err: TransferError;
+   Ok: BlockIndex;
+ };
+type TransferError = 
+ variant {
+   BadFee: record {expected_fee: ICP;};
+   InsufficientFunds: record {balance: ICP;};
+   TxCreatedInFuture;
+   TxDuplicate: record {duplicate_of: BlockIndex;};
+   TxTooOld: record {allowed_window_nanos: nat64;};
  };
 type Time = int;
 type Schedule = nat;
+type Result = 
+ variant {
+   err: text;
+   ok: bool;
+ };
 type Lottery__1 = 
  record {
    red: opt nat8;
@@ -50,11 +52,9 @@ type LotteryType =
  };
 type LotterySummarize = 
  record {
-   award: AwardAmount;
    bonusPool: nat64;
    currentBuySchedule: nat;
    currentLotterySchedule: nat;
-   lotteryUnitPrice: nat64;
    startupTime: nat;
    step: LotteryStep;
    userCumulativeAmount: WinnerAmount;
@@ -66,7 +66,6 @@ type LotteryStep =
    notBegin;
    second;
  };
-type LotteryId = nat;
 type LotteryData = 
  record {
    award: opt Award;
@@ -77,30 +76,15 @@ type LotteryData =
  };
 type Lottery = 
  service {
-   buyLottery: (vec LotteryType) -> (TxReceipt);
+   approve: () -> (nat64);
+   buyLottery: (vec LotteryType, nat64) -> (Result);
    check: () -> (WinnerAmount__1) query;
-   checkData: (Schedule) -> (vec record {
-                                   LotteryId;
-                                   LotteryData;
-                                 }) query;
    currentLottery: () -> (opt LotteryType) query;
-   extract: (principal, nat64) -> (bool);
    getBonusList: () -> (vec UserWinnerAmountTuples) query;
-   getLotteryData: () -> (vec record {
-                                LotteryId;
-                                LotteryData;
-                              }) query;
-   getPoundage: () -> (nat64) query;
-   getSaleData: () -> (vec record {
-                             Schedule;
-                             vec LotteryId;
-                           }) query;
    historyLottery: () -> (vec record {
                                 nat;
                                 LotteryType;
                               }) query;
-   injectFunds: (nat) -> (TxReceipt);
-   lock: () -> (bool);
    lotterySummarize: () -> (LotterySummarize) query;
    "record": () -> (vec LotteryData) query;
    searchSechduleWinnerData: (vec Schedule) ->
@@ -108,19 +92,10 @@ type Lottery =
            Schedule;
            opt WinningRecord;
          }) query;
-   unlock: () -> (bool);
-   withdrawal: (principal) -> (TxReceipt);
+   withdrawal: (principal) -> (TransferResult);
  };
-type AwardAmount = 
- record {
-   five: nat64;
-   four: nat64;
-   jackpot: nat64;
-   losing: nat64;
-   one: nat64;
-   three: nat64;
-   two: nat64;
- };
+type ICP = record {e8s: nat64;};
+type BlockIndex = nat64;
 type Award = 
  variant {
    five;
