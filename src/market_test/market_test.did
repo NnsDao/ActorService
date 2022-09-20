@@ -1,9 +1,13 @@
-type Amount = variant { ICP : nat64; NDP : nat64 };
 type CanisterLogMessages = record {
   data : vec LogMessageData;
   lastAnalyzedMessageTimeNanos : opt nat64;
 };
-type CommonError = variant { InvalidToken : text; Other : text };
+type CommonError = variant {
+  InsufficientBalance;
+  InvalidToken : text;
+  Unauthorized : text;
+  Other : text;
+};
 type DisburseService = record {
   subaccount_num : nat;
   disbursements_process_lock : bool;
@@ -17,7 +21,7 @@ type Disbursement = record {
   from_subaccount : opt vec nat8;
   canister : text;
   token_idf : text;
-  amount : Amount;
+  amount : Price;
 };
 type GetLogMessagesFilter = record {
   messageRegex : opt text;
@@ -32,9 +36,8 @@ type Listing = record {
   seller_subaccount : opt vec nat8;
   seller : principal;
   lock_info : opt LockInfo;
-  price : Amount;
+  price : Price;
 };
-type LocalSaleStats = record { icp : Stats; ndp : Stats };
 type LockInfo = record {
   buyer_subaccount : opt vec nat8;
   sold : bool;
@@ -53,24 +56,27 @@ type NFT = record {
   listings : vec record { nat32; Listing };
   canister_id : text;
   pendding_listings : vec record { nat32; Listing };
-  stats : LocalSaleStats;
+  stats : vec record { text; Stats };
 };
 type NftInfo = record {
   commission : vec record { principal; nat64 };
   standard : Standard;
 };
+type Price = variant { ICP : nat64; NDP : nat64; GHOST : nat64 };
 type Result = variant { Ok; Err : CommonError };
-type Result_1 = variant { Ok : record { principal; nat32 }; Err : text };
-type Result_2 = variant { Ok : text; Err : text };
-type Result_3 = variant { Ok : text; Err : CommonError };
-type Result_4 = variant {
+type Result_1 = variant { Ok : Price; Err : text };
+type Result_2 = variant { Ok : record { principal; nat32 }; Err : text };
+type Result_3 = variant { Ok : text; Err : text };
+type Result_4 = variant { Ok : text; Err : CommonError };
+type Result_5 = variant {
   Ok : vec record { text; vec record { nat32; opt Listing; opt nat8 } };
   Err : CommonError;
 };
-type Result_5 = variant {
+type Result_6 = variant {
   Ok : vec record { nat32; opt Listing; opt nat8 };
   Err : CommonError;
 };
+type Result_7 = variant { Ok : nat64; Err : text };
 type Standard = variant { Ext; DIP20 };
 type Stats = record {
   floor : nat64;
@@ -81,7 +87,7 @@ type Stats = record {
   supply : nat64;
   total_volume : nat64;
 };
-type Token = variant { Icp; Ndp };
+type Token = variant { Icp; Ndp; Ghost };
 service : {
   add_nft_project : (text, vec record { Token; NftInfo }) -> ();
   address : (opt principal) -> (text) query;
@@ -90,7 +96,8 @@ service : {
   auto_list : (text, text) -> (Result);
   backup_disburse : () -> (DisburseService) query;
   backup_market : () -> (MarketService) query;
-  decode_token : (text) -> (Result_1) query;
+  balance : (Price, principal, opt vec nat8) -> (Result_1);
+  decode_token : (text) -> (Result_2) query;
   delete_nft_project : (text) -> ();
   delist : (text, opt vec nat8, text) -> (Result);
   encode_token : (principal, nat32) -> (text) query;
@@ -98,16 +105,25 @@ service : {
   get_nft : (text) -> (opt NFT) query;
   get_nft_project : (text) -> (opt vec record { Token; NftInfo }) query;
   get_owner : () -> (vec principal) query;
-  handle_disbursement : (Disbursement) -> (Result_2);
-  handle_failed_disbursements : () -> (opt Disbursement, Result_2);
-  list : (text, opt vec nat8, text, Amount) -> (Result_3);
+  handle_disbursement : (Disbursement) -> (Result_3);
+  handle_failed_disbursements : () -> (opt Disbursement, Result_3);
+  list : (text, opt vec nat8, text, Price) -> (Result_4);
   listings : (text) -> (vec record { nat32; Listing }) query;
-  lock : (text, text, Amount, principal, opt vec nat8) -> (Result_3);
-  market_tokens_ext : (text, opt text) -> (Result_4) query;
+  lock : (text, text, Price, principal, opt vec nat8) -> (Result_4);
+  market_tokens_ext : (text, opt text) -> (Result_5) query;
   restore_disburse : (DisburseService) -> () query;
   restore_market : (MarketService) -> () query;
-  return_back : (text, text, opt text) -> (Result_3);
+  return_back : (text, text, opt text) -> (Result_4);
   settle : (text, text) -> (Result);
   stats : (text) -> (record { Stats; Stats }) query;
-  tokens_ext : (text, text) -> (Result_5);
+  tokens_ext : (text, text) -> (Result_6);
+  transfer : (
+      Price,
+      principal,
+      opt vec nat8,
+      principal,
+      opt vec nat8,
+      Price,
+      text,
+    ) -> (Result_7);
 }
