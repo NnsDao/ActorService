@@ -181,7 +181,11 @@ export const idlFactory = ({ IDL }) => {
       []
     ),
     settle: IDL.Func([IDL.Text, IDL.Text], [Result], []),
-    stats: IDL.Func([IDL.Text], [IDL.Tuple(Stats, Stats)], ['query']),
+    stats: IDL.Func(
+      [IDL.Text],
+      [IDL.Vec(IDL.Tuple(IDL.Text, Stats))],
+      ['query']
+    ),
     tokens_ext: IDL.Func([IDL.Text, IDL.Text], [Result_6], []),
     transfer: IDL.Func(
       [

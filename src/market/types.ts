@@ -128,7 +128,7 @@ export interface _SERVICE {
   restore_market: ActorMethod<[MarketService], undefined>;
   return_back: ActorMethod<[string, string, [] | [string]], Result_4>;
   settle: ActorMethod<[string, string], Result>;
-  stats: ActorMethod<[string], [Stats, Stats]>;
+  stats: ActorMethod<[string], Array<[string, Stats]>>;
   tokens_ext: ActorMethod<[string, string], Result_6>;
   transfer: ActorMethod<
     [
