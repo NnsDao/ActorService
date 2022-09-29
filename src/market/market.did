@@ -115,7 +115,7 @@ service : {
   restore_market : (MarketService) -> () query;
   return_back : (text, text, opt text) -> (Result_4);
   settle : (text, text) -> (Result);
-  stats : (text) -> (record { Stats; Stats }) query;
+  stats : (text) -> (vec record { text; Stats }) query;
   tokens_ext : (text, text) -> (Result_6);
   transfer : (
       Price,
