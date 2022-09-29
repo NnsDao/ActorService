@@ -1,7 +1,6 @@
+import { AccountIdentifier, principalToAccountIdentifier } from '@dfinity/nns';
 import { Principal } from '@dfinity/principal';
-import { getCrc32 } from '@dfinity/principal/lib/esm/utils/getCrc';
-import { sha224 } from '@dfinity/principal/lib/esm/utils/sha224';
-import { Buffer } from 'buffer';
+import { DIP20IDL, EXTIDL, supportTokenItem, supportTokensList, tokenStandardType, tokenType } from './constants';
 
 export function validPrincipalId(principalId: string) {
   try {
@@ -16,35 +15,49 @@ export function validAccountId(accountId: string) {
   return accountId.length === 64 && /^[a-zA-Z0-9]+$/.test(accountId);
 }
 
-export const principalIdToAccountId = (p: string, s = 0) => {
-  const padding = Buffer.from('\x0Aaccount-id');
-  const array = new Uint8Array([...padding, ...Principal.fromText(p).toUint8Array(), ...getSubAccountArray(s)]);
-  const hash = sha224(array);
-  const checksum = to32bits(getCrc32(hash));
-  const array2 = new Uint8Array([...checksum, ...hash]);
-  // @ts-ignore
-  return toHexString(array2);
+/**
+ *
+ * @param principalID  string
+ * @returns  accountID string
+ */
+export const principalIdToAccountId = (principalID: string) => {
+  return principalToAccountIdentifier(Principal.fromText(principalID));
 };
 
-export const getSubAccountArray = (s: number = 0) => {
-  if (Array.isArray(s)) {
-    return s.concat(Array(32 - s.length).fill(0));
-  } else {
-    //32 bit number only
-    return Array(28)
-      .fill(0)
-      .concat(to32bits(s ? s : 0));
+export const principalIdToAccountIdentifier = (principalID: string, subAccount?: any) => {
+  return AccountIdentifier.fromPrincipal({ principal: Principal.fromText(principalID), subAccount });
+};
+
+/**
+ * transform Price type
+ */
+type PriceObj = {
+  [key in tokenType]: bigint;
+};
+export function getNFTPrice(price: bigint | PriceObj): [tokenType, bigint] {
+  if (typeof price === 'object') {
+    return [Object.keys(price)[0] as tokenType, Object.values(price)[0]];
   }
-};
+  return ['ICP', price];
+}
 
-export const toHexString = (byteArray: any[]) => {
-  return Array.from(byteArray, function (byte: any) {
-    return ('0' + (byte & 0xff).toString(16)).slice(-2);
-  }).join('');
-};
+export function getStandardIDL(standard: tokenStandardType) {
+  switch (standard) {
+    case 'DIP20':
+      return DIP20IDL;
+    case 'EXT':
+      return EXTIDL;
+    case 'ICP':
+      throw new Error('Umimplemented icp actor');
+  }
+}
 
-export const to32bits = (num: any) => {
-  const b = new ArrayBuffer(4);
-  new DataView(b).setUint32(0, num);
-  return Array.from(new Uint8Array(b));
-};
+export function getTokenItemInfo(token: tokenType) {
+  return supportTokensList.find(item => item.token == token) as supportTokenItem;
+}
+export function thousandsCommaDivide(num: number) {
+  return `${num}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+export function thousandsToK(num: number): string {
+  return num >= 1e3 ? (num / 1e3).toFixed(2) + 'k' : num + '';
+}

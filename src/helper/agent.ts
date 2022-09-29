@@ -1,7 +1,7 @@
 import { Actor, HttpAgent } from '@dfinity/agent';
-import NDPActor from '../dip20/types';
 import { idlFactory as getCandidIDL } from '../get-candid';
-import { ActorMap } from './constants';
+import { DIP20Actor, DIP20IDL, EXTActor, EXTIDL } from './constants';
+
 import storage from './storage';
 
 //  online IC  host
@@ -21,12 +21,6 @@ export async function getActor<T>(props: getActorProps): Promise<T> {
   return actor;
 }
 
-export function toHexString(byteArray: any) {
-  return Array.from(byteArray, function (byte: any) {
-    return ('0' + (byte & 0xff).toString(16)).slice(-2);
-  }).join('');
-}
-
 export async function getCandid(cid: string) {
   const actor = Actor.createActor(getCandidIDL, {
     agent: anonymousAgent,
@@ -36,10 +30,25 @@ export async function getCandid(cid: string) {
 }
 
 /**
- * NDP actor
+ * DIP20 actor
  */
-export async function getNDPActor(needAuth: boolean = false) {
-  return getActor<NDPActor>({ needAuth, ...ActorMap.ndp });
+export async function getDIP20Actor(needAuth: boolean = false, cid: string) {
+  return getActor<DIP20Actor>({
+    needAuth,
+    idl: DIP20IDL,
+    cid,
+  });
+}
+
+/**
+ * EXT actor
+ */
+export async function getEXTActor(needAuth: boolean = false, cid: string) {
+  return getActor<EXTActor>({
+    needAuth,
+    idl: EXTIDL,
+    cid,
+  });
 }
 
 // Type

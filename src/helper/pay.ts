@@ -1,9 +1,10 @@
-import { AccountIdentifier, ICP, LedgerCanister } from '@dfinity/nns';
+import { AccountIdentifier, ICP, LedgerCanister, principalToAccountIdentifier } from '@dfinity/nns';
 import { Principal } from '@dfinity/principal';
-import { agent, getNDPActor } from './agent';
+import { agent, getDIP20Actor, getEXTActor } from './agent';
+import { tokenType } from './constants';
 import { plugLogin } from './plug';
 import storage from './storage';
-import { principalIdToAccountId } from './utils';
+import { getTokenItemInfo } from './utils';
 
 /**
  *
@@ -46,38 +47,109 @@ export async function payWithICP(amount: bigint, receiver: string, memo?: bigint
   return res as number;
 }
 
-export async function payWithNDP() {
-  //
-  throw new Error('Unimplemented');
+/**
+ *
+ * @param accountID string
+ * @returns es8 bigint
+ */
+export async function getICPBalance(accountID: string) {
+  const ledger = LedgerCanister.create({ agent });
+
+  const balance = await ledger.accountBalance({
+    accountIdentifier: AccountIdentifier.fromHex(accountID),
+  });
+  console.log('ICP balance', balance);
+  return balance.toE8s();
+}
+
+/**
+ * support DIP20 EXT ICP
+ * @param token string
+ * @param principal Principal
+ * @returns bigint
+ */
+export async function getTokenBalance(token: tokenType, principal: Principal): Promise<bigint> {
+  const accountID = principalToAccountIdentifier(principal);
+  const standard = getTokenItemInfo(token);
+  if (standard?.standard === 'ICP') {
+    return getICPBalance(accountID);
+  }
+  if (standard?.standard == 'EXT') {
+    const actor = await getEXTActor(true, standard.cid ?? '');
+    const balance = await actor.balance({
+      token: token as string,
+      user: {
+        address: accountID,
+      },
+    });
+    if ('ok' in balance) {
+      return balance.ok;
+    }
+    return BigInt(0);
+  }
+  if (standard?.standard == 'DIP20') {
+    const actor = await getDIP20Actor(true, standard.cid ?? '');
+    const balance = await actor.balanceOf(principal);
+    return balance;
+  }
+  return BigInt(0);
 }
 
 /**
  *
- * @param accountId
- * @returns es8 bigint
+ *
+ * @param token tokenType
+ * @param amount  bigint
+ * @param receiver_principal
+ * @param from_principal
+ * @param memo
+ * @returns
  */
-export async function getBalanceOfICP(principal: Principal): Promise<bigint> {
-  const accountId = principalIdToAccountId(principal.toText());
-  const data = {
-    account_identifier: { address: accountId },
-    network_identifier: {
-      blockchain: 'Internet Computer',
-      network: '00000000000000020101',
-    },
-  };
-  const res = await fetch('https://rosetta-api.internetcomputer.org/account/balance', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  }).then(res => res.json());
+export async function payToken(
+  token: tokenType,
+  amount: bigint,
+  receiver_principal: Principal,
+  from_principal?: Principal,
+  memo?: bigint
+) {
+  const standard = getTokenItemInfo(token);
+  const receiver_accountID = principalToAccountIdentifier(receiver_principal);
+  if (standard?.standard === 'ICP') {
+    return payWithICP(amount, receiver_accountID, memo);
+  }
+  // frontend transfer
+  if (standard?.standard == 'EXT') {
+    const actor = await getEXTActor(true, standard.cid ?? '');
+    const res = await actor.transfer({
+      to: {
+        address: receiver_accountID,
+      },
+      token,
+      notify: false,
+      from: {
+        // @ts-ignore
+        principal: from_principal,
+      },
+      memo: [],
+      subaccount: [],
+      amount,
+    });
+    if ('ok' in res) {
+      return res.ok;
+    }
+    console.log('transfer', res);
 
-  return res.balances?.[0]?.value;
-}
+    return null;
+  }
+  // backend transfer,here need approve
+  if (standard?.standard == 'DIP20') {
+    const actor = await getDIP20Actor(true, standard.cid ?? '');
+    const res = await actor.approve(receiver_principal as Principal, amount);
+    if ('Ok' in res) {
+      return res.Ok;
+    }
+    console.log('approve res', res);
 
-// es8 bigint type
-export async function getBalanceOfNDP(principal: Principal) {
-  const actor = await getNDPActor(true);
-  return actor.balanceOf(principal);
+    return null;
+  }
 }
