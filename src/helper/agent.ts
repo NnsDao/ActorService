@@ -1,5 +1,7 @@
 import { Actor, HttpAgent } from '@dfinity/agent';
 import { idlFactory as getCandidIDL } from '../get-candid';
+import { DIP20Actor, DIP20IDL, EXTActor, EXTIDL } from './constants';
+
 import storage from './storage';
 
 //  online IC  host
@@ -9,7 +11,7 @@ export const agent = new HttpAgent({ host: onlineHost });
 // anonymous agent can more efficient then auth agent;
 export const anonymousAgent: HttpAgent = new HttpAgent({ host: onlineHost });
 
-export async function getActor(props: getActorProps): Promise<typeof Actor> {
+export async function getActor<T>(props: getActorProps): Promise<T> {
   let { cid, idl, needAuth = false } = props;
   const loginType = storage.get('loginType');
   const actor =
@@ -19,12 +21,6 @@ export async function getActor(props: getActorProps): Promise<typeof Actor> {
   return actor;
 }
 
-export function toHexString(byteArray: any) {
-  return Array.from(byteArray, function (byte: any) {
-    return ('0' + (byte & 0xff).toString(16)).slice(-2);
-  }).join('');
-}
-
 export async function getCandid(cid: string) {
   const actor = Actor.createActor(getCandidIDL, {
     agent: anonymousAgent,
@@ -32,9 +28,32 @@ export async function getCandid(cid: string) {
   });
   return await actor.__get_candid_interface_tmp_hack();
 }
+
+/**
+ * DIP20 actor
+ */
+export async function getDIP20Actor(needAuth: boolean = false, cid: string) {
+  return getActor<DIP20Actor>({
+    needAuth,
+    idl: DIP20IDL,
+    cid,
+  });
+}
+
+/**
+ * EXT actor
+ */
+export async function getEXTActor(needAuth: boolean = false, cid: string) {
+  return getActor<EXTActor>({
+    needAuth,
+    idl: EXTIDL,
+    cid,
+  });
+}
+
 // Type
 export interface getActorProps {
   needAuth?: boolean;
-  idl?: any;
+  idl: (...arg: any[]) => any;
   cid: string;
 }

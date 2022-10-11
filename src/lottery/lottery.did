@@ -1,0 +1,109 @@
+type WinningRecord = 
+ record {
+   five: WinningData;
+   four: WinningData;
+   jackpot: WinningData;
+   losing: WinningData;
+   one: WinningData;
+   three: WinningData;
+   two: WinningData;
+ };
+type WinningData = 
+ record {
+   amount: nat64;
+   num: nat64;
+ };
+type WinnerAmount__1 = nat64;
+type WinnerAmount = nat64;
+type UserWinnerAmountTuples = 
+ record {
+   principal;
+   WinnerAmount;
+ };
+type TransferResult = 
+ variant {
+   Err: TransferError;
+   Ok: BlockIndex;
+ };
+type TransferError = 
+ variant {
+   BadFee: record {expected_fee: ICP;};
+   InsufficientFunds: record {balance: ICP;};
+   TxCreatedInFuture;
+   TxDuplicate: record {duplicate_of: BlockIndex;};
+   TxTooOld: record {allowed_window_nanos: nat64;};
+ };
+type Time = int;
+type Schedule = nat;
+type Result = 
+ variant {
+   err: text;
+   ok: bool;
+ };
+type Lottery__1 = 
+ record {
+   red: opt nat8;
+   white: vec nat8;
+ };
+type LotteryType = 
+ record {
+   red: opt nat8;
+   white: vec nat8;
+ };
+type LotterySummarize = 
+ record {
+   bonusPool: nat64;
+   currentBuySchedule: nat;
+   currentLotterySchedule: nat;
+   startupTime: nat;
+   step: LotteryStep;
+   userCumulativeAmount: WinnerAmount;
+ };
+type LotteryStep = 
+ variant {
+   final;
+   first;
+   notBegin;
+   second;
+ };
+type LotteryData = 
+ record {
+   award: opt Award;
+   buyer: principal;
+   lottery: Lottery__1;
+   timestamp: Time;
+   winnerAmount: opt WinnerAmount;
+ };
+type Lottery = 
+ service {
+   approve: () -> (nat64);
+   buyLottery: (vec LotteryType, nat64) -> (Result);
+   check: () -> (WinnerAmount__1) query;
+   currentLottery: () -> (opt LotteryType) query;
+   getBonusList: () -> (vec UserWinnerAmountTuples) query;
+   historyLottery: () -> (vec record {
+                                nat;
+                                LotteryType;
+                              }) query;
+   lotterySummarize: () -> (LotterySummarize) query;
+   "record": () -> (vec LotteryData) query;
+   searchSechduleWinnerData: (vec Schedule) ->
+    (vec record {
+           Schedule;
+           opt WinningRecord;
+         }) query;
+   withdrawal: (principal) -> (TransferResult);
+ };
+type ICP = record {e8s: nat64;};
+type BlockIndex = nat64;
+type Award = 
+ variant {
+   five;
+   four;
+   jackpot;
+   losing;
+   one;
+   three;
+   two;
+ };
+service : () -> Lottery

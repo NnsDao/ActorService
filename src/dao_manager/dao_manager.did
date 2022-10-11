@@ -1,0 +1,72 @@
+type AddDaoInfo = record {
+  option : opt vec record { text; text };
+  name : text;
+  tags : vec text;
+  intro : text;
+  avatar : text;
+  poster : text;
+};
+type CanisterStatusResponse = record {
+  status : Status;
+  memory_size : nat;
+  cycles : nat;
+  settings : DefiniteCanisterSettings;
+  module_hash : opt vec nat8;
+};
+type ControllerAction = variant { add : principal; remove : principal; clear };
+type CreateDaoOptions = record {
+  memo : nat64;
+  tags : vec text;
+  block_height : nat64;
+};
+type DaoInfo = record {
+  id : nat;
+  controller : vec principal;
+  status : DaoStatusCode;
+  owner : principal;
+  tags : vec text;
+  canister_id : principal;
+};
+type DaoStatusCode = variant { Closed; Normal };
+type DefiniteCanisterSettings = record {
+  freezing_threshold : nat;
+  controllers : vec principal;
+  memory_allocation : nat;
+  compute_allocation : nat;
+};
+type RejectionCode = variant {
+  NoError;
+  CanisterError;
+  SysTransient;
+  DestinationInvalid;
+  Unknown;
+  SysFatal;
+  CanisterReject;
+};
+type Result = variant { Ok : DaoInfo; Err : text };
+type Result_1 = variant {
+  Ok : CanisterStatusResponse;
+  Err : record { RejectionCode; text };
+};
+type Result_2 = variant { Ok : TransactionItem; Err : text };
+type Result_3 = variant { Ok; Err : record { RejectionCode; text } };
+type Status = variant { stopped; stopping; running };
+type TransactionItem = record {
+  to : text;
+  status : nat8;
+  from : text;
+  memo : nat64;
+  amount : nat64;
+};
+service : {
+  add_dao : (text, AddDaoInfo) -> (Result);
+  create_dao : (CreateDaoOptions) -> (Result);
+  dao_list : () -> (vec DaoInfo) query;
+  dao_status : (text) -> (Result_1) query;
+  get_owner : () -> (vec principal) query;
+  get_pay_info : () -> (Result_2);
+  reinstall_canister : () -> (Result_3);
+  transaction_log : () -> (vec TransactionItem) query;
+  update_dao_controller : (nat, ControllerAction) -> (Result);
+  upgrade_canister : () -> (Result_3);
+}

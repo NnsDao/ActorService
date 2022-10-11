@@ -1,0 +1,20 @@
+type Operation = variant { Mint; Sale; Transfer; Offer; Subdao };
+type Price = variant { Icp : nat64; Ndp : nat64 };
+type Record = record {
+  to : text;
+  from : text;
+  time : nat64;
+  canister_id : text;
+  token_identifier : text;
+  operation : Operation;
+  price : Price;
+};
+service : {
+  get_owner : () -> (opt principal) query;
+  get_personal_record : (text) -> (opt vec Record) query;
+  get_record : (text) -> (opt vec Record) query;
+  get_recorder : () -> (vec principal) query;
+  get_token_record : (text, text) -> (opt vec Record) query;
+  record_log : (text, Record) -> ();
+  set_recorder : (principal) -> ();
+}

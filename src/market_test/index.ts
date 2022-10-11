@@ -1,16 +1,26 @@
 export const idlFactory = ({ IDL }) => {
-  const Token = IDL.Variant({ Icp: IDL.Null, Ndp: IDL.Null });
+  const Token = IDL.Variant({
+    Icp: IDL.Null,
+    Ndp: IDL.Null,
+    Ghost: IDL.Null
+  });
   const Standard = IDL.Variant({ Ext: IDL.Null, DIP20: IDL.Null });
   const NftInfo = IDL.Record({
     commission: IDL.Vec(IDL.Tuple(IDL.Principal, IDL.Nat64)),
     standard: Standard
   });
   const CommonError = IDL.Variant({
+    InsufficientBalance: IDL.Null,
     InvalidToken: IDL.Text,
+    Unauthorized: IDL.Text,
     Other: IDL.Text
   });
   const Result = IDL.Variant({ Ok: IDL.Null, Err: CommonError });
-  const Amount = IDL.Variant({ ICP: IDL.Nat64, NDP: IDL.Nat64 });
+  const Price = IDL.Variant({
+    ICP: IDL.Nat64,
+    NDP: IDL.Nat64,
+    GHOST: IDL.Nat64
+  });
   const Disbursement = IDL.Record({
     to: IDL.Principal,
     to_subaccount: IDL.Opt(IDL.Vec(IDL.Nat8)),
@@ -18,7 +28,7 @@ export const idlFactory = ({ IDL }) => {
     from_subaccount: IDL.Opt(IDL.Vec(IDL.Nat8)),
     canister: IDL.Text,
     token_idf: IDL.Text,
-    amount: Amount
+    amount: Price
   });
   const DisburseService = IDL.Record({
     subaccount_num: IDL.Nat,
@@ -37,7 +47,7 @@ export const idlFactory = ({ IDL }) => {
     seller_subaccount: IDL.Opt(IDL.Vec(IDL.Nat8)),
     seller: IDL.Principal,
     lock_info: IDL.Opt(LockInfo),
-    price: Amount
+    price: Price
   });
   const Stats = IDL.Record({
     floor: IDL.Nat64,
@@ -48,12 +58,11 @@ export const idlFactory = ({ IDL }) => {
     supply: IDL.Nat64,
     total_volume: IDL.Nat64
   });
-  const LocalSaleStats = IDL.Record({ icp: Stats, ndp: Stats });
   const NFT = IDL.Record({
     listings: IDL.Vec(IDL.Tuple(IDL.Nat32, Listing)),
     canister_id: IDL.Text,
     pendding_listings: IDL.Vec(IDL.Tuple(IDL.Nat32, Listing)),
-    stats: LocalSaleStats
+    stats: IDL.Vec(IDL.Tuple(IDL.Text, Stats))
   });
   const MarketService = IDL.Record({
     last_settle_cron: IDL.Nat64,
@@ -63,7 +72,8 @@ export const idlFactory = ({ IDL }) => {
       IDL.Tuple(IDL.Text, IDL.Vec(IDL.Tuple(Token, NftInfo)))
     )
   });
-  const Result_1 = IDL.Variant({
+  const Result_1 = IDL.Variant({ Ok: Price, Err: IDL.Text });
+  const Result_2 = IDL.Variant({
     Ok: IDL.Tuple(IDL.Principal, IDL.Nat32),
     Err: IDL.Text
   });
@@ -84,9 +94,9 @@ export const idlFactory = ({ IDL }) => {
     data: IDL.Vec(LogMessageData),
     lastAnalyzedMessageTimeNanos: IDL.Opt(IDL.Nat64)
   });
-  const Result_2 = IDL.Variant({ Ok: IDL.Text, Err: IDL.Text });
-  const Result_3 = IDL.Variant({ Ok: IDL.Text, Err: CommonError });
-  const Result_4 = IDL.Variant({
+  const Result_3 = IDL.Variant({ Ok: IDL.Text, Err: IDL.Text });
+  const Result_4 = IDL.Variant({ Ok: IDL.Text, Err: CommonError });
+  const Result_5 = IDL.Variant({
     Ok: IDL.Vec(
       IDL.Tuple(
         IDL.Text,
@@ -95,10 +105,11 @@ export const idlFactory = ({ IDL }) => {
     ),
     Err: CommonError
   });
-  const Result_5 = IDL.Variant({
+  const Result_6 = IDL.Variant({
     Ok: IDL.Vec(IDL.Tuple(IDL.Nat32, IDL.Opt(Listing), IDL.Opt(IDL.Nat8))),
     Err: CommonError
   });
+  const Result_7 = IDL.Variant({ Ok: IDL.Nat64, Err: IDL.Text });
   return IDL.Service({
     add_nft_project: IDL.Func(
       [IDL.Text, IDL.Vec(IDL.Tuple(Token, NftInfo))],
@@ -111,7 +122,12 @@ export const idlFactory = ({ IDL }) => {
     auto_list: IDL.Func([IDL.Text, IDL.Text], [Result], []),
     backup_disburse: IDL.Func([], [DisburseService], ['query']),
     backup_market: IDL.Func([], [MarketService], ['query']),
-    decode_token: IDL.Func([IDL.Text], [Result_1], ['query']),
+    balance: IDL.Func(
+      [Price, IDL.Principal, IDL.Opt(IDL.Vec(IDL.Nat8))],
+      [Result_1],
+      []
+    ),
+    decode_token: IDL.Func([IDL.Text], [Result_2], ['query']),
     delete_nft_project: IDL.Func([IDL.Text], [], []),
     delist: IDL.Func(
       [IDL.Text, IDL.Opt(IDL.Vec(IDL.Nat8)), IDL.Text],
@@ -131,15 +147,15 @@ export const idlFactory = ({ IDL }) => {
       ['query']
     ),
     get_owner: IDL.Func([], [IDL.Vec(IDL.Principal)], ['query']),
-    handle_disbursement: IDL.Func([Disbursement], [Result_2], []),
+    handle_disbursement: IDL.Func([Disbursement], [Result_3], []),
     handle_failed_disbursements: IDL.Func(
       [],
-      [IDL.Opt(Disbursement), Result_2],
+      [IDL.Opt(Disbursement), Result_3],
       []
     ),
     list: IDL.Func(
-      [IDL.Text, IDL.Opt(IDL.Vec(IDL.Nat8)), IDL.Text, Amount],
-      [Result_3],
+      [IDL.Text, IDL.Opt(IDL.Vec(IDL.Nat8)), IDL.Text, Price],
+      [Result_4],
       []
     ),
     listings: IDL.Func(
@@ -148,25 +164,42 @@ export const idlFactory = ({ IDL }) => {
       ['query']
     ),
     lock: IDL.Func(
-      [IDL.Text, IDL.Text, Amount, IDL.Principal, IDL.Opt(IDL.Vec(IDL.Nat8))],
-      [Result_3],
+      [IDL.Text, IDL.Text, Price, IDL.Principal, IDL.Opt(IDL.Vec(IDL.Nat8))],
+      [Result_4],
       []
     ),
     market_tokens_ext: IDL.Func(
       [IDL.Text, IDL.Opt(IDL.Text)],
-      [Result_4],
+      [Result_5],
       ['query']
     ),
     restore_disburse: IDL.Func([DisburseService], [], ['query']),
     restore_market: IDL.Func([MarketService], [], ['query']),
     return_back: IDL.Func(
       [IDL.Text, IDL.Text, IDL.Opt(IDL.Text)],
-      [Result_3],
+      [Result_4],
       []
     ),
     settle: IDL.Func([IDL.Text, IDL.Text], [Result], []),
-    stats: IDL.Func([IDL.Text], [IDL.Tuple(Stats, Stats)], ['query']),
-    tokens_ext: IDL.Func([IDL.Text, IDL.Text], [Result_5], [])
+    stats: IDL.Func(
+      [IDL.Text],
+      [IDL.Vec(IDL.Tuple(IDL.Text, Stats))],
+      ['query']
+    ),
+    tokens_ext: IDL.Func([IDL.Text, IDL.Text], [Result_6], []),
+    transfer: IDL.Func(
+      [
+        Price,
+        IDL.Principal,
+        IDL.Opt(IDL.Vec(IDL.Nat8)),
+        IDL.Principal,
+        IDL.Opt(IDL.Vec(IDL.Nat8)),
+        Price,
+        IDL.Text
+      ],
+      [Result_7],
+      []
+    )
   });
 };
 export const init = ({ IDL }) => {

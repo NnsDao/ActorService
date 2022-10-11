@@ -1,12 +1,15 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 
-export type Amount = { ICP: bigint } | { NDP: bigint };
 export interface CanisterLogMessages {
   data: Array<LogMessageData>;
   lastAnalyzedMessageTimeNanos: [] | [bigint];
 }
-export type CommonError = { InvalidToken: string } | { Other: string };
+export type CommonError =
+  | { InsufficientBalance: null }
+  | { InvalidToken: string }
+  | { Unauthorized: string }
+  | { Other: string };
 export interface DisburseService {
   subaccount_num: bigint;
   disbursements_process_lock: boolean;
@@ -20,7 +23,7 @@ export interface Disbursement {
   from_subaccount: [] | [Array<number>];
   canister: string;
   token_idf: string;
-  amount: Amount;
+  amount: Price;
 }
 export interface GetLogMessagesFilter {
   messageRegex: [] | [string];
@@ -35,11 +38,7 @@ export interface Listing {
   seller_subaccount: [] | [Array<number>];
   seller: Principal;
   lock_info: [] | [LockInfo];
-  price: Amount;
-}
-export interface LocalSaleStats {
-  icp: Stats;
-  ndp: Stats;
+  price: Price;
 }
 export interface LockInfo {
   buyer_subaccount: [] | [Array<number>];
@@ -62,26 +61,29 @@ export interface NFT {
   listings: Array<[number, Listing]>;
   canister_id: string;
   pendding_listings: Array<[number, Listing]>;
-  stats: LocalSaleStats;
+  stats: Array<[string, Stats]>;
 }
 export interface NftInfo {
   commission: Array<[Principal, bigint]>;
   standard: Standard;
 }
+export type Price = { ICP: bigint } | { NDP: bigint } | { GHOST: bigint };
 export type Result = { Ok: null } | { Err: CommonError };
-export type Result_1 = { Ok: [Principal, number] } | { Err: string };
-export type Result_2 = { Ok: string } | { Err: string };
-export type Result_3 = { Ok: string } | { Err: CommonError };
-export type Result_4 =
+export type Result_1 = { Ok: Price } | { Err: string };
+export type Result_2 = { Ok: [Principal, number] } | { Err: string };
+export type Result_3 = { Ok: string } | { Err: string };
+export type Result_4 = { Ok: string } | { Err: CommonError };
+export type Result_5 =
   | {
       Ok: Array<[string, Array<[number, [] | [Listing], [] | [number]]>]>;
     }
   | { Err: CommonError };
-export type Result_5 =
+export type Result_6 =
   | {
       Ok: Array<[number, [] | [Listing], [] | [number]]>;
     }
   | { Err: CommonError };
+export type Result_7 = { Ok: bigint } | { Err: string };
 export type Standard = { Ext: null } | { DIP20: null };
 export interface Stats {
   floor: bigint;
@@ -92,7 +94,7 @@ export interface Stats {
   supply: bigint;
   total_volume: bigint;
 }
-export type Token = { Icp: null } | { Ndp: null };
+export type Token = { Icp: null } | { Ndp: null } | { Ghost: null };
 export interface _SERVICE {
   add_nft_project: ActorMethod<[string, Array<[Token, NftInfo]>], undefined>;
   address: ActorMethod<[[] | [Principal]], string>;
@@ -101,7 +103,8 @@ export interface _SERVICE {
   auto_list: ActorMethod<[string, string], Result>;
   backup_disburse: ActorMethod<[], DisburseService>;
   backup_market: ActorMethod<[], MarketService>;
-  decode_token: ActorMethod<[string], Result_1>;
+  balance: ActorMethod<[Price, Principal, [] | [Array<number>]], Result_1>;
+  decode_token: ActorMethod<[string], Result_2>;
   delete_nft_project: ActorMethod<[string], undefined>;
   delist: ActorMethod<[string, [] | [Array<number>], string], Result>;
   encode_token: ActorMethod<[Principal, number], string>;
@@ -112,19 +115,31 @@ export interface _SERVICE {
   get_nft: ActorMethod<[string], [] | [NFT]>;
   get_nft_project: ActorMethod<[string], [] | [Array<[Token, NftInfo]>]>;
   get_owner: ActorMethod<[], Array<Principal>>;
-  handle_disbursement: ActorMethod<[Disbursement], Result_2>;
-  handle_failed_disbursements: ActorMethod<[], [[] | [Disbursement], Result_2]>;
-  list: ActorMethod<[string, [] | [Array<number>], string, Amount], Result_3>;
+  handle_disbursement: ActorMethod<[Disbursement], Result_3>;
+  handle_failed_disbursements: ActorMethod<[], [[] | [Disbursement], Result_3]>;
+  list: ActorMethod<[string, [] | [Array<number>], string, Price], Result_4>;
   listings: ActorMethod<[string], Array<[number, Listing]>>;
   lock: ActorMethod<
-    [string, string, Amount, Principal, [] | [Array<number>]],
-    Result_3
+    [string, string, Price, Principal, [] | [Array<number>]],
+    Result_4
   >;
-  market_tokens_ext: ActorMethod<[string, [] | [string]], Result_4>;
+  market_tokens_ext: ActorMethod<[string, [] | [string]], Result_5>;
   restore_disburse: ActorMethod<[DisburseService], undefined>;
   restore_market: ActorMethod<[MarketService], undefined>;
-  return_back: ActorMethod<[string, string, [] | [string]], Result_3>;
+  return_back: ActorMethod<[string, string, [] | [string]], Result_4>;
   settle: ActorMethod<[string, string], Result>;
-  stats: ActorMethod<[string], [Stats, Stats]>;
-  tokens_ext: ActorMethod<[string, string], Result_5>;
+  stats: ActorMethod<[string], Array<[string, Stats]>>;
+  tokens_ext: ActorMethod<[string, string], Result_6>;
+  transfer: ActorMethod<
+    [
+      Price,
+      Principal,
+      [] | [Array<number>],
+      Principal,
+      [] | [Array<number>],
+      Price,
+      string
+    ],
+    Result_7
+  >;
 }

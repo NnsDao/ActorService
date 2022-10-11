@@ -1,5 +1,6 @@
+import { AccountIdentifier, principalToAccountIdentifier } from '@dfinity/nns';
 import { Principal } from '@dfinity/principal';
-import { toHexString } from './agent';
+import { DIP20IDL, EXTIDL, supportTokenItem, supportTokensList, tokenStandardType, tokenType } from './constants';
 
 export function validPrincipalId(principalId: string) {
   try {
@@ -14,40 +15,49 @@ export function validAccountId(accountId: string) {
   return accountId.length === 64 && /^[a-zA-Z0-9]+$/.test(accountId);
 }
 
-function to32bits(num: number) {
-  let b = new ArrayBuffer(4);
-  new DataView(b).setUint32(0, num);
-  return Array.from(new Uint8Array(b));
-}
+/**
+ *
+ * @param principalID  string
+ * @returns  accountID string
+ */
+export const principalIdToAccountId = (principalID: string) => {
+  return principalToAccountIdentifier(Principal.fromText(principalID));
+};
 
-function from32bits(arr: number[]) {
-  let value = 0;
-  for (let i = 0; i < 4; i++) {
-    value = (value << 8) | arr[i];
+export const principalIdToAccountIdentifier = (principalID: string, subAccount?: any) => {
+  return AccountIdentifier.fromPrincipal({ principal: Principal.fromText(principalID), subAccount });
+};
+
+/**
+ * transform Price type
+ */
+type PriceObj = {
+  [key in tokenType]: bigint;
+};
+export function getNFTPrice(price: bigint | PriceObj): [tokenType, bigint] {
+  if (typeof price === 'object') {
+    return [Object.keys(price)[0] as tokenType, Object.values(price)[0]];
   }
-  return value;
+  return ['ICP', price];
 }
 
-function canisterIdToTokenId(principal: string, index: number) {
-  const padding = Buffer.from('\x0Atid');
-  const array = new Uint8Array([...padding, ...Principal.fromText(principal).toUint8Array(), ...to32bits(index)]);
-  return Principal.fromUint8Array(array).toText();
-}
-export function tokenIdToCanisterId(tokenId: string) {
-  let p = [...Principal.fromText(tokenId).toUint8Array()];
-  let padding = p.splice(0, 4);
-
-  if (toHexString(padding) !== toHexString(Buffer.from('\x0Atid'))) {
-    return {
-      index: 0,
-      canister: tokenId,
-      token: canisterIdToTokenId(tokenId, 0),
-    };
-  } else {
-    return {
-      index: from32bits(p.splice(-4)),
-      canister: Principal.fromUint8Array(p as unknown as Uint8Array).toText(),
-      token: tokenId,
-    };
+export function getStandardIDL(standard: tokenStandardType) {
+  switch (standard) {
+    case 'DIP20':
+      return DIP20IDL;
+    case 'EXT':
+      return EXTIDL;
+    case 'ICP':
+      throw new Error('Umimplemented icp actor');
   }
+}
+
+export function getTokenItemInfo(token: tokenType) {
+  return supportTokensList.find(item => item.token == token) as supportTokenItem;
+}
+export function thousandsCommaDivide(num: number) {
+  return `${num}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+export function thousandsToK(num: number): string {
+  return num >= 1e3 ? (num / 1e3).toFixed(2) + 'k' : num + '';
 }
