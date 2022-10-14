@@ -1,74 +1,10 @@
-type DaoInfo = record {
-  option : opt vec record { text; text };
-  name : text;
-  tags : vec text;
-  intro : text;
-  avatar : text;
-  poster : text;
-};
-type JoinDaoParams = record {
-  nickname : text;
-  social : vec Social;
-  intro : text;
-  avatar : text;
-};
-type MemberItems = record {
-  "principal" : principal;
-  nickname : text;
-  social : vec Social;
-  intro : text;
-  status_code : int8;
-  avatar : text;
-};
-type Proposal = record {
-  id : nat64;
-  title : text;
-  content : text;
-  vote_data : vec record { principal; Votes };
-  end_time : nat64;
-  timestamp : nat64;
-  property : opt vec record { text; text };
-  proposer : principal;
-  proposal_state : ProposalState;
-};
-type ProposalContent = record {
-  title : text;
-  content : text;
-  end_time : nat64;
-  property : opt vec record { text; text };
-};
-type ProposalState = variant {
-  Failed : text;
-  Open;
-  Executing;
-  Rejected;
-  Succeeded;
-  Accepted;
-};
-type Result = variant { Ok : DaoInfo; Err : text };
-type Result_1 = variant { Ok : text; Err : text };
-type Result_2 = variant { Ok : Proposal; Err : text };
-type Result_3 = variant { Ok : vec record { nat64; Proposal }; Err : text };
-type Result_4 = variant { Ok : MemberItems; Err : text };
-type Result_5 = variant { Ok : vec MemberItems; Err : text };
-type Result_6 = variant { Ok; Err : text };
-type Social = record { key : text; link : text };
-type UserVoteArgs = record {
-  id : nat64;
+type Result = variant { Ok : int32; Err : text };
+type StackingItem = record {
   "principal" : opt principal;
-  vote : Votes;
+  duration : nat8;
+  amount : nat64;
 };
-type Votes = variant { No : nat64; Yes : nat64 };
-service : {
-  dao_info : () -> (Result);
-  get_handled_proposal : () -> (vec record { nat64; Result_1 }) query;
-  get_proposal : (nat64) -> (Result_2) query;
-  get_proposal_list : () -> (Result_3) query;
-  join : (JoinDaoParams) -> (Result_4);
-  member_list : () -> (Result_5);
-  propose : (ProposalContent) -> (Result_2);
-  quit : () -> (Result_4);
-  update_dao_info : (DaoInfo) -> (Result);
-  user_info : (opt principal) -> (Result_4);
-  vote : (UserVoteArgs) -> (Result_6);
+service : (principal) -> {
+  stacking_list : () -> (vec record { nat64; StackingItem }) query;
+  test : () -> (Result) query;
 }
