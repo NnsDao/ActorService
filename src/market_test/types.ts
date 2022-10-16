@@ -67,7 +67,11 @@ export interface NftInfo {
   commission: Array<[Principal, bigint]>;
   standard: Standard;
 }
-export type Price = { ICP: bigint } | { NDP: bigint } | { GHOST: bigint };
+export type Price =
+  | { ICP: bigint }
+  | { NDP: bigint }
+  | { GHOST: bigint }
+  | { DOGMI: bigint };
 export type Result = { Ok: null } | { Err: CommonError };
 export type Result_1 = { Ok: Price } | { Err: string };
 export type Result_2 = { Ok: [Principal, number] } | { Err: string };
@@ -94,7 +98,11 @@ export interface Stats {
   supply: bigint;
   total_volume: bigint;
 }
-export type Token = { Icp: null } | { Ndp: null } | { Ghost: null };
+export type Token =
+  | { Icp: null }
+  | { Ndp: null }
+  | { Ghost: null }
+  | { Dogmi: null };
 export interface _SERVICE {
   add_nft_project: ActorMethod<[string, Array<[Token, NftInfo]>], undefined>;
   address: ActorMethod<[[] | [Principal]], string>;

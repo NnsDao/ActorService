@@ -62,7 +62,7 @@ type NftInfo = record {
   commission : vec record { principal; nat64 };
   standard : Standard;
 };
-type Price = variant { ICP : nat64; NDP : nat64; GHOST : nat64 };
+type Price = variant { ICP : nat64; NDP : nat64; GHOST : nat64; DOGMI : nat64 };
 type Result = variant { Ok; Err : CommonError };
 type Result_1 = variant { Ok : Price; Err : text };
 type Result_2 = variant { Ok : record { principal; nat32 }; Err : text };
@@ -87,7 +87,7 @@ type Stats = record {
   supply : nat64;
   total_volume : nat64;
 };
-type Token = variant { Icp; Ndp; Ghost };
+type Token = variant { Icp; Ndp; Ghost; Dogmi };
 service : {
   add_nft_project : (text, vec record { Token; NftInfo }) -> ();
   address : (opt principal) -> (text) query;
