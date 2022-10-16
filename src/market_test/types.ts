@@ -1,5 +1,5 @@
-import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
+import type { Principal } from '@dfinity/principal';
 
 export interface CanisterLogMessages {
   data: Array<LogMessageData>;
@@ -108,10 +108,7 @@ export interface _SERVICE {
   delete_nft_project: ActorMethod<[string], undefined>;
   delist: ActorMethod<[string, [] | [Array<number>], string], Result>;
   encode_token: ActorMethod<[Principal, number], string>;
-  get_canister_log: ActorMethod<
-    [GetLogMessagesParameters],
-    CanisterLogMessages
-  >;
+  get_canister_log: ActorMethod<[GetLogMessagesParameters], CanisterLogMessages>;
   get_nft: ActorMethod<[string], [] | [NFT]>;
   get_nft_project: ActorMethod<[string], [] | [Array<[Token, NftInfo]>]>;
   get_owner: ActorMethod<[], Array<Principal>>;
@@ -119,10 +116,7 @@ export interface _SERVICE {
   handle_failed_disbursements: ActorMethod<[], [[] | [Disbursement], Result_3]>;
   list: ActorMethod<[string, [] | [Array<number>], string, Price], Result_4>;
   listings: ActorMethod<[string], Array<[number, Listing]>>;
-  lock: ActorMethod<
-    [string, string, Price, Principal, [] | [Array<number>]],
-    Result_4
-  >;
+  lock: ActorMethod<[string, string, Price, Principal, [] | [Array<number>]], Result_4>;
   market_tokens_ext: ActorMethod<[string, [] | [string]], Result_5>;
   restore_disburse: ActorMethod<[DisburseService], undefined>;
   restore_market: ActorMethod<[MarketService], undefined>;
@@ -131,15 +125,7 @@ export interface _SERVICE {
   stats: ActorMethod<[string], Array<[string, Stats]>>;
   tokens_ext: ActorMethod<[string, string], Result_6>;
   transfer: ActorMethod<
-    [
-      Price,
-      Principal,
-      [] | [Array<number>],
-      Principal,
-      [] | [Array<number>],
-      Price,
-      string
-    ],
+    [Price, Principal, [] | [Array<number>], Principal, [] | [Array<number>], Price, string],
     Result_7
   >;
 }
