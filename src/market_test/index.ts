@@ -2,7 +2,8 @@ export const idlFactory = ({ IDL }) => {
   const Token = IDL.Variant({
     Icp: IDL.Null,
     Ndp: IDL.Null,
-    Ghost: IDL.Null
+    Ghost: IDL.Null,
+    Dogmi: IDL.Null
   });
   const Standard = IDL.Variant({ Ext: IDL.Null, DIP20: IDL.Null });
   const NftInfo = IDL.Record({
@@ -19,7 +20,8 @@ export const idlFactory = ({ IDL }) => {
   const Price = IDL.Variant({
     ICP: IDL.Nat64,
     NDP: IDL.Nat64,
-    GHOST: IDL.Nat64
+    GHOST: IDL.Nat64,
+    DOGMI: IDL.Nat64
   });
   const Disbursement = IDL.Record({
     to: IDL.Principal,
