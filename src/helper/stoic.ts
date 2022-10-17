@@ -1,5 +1,6 @@
+import { HttpAgent } from '@dfinity/agent';
 import { StoicIdentity } from 'ic-stoic-identity';
-import { agent } from './agent';
+import { agent, replaceAgent } from './agent';
 import storage from './storage';
 interface loginRes {
   [key: string]: any;
@@ -18,7 +19,12 @@ export async function stoicLogin(): Promise<loginRes | null> {
       // return identity.getPrincipal().toText();
     }
     // update auth agent
-    agent.replaceIdentity(identity);
+    if ('replaceIdentity' in agent) {
+      agent.replaceIdentity(identity);
+    } else {
+      const onlineHost = 'https://ic0.app';
+      replaceAgent(new HttpAgent({ host: onlineHost, identity: identity }));
+    }
     return identity
       .accounts()
       .then((res: string) => {

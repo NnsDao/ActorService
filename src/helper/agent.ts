@@ -6,7 +6,8 @@ import storage from './storage';
 
 //  online IC  host
 const onlineHost = 'https://ic0.app';
-export const agent = new HttpAgent({ host: onlineHost });
+export let agent = new HttpAgent({ host: onlineHost });
+export const replaceAgent = (agent_: HttpAgent) => (agent = agent_);
 
 // anonymous agent can more efficient then auth agent;
 export const anonymousAgent: HttpAgent = new HttpAgent({ host: onlineHost });
