@@ -1,4 +1,5 @@
 import type { HttpAgent } from '@dfinity/agent';
+import { agent } from './agent';
 import storage from './storage';
 
 interface PlugLoginRes {
@@ -50,7 +51,8 @@ export async function plugLogin(whitelist: string[]): Promise<PlugLoginRes | nul
   };
   persistConnect();
   console.log('Plug login', globalThis.ic.plug.sessionManager);
-
+  // auth agent
+  agent.replaceIdentity(globalThis.ic.plug.sessionManager.sessionData.agent._identity);
   return globalThis.ic.plug.sessionManager.sessionData;
 }
 
