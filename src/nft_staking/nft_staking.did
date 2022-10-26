@@ -35,6 +35,7 @@ type Summary = record {
   total : nat64;
   total_weight : nat32;
   cycle : nat32;
+  nri_limit : nat32;
 };
 type Weight = record {
   fifth : record { nat32; nat32 };
@@ -45,13 +46,12 @@ type Weight = record {
 };
 service : {
   backup_all_data : () -> (Staking) query;
-  get_nri_limit : () -> (nat32) query;
+  check_nri : (nat32) -> (bool) query;
   get_staking : () -> (opt vec StakingItem) query;
   get_staking_all : () -> (vec record { principal; vec StakingItem }) query;
   get_summary : () -> (Summary) query;
-  set_nri_limit : (nat32) -> ();
   set_summary : (Summary) -> ();
   set_weight : (Weight) -> () query;
   staking_back : (nat32) -> (Result);
-  staking_up : (principal, nat32) -> (Result_1);
+  staking_up : (nat32) -> (Result_1);
 }

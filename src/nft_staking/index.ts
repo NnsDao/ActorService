@@ -16,7 +16,8 @@ export const idlFactory = ({ IDL }) => {
     describe: IDL.Text,
     total: IDL.Nat64,
     total_weight: IDL.Nat32,
-    cycle: IDL.Nat32
+    cycle: IDL.Nat32,
+    nri_limit: IDL.Nat32
   });
   const Staking = IDL.Record({
     weight: Weight,
@@ -49,7 +50,7 @@ export const idlFactory = ({ IDL }) => {
   });
   return IDL.Service({
     backup_all_data: IDL.Func([], [Staking], ['query']),
-    get_nri_limit: IDL.Func([], [IDL.Nat32], ['query']),
+    check_nri: IDL.Func([IDL.Nat32], [IDL.Bool], ['query']),
     get_staking: IDL.Func([], [IDL.Opt(IDL.Vec(StakingItem))], ['query']),
     get_staking_all: IDL.Func(
       [],
@@ -57,11 +58,10 @@ export const idlFactory = ({ IDL }) => {
       ['query']
     ),
     get_summary: IDL.Func([], [Summary], ['query']),
-    set_nri_limit: IDL.Func([IDL.Nat32], [], []),
     set_summary: IDL.Func([Summary], [], []),
     set_weight: IDL.Func([Weight], [], ['query']),
     staking_back: IDL.Func([IDL.Nat32], [Result], []),
-    staking_up: IDL.Func([IDL.Principal, IDL.Nat32], [Result_1], [])
+    staking_up: IDL.Func([IDL.Nat32], [Result_1], [])
   });
 };
 export const init = ({ IDL }) => {

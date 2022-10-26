@@ -33,6 +33,7 @@ export interface Summary {
   total: bigint;
   total_weight: number;
   cycle: number;
+  nri_limit: number;
 }
 export interface Weight {
   fifth: [number, number];
@@ -43,13 +44,12 @@ export interface Weight {
 }
 export interface _SERVICE {
   backup_all_data: ActorMethod<[], Staking>;
-  get_nri_limit: ActorMethod<[], number>;
+  check_nri: ActorMethod<[number], boolean>;
   get_staking: ActorMethod<[], [] | [Array<StakingItem>]>;
   get_staking_all: ActorMethod<[], Array<[Principal, Array<StakingItem>]>>;
   get_summary: ActorMethod<[], Summary>;
-  set_nri_limit: ActorMethod<[number], undefined>;
   set_summary: ActorMethod<[Summary], undefined>;
   set_weight: ActorMethod<[Weight], undefined>;
   staking_back: ActorMethod<[number], Result>;
-  staking_up: ActorMethod<[Principal, number], Result_1>;
+  staking_up: ActorMethod<[number], Result_1>;
 }
