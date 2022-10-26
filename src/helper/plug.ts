@@ -53,10 +53,12 @@ export async function plugLogin(whitelist: string[], replaceAgent = true): Promi
   console.log('Plug login', globalThis.ic.plug.sessionManager);
   // auth agent
   replaceAgent && agent.replaceIdentity(globalThis.ic.plug.sessionManager.sessionData.agent._identity);
+  storage.set('loginType', 'plug');
   return globalThis.ic.plug.sessionManager.sessionData;
 }
 
 export async function plugLogout(): Promise<void> {
+  agent.invalidateIdentity();
   storage.remove('loginType');
   storage.remove('userInfo');
   // @ts-ignore

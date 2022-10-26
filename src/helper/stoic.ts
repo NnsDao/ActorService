@@ -24,6 +24,7 @@ export async function stoicLogin(replaceAgent = true): Promise<loginRes | null> 
       .then((res: string) => {
         const addressList = JSON.parse(res);
         console.log('stoic address', addressList, 'identity', identity.getPrincipal().toText());
+        storage.set('loginType', 'stoic');
         return {
           agent: null,
           principalId: identity.getPrincipal().toText(),
@@ -38,6 +39,7 @@ export async function stoicLogin(replaceAgent = true): Promise<loginRes | null> 
 }
 
 export async function stoicLogout() {
+  agent.invalidateIdentity();
   //Disconnect after
   storage.remove('userInfo');
   storage.remove('loginType');
