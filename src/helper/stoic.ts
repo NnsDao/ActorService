@@ -6,7 +6,7 @@ interface loginRes {
   principalId: string;
   accountId: string;
 }
-export async function stoicLogin(): Promise<loginRes | null> {
+export async function stoicLogin(replaceAgent = true): Promise<loginRes | null> {
   return StoicIdentity.load().then(async (identity: any) => {
     if (identity !== false) {
       //ID is a already connected wallet!
@@ -18,7 +18,7 @@ export async function stoicLogin(): Promise<loginRes | null> {
       // return identity.getPrincipal().toText();
     }
     // update auth agent
-    agent.replaceIdentity(identity);
+    replaceAgent && agent.replaceIdentity(identity);
     return identity
       .accounts()
       .then((res: string) => {

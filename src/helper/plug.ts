@@ -9,7 +9,7 @@ interface PlugLoginRes {
 }
 let persistTimer: any = null;
 
-export async function plugLogin(whitelist: string[]): Promise<PlugLoginRes | null> {
+export async function plugLogin(whitelist: string[], replaceAgent = true): Promise<PlugLoginRes | null> {
   if (!globalThis?.ic?.plug) {
     console.error('Please make sure the Plug extension is installed!');
     alert('Please make sure the Plug extension is installed!');
@@ -52,7 +52,7 @@ export async function plugLogin(whitelist: string[]): Promise<PlugLoginRes | nul
   persistConnect();
   console.log('Plug login', globalThis.ic.plug.sessionManager);
   // auth agent
-  agent.replaceIdentity(globalThis.ic.plug.sessionManager.sessionData.agent._identity);
+  replaceAgent && agent.replaceIdentity(globalThis.ic.plug.sessionManager.sessionData.agent._identity);
   return globalThis.ic.plug.sessionManager.sessionData;
 }
 
