@@ -1,0 +1,57 @@
+type BearerResponse = variant { Ok : text; Err : CommonError };
+type CommonError = variant { InvalidToken : text; Other : text };
+type RejectionCode = variant {
+  NoError;
+  CanisterError;
+  SysTransient;
+  DestinationInvalid;
+  Unknown;
+  SysFatal;
+  CanisterReject;
+};
+type Result = variant {
+  Ok : record { bool };
+  Err : record { RejectionCode; text };
+};
+type Result_1 = variant {
+  Ok : record { BearerResponse };
+  Err : record { RejectionCode; text };
+};
+type Staking = record {
+  weight : Weight;
+  staking_list : vec record { principal; vec StakingItem };
+  summary : Summary;
+  nft_list : vec nat32;
+  nri_limit : nat32;
+};
+type StakingItem = record {
+  weight : nat32;
+  earnings : nat64;
+  number : opt nat32;
+  timestamp : nat64;
+};
+type Summary = record {
+  describe : text;
+  total : nat64;
+  total_weight : nat32;
+  cycle : nat32;
+};
+type Weight = record {
+  fifth : record { nat32; nat32 };
+  first : record { nat32; nat32 };
+  third : record { nat32; nat32 };
+  second : record { nat32; nat32 };
+  fourth : record { nat32; nat32 };
+};
+service : {
+  backup_all_data : () -> (Staking) query;
+  get_nri_limit : () -> (nat32) query;
+  get_staking : () -> (opt vec StakingItem) query;
+  get_staking_all : () -> (vec record { principal; vec StakingItem }) query;
+  get_summary : () -> (Summary) query;
+  set_nri_limit : (nat32) -> ();
+  set_summary : (Summary) -> ();
+  set_weight : (Weight) -> () query;
+  staking_back : (nat32) -> (Result);
+  staking_up : (principal, nat32) -> (Result_1);
+}
