@@ -15,6 +15,7 @@ export interface Metadata {
 export type Result = { Ok: null } | { Err: string };
 export type Result_1 = { Ok: UserItem } | { Err: string };
 export type Result_2 = { Ok: Metadata } | { Err: string };
+export type Result_3 = { Ok: TotalUserInfo } | { Err: string };
 export interface StakeItem {
   status: StakeItemStatus;
   duration: StakeItemDuration;
@@ -27,6 +28,18 @@ export type StakeItemStatus =
   | { Banned: null }
   | { Valid: null }
   | { Expired: null };
+export interface TotalUserInfo {
+  log: Array<UserLog>;
+  nid: bigint;
+  nickname: string;
+  level: bigint;
+  credit: bigint;
+  stake: Array<StakeItem>;
+  badge: Array<string>;
+  wallet: Array<[bigint, string, string]>;
+  intro: string;
+  avatar: string;
+}
 export interface UserItem {
   log: Array<UserLog>;
   nid: bigint;
@@ -47,9 +60,10 @@ export interface _SERVICE {
   add_admin: ActorMethod<[Principal], Result>;
   add_stake: ActorMethod<[StakeItem], Result_1>;
   bind_wallet: ActorMethod<[[bigint, string, string]], Result>;
+  get_bind_wallet: ActorMethod<[], Array<[bigint, string, string]>>;
   login: ActorMethod<[string], Result_1>;
   metadata: ActorMethod<[], Result_2>;
   system_time: ActorMethod<[], bigint>;
   update_user_info: ActorMethod<[BasicUserInfo], Result>;
-  user_info: ActorMethod<[], Result_1>;
+  user_info: ActorMethod<[], Result_3>;
 }
