@@ -50,7 +50,7 @@ export async function payWithICP(amount: bigint, receiver: string, memo?: bigint
 /**
  *
  * @param accountID string
- * @returns es8 bigint
+ * @returns bigint
  */
 export async function getICPBalance(accountID: string) {
   const ledger = LedgerCanister.create({ agent });
@@ -59,7 +59,7 @@ export async function getICPBalance(accountID: string) {
     accountIdentifier: AccountIdentifier.fromHex(accountID),
   });
   console.log('ICP balance', balance);
-  return balance.toE8s();
+  return balance;
 }
 
 /**
