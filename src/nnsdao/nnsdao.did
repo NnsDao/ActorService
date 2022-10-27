@@ -1,10 +1,79 @@
-type Result = variant { Ok : int32; Err : text };
-type StackingItem = record {
-  "principal" : opt principal;
-  duration : nat8;
-  amount : nat64;
+type DaoInfo = record {
+  option : opt vec record { text; text };
+  name : text;
+  tags : vec text;
+  intro : text;
+  avatar : text;
+  poster : text;
 };
-service : (principal) -> {
-  stacking_list : () -> (vec record { nat64; StackingItem }) query;
-  test : () -> (Result) query;
+type JoinDaoParams = record {
+  nickname : text;
+  social : vec Social;
+  intro : text;
+  avatar : text;
+};
+type MemberItems = record {
+  "principal" : principal;
+  nickname : text;
+  social : vec Social;
+  intro : text;
+  status_code : int8;
+  avatar : text;
+};
+type Proposal = record {
+  id : nat64;
+  title : text;
+  content : text;
+  vote_data : vec record { principal; Votes };
+  end_time : nat64;
+  timestamp : nat64;
+  property : opt vec record { text; text };
+  proposer : principal;
+  proposal_state : ProposalState;
+};
+type ProposalContent = record {
+  title : text;
+  content : text;
+  end_time : nat64;
+  property : opt vec record { text; text };
+};
+type ProposalLog = record {
+  pending : vec nat64;
+  finished : vec record { nat64; Result_5 };
+};
+type ProposalState = variant {
+  Failed : text;
+  Open;
+  Executing;
+  Rejected;
+  Succeeded;
+  Accepted;
+};
+type Result = variant { Ok : DaoInfo; Err : text };
+type Result_1 = variant { Ok : Proposal; Err : text };
+type Result_2 = variant { Ok : vec record { nat64; Proposal }; Err : text };
+type Result_3 = variant { Ok : MemberItems; Err : text };
+type Result_4 = variant { Ok : vec MemberItems; Err : text };
+type Result_5 = variant { Ok : text; Err : text };
+type Result_6 = variant { Ok : ProposalLog; Err : text };
+type Result_7 = variant { Ok; Err : text };
+type Social = record { key : text; link : text };
+type UserVoteArgs = record {
+  id : nat64;
+  "principal" : opt principal;
+  vote : Votes;
+};
+type Votes = variant { No : nat64; Yes : nat64 };
+service : {
+  dao_info : () -> (Result);
+  get_proposal : (nat64) -> (Result_1) query;
+  get_proposal_list : () -> (Result_2) query;
+  join : (JoinDaoParams) -> (Result_3);
+  member_list : () -> (Result_4);
+  proposal_heartbeat_log : () -> (Result_6) query;
+  propose : (ProposalContent) -> (Result_1);
+  quit : () -> (Result_3);
+  update_dao_info : (DaoInfo) -> (Result);
+  user_info : (opt principal) -> (Result_3);
+  vote : (UserVoteArgs) -> (Result_7);
 }
