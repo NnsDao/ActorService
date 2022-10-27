@@ -1,7 +1,7 @@
 import { idlFactory as DIP20IDL } from '../dip20';
-import DIP20Actor from '../dip20/types';
+import type DIP20Actor from '../dip20/types';
 import EXTIDL from '../ext';
-import EXTActor from '../ext/types';
+import type EXTActor from '../ext/types';
 export { DIP20Actor, DIP20IDL, EXTActor, EXTIDL };
 
 export const supportTokensList: supportTokenItem[] = [
