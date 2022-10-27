@@ -60,13 +60,7 @@ export const idlFactory = ({ IDL }) => {
     set_summary: IDL.Func([Summary], [], []),
     set_weight: IDL.Func([Weight], [], ['query']),
     staking_back: IDL.Func([IDL.Nat32], [Result], []),
-    staking_up: IDL.Func([IDL.Nat32], [Result_1], []),
-    test: IDL.Func([IDL.Nat32], [Result_1], []),
-    test1: IDL.Func([IDL.Nat32], [Result_1], []),
-    test2: IDL.Func([], [Result_1], []),
-    test3: IDL.Func([], [IDL.Principal], []),
-    test4: IDL.Func([IDL.Text], [Result_1], []),
-    tt: IDL.Func([], [IDL.Principal], ['query'])
+    staking_up: IDL.Func([IDL.Nat32], [Result_1], [])
   });
 };
 export const init = ({ IDL }) => {

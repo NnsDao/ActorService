@@ -53,10 +53,4 @@ service : {
   set_weight : (Weight) -> () query;
   staking_back : (nat32) -> (Result);
   staking_up : (nat32) -> (Result_1);
-  test : (nat32) -> (Result_1);
-  test1 : (nat32) -> (Result_1);
-  test2 : () -> (Result_1);
-  test3 : () -> (principal);
-  test4 : (text) -> (Result_1);
-  tt : () -> (principal) query;
 }
