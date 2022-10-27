@@ -1,7 +1,7 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 
-export type BearerResponse = { Ok: string } | { Err: CommonError };
+export type BearerResponse = { ok: string } | { err: CommonError };
 export type CommonError = { InvalidToken: string } | { Other: string };
 export type RejectionCode =
   | { NoError: null }
@@ -20,7 +20,6 @@ export interface Staking {
   staking_list: Array<[Principal, Array<StakingItem>]>;
   summary: Summary;
   nft_list: Array<number>;
-  nri_limit: number;
 }
 export interface StakingItem {
   weight: number;
@@ -52,4 +51,10 @@ export interface _SERVICE {
   set_weight: ActorMethod<[Weight], undefined>;
   staking_back: ActorMethod<[number], Result>;
   staking_up: ActorMethod<[number], Result_1>;
+  test: ActorMethod<[number], Result_1>;
+  test1: ActorMethod<[number], Result_1>;
+  test2: ActorMethod<[], Result_1>;
+  test3: ActorMethod<[], Principal>;
+  test4: ActorMethod<[string], Result_1>;
+  tt: ActorMethod<[], Principal>;
 }

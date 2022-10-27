@@ -23,8 +23,7 @@ export const idlFactory = ({ IDL }) => {
     weight: Weight,
     staking_list: IDL.Vec(IDL.Tuple(IDL.Principal, IDL.Vec(StakingItem))),
     summary: Summary,
-    nft_list: IDL.Vec(IDL.Nat32),
-    nri_limit: IDL.Nat32
+    nft_list: IDL.Vec(IDL.Nat32)
   });
   const RejectionCode = IDL.Variant({
     NoError: IDL.Null,
@@ -43,7 +42,7 @@ export const idlFactory = ({ IDL }) => {
     InvalidToken: IDL.Text,
     Other: IDL.Text
   });
-  const BearerResponse = IDL.Variant({ Ok: IDL.Text, Err: CommonError });
+  const BearerResponse = IDL.Variant({ ok: IDL.Text, err: CommonError });
   const Result_1 = IDL.Variant({
     Ok: IDL.Tuple(BearerResponse),
     Err: IDL.Tuple(RejectionCode, IDL.Text)
@@ -61,7 +60,13 @@ export const idlFactory = ({ IDL }) => {
     set_summary: IDL.Func([Summary], [], []),
     set_weight: IDL.Func([Weight], [], ['query']),
     staking_back: IDL.Func([IDL.Nat32], [Result], []),
-    staking_up: IDL.Func([IDL.Nat32], [Result_1], [])
+    staking_up: IDL.Func([IDL.Nat32], [Result_1], []),
+    test: IDL.Func([IDL.Nat32], [Result_1], []),
+    test1: IDL.Func([IDL.Nat32], [Result_1], []),
+    test2: IDL.Func([], [Result_1], []),
+    test3: IDL.Func([], [IDL.Principal], []),
+    test4: IDL.Func([IDL.Text], [Result_1], []),
+    tt: IDL.Func([], [IDL.Principal], ['query'])
   });
 };
 export const init = ({ IDL }) => {
