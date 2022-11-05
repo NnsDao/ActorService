@@ -191,7 +191,6 @@ export const idlFactory = ({ IDL }) => {
     tokens_ext: IDL.Func([IDL.Text, IDL.Text], [Result_6], []),
     transfer: IDL.Func(
       [
-        Price,
         IDL.Principal,
         IDL.Opt(IDL.Vec(IDL.Nat8)),
         IDL.Principal,
