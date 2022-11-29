@@ -14,8 +14,8 @@ export interface Metadata {
 }
 export type Result = { Ok: null } | { Err: string };
 export type Result_1 = { Ok: UserItem } | { Err: string };
-export type Result_2 = { Ok: Metadata } | { Err: string };
-export type Result_3 = { Ok: TotalUserInfo } | { Err: string };
+export type Result_2 = { Ok: TotalUserInfo } | { Err: string };
+export type Result_3 = { Ok: Metadata } | { Err: string };
 export interface StakeItem {
   status: StakeItemStatus;
   duration: StakeItemDuration;
@@ -61,9 +61,9 @@ export interface _SERVICE {
   add_stake: ActorMethod<[StakeItem], Result_1>;
   bind_wallet: ActorMethod<[[bigint, string, string]], Result>;
   get_bind_wallet: ActorMethod<[], Array<[bigint, string, string]>>;
-  login: ActorMethod<[string], Result_1>;
-  metadata: ActorMethod<[], Result_2>;
+  login: ActorMethod<[string], Result_2>;
+  metadata: ActorMethod<[], Result_3>;
   system_time: ActorMethod<[], bigint>;
   update_user_info: ActorMethod<[BasicUserInfo], Result>;
-  user_info: ActorMethod<[], Result_3>;
+  user_info: ActorMethod<[], Result_2>;
 }
