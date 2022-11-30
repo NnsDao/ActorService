@@ -1,14 +1,6 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 
-export interface AddDaoInfo {
-  option: [] | [Array<[string, string]>];
-  name: string;
-  tags: Array<string>;
-  intro: string;
-  avatar: string;
-  poster: string;
-}
 export interface CanisterStatusResponse {
   status: Status;
   memory_size: bigint;
@@ -26,14 +18,13 @@ export interface CreateDaoOptions {
   block_height: bigint;
 }
 export interface DaoInfo {
-  id: bigint;
   controller: Array<Principal>;
   status: DaoStatusCode;
   owner: Principal;
-  tags: Array<string>;
+  create_at: bigint;
   canister_id: Principal;
 }
-export type DaoStatusCode = { Closed: null } | { Normal: null };
+export type DaoStatusCode = { Stopped: null } | { Active: null };
 export interface DefiniteCanisterSettings {
   freezing_threshold: bigint;
   controllers: Array<Principal>;
@@ -63,7 +54,7 @@ export interface TransactionItem {
   amount: bigint;
 }
 export interface _SERVICE {
-  add_dao: ActorMethod<[string, AddDaoInfo], Result>;
+  add_dao: ActorMethod<[string], Result>;
   create_dao: ActorMethod<[CreateDaoOptions], Result>;
   dao_list: ActorMethod<[], Array<DaoInfo>>;
   dao_status: ActorMethod<[string], Result_1>;
@@ -71,6 +62,6 @@ export interface _SERVICE {
   get_pay_info: ActorMethod<[], Result_2>;
   reinstall_canister: ActorMethod<[], Result_3>;
   transaction_log: ActorMethod<[], Array<TransactionItem>>;
-  update_dao_controller: ActorMethod<[bigint, ControllerAction], Result>;
+  update_dao_controller: ActorMethod<[Principal, ControllerAction], Result>;
   upgrade_canister: ActorMethod<[], Result_3>;
 }
