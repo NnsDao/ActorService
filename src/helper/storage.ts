@@ -33,7 +33,7 @@ export default new Storage();
 // Type Definition
 // ========================================
 type Store = {
-  loginType: undefined | 'stoic' | 'plug';
+  loginType: undefined | 'stoic' | 'plug' | 'II';
   userInfo: LoginUserInfo;
 };
 

@@ -1,4 +1,4 @@
-import { AccountIdentifier, ICP, LedgerCanister, principalToAccountIdentifier } from '@dfinity/nns';
+import { AccountIdentifier, LedgerCanister, principalToAccountIdentifier } from '@dfinity/nns';
 import { Principal } from '@dfinity/principal';
 import { agent, getDIP20Actor, getEXTActor } from './agent';
 import { tokenType } from './constants';
@@ -36,7 +36,7 @@ export async function payWithICP(amount: bigint, receiver: string, memo?: bigint
     const ledger = LedgerCanister.create({ agent });
     const params: any = {
       to: AccountIdentifier.fromHex(receiver),
-      amount: ICP.fromE8s(amount),
+      amount,
     };
     if (memo) {
       params.memo = memo;
