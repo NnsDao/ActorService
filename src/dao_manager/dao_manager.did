@@ -15,8 +15,8 @@ type DaoInfo = record {
   controller : vec principal;
   status : DaoStatusCode;
   owner : principal;
-  create_at : nat64;
   canister_id : principal;
+  created_at : nat64;
 };
 type DaoStatusCode = variant { Stopped; Active };
 type DefiniteCanisterSettings = record {

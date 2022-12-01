@@ -21,8 +21,8 @@ export interface DaoInfo {
   controller: Array<Principal>;
   status: DaoStatusCode;
   owner: Principal;
-  create_at: bigint;
   canister_id: Principal;
+  created_at: bigint;
 }
 export type DaoStatusCode = { Stopped: null } | { Active: null };
 export interface DefiniteCanisterSettings {

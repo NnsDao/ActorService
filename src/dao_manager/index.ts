@@ -7,8 +7,8 @@ export const idlFactory = ({ IDL }) => {
     controller: IDL.Vec(IDL.Principal),
     status: DaoStatusCode,
     owner: IDL.Principal,
-    create_at: IDL.Nat64,
-    canister_id: IDL.Principal
+    canister_id: IDL.Principal,
+    created_at: IDL.Nat64
   });
   const Result = IDL.Variant({ Ok: DaoInfo, Err: IDL.Text });
   const CreateDaoOptions = IDL.Record({
