@@ -118,7 +118,6 @@ service : {
   stats : (text) -> (vec record { text; Stats }) query;
   tokens_ext : (text, text) -> (Result_6);
   transfer : (
-      Price,
       principal,
       opt vec nat8,
       principal,

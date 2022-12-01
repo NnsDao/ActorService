@@ -33,18 +33,6 @@ export const idlFactory = ({ IDL }) => {
     avatar: IDL.Text
   });
   const Result_1 = IDL.Variant({ Ok: UserItem, Err: IDL.Text });
-  const Metadata = IDL.Record({
-    owner: IDL.Opt(IDL.Principal),
-    canister_id: IDL.Text,
-    admin_list: IDL.Vec(IDL.Principal)
-  });
-  const Result_2 = IDL.Variant({ Ok: Metadata, Err: IDL.Text });
-  const BasicUserInfo = IDL.Record({
-    nid: IDL.Nat64,
-    nickname: IDL.Text,
-    intro: IDL.Text,
-    avatar: IDL.Text
-  });
   const TotalUserInfo = IDL.Record({
     log: IDL.Vec(UserLog),
     nid: IDL.Nat64,
@@ -57,7 +45,19 @@ export const idlFactory = ({ IDL }) => {
     intro: IDL.Text,
     avatar: IDL.Text
   });
-  const Result_3 = IDL.Variant({ Ok: TotalUserInfo, Err: IDL.Text });
+  const Result_2 = IDL.Variant({ Ok: TotalUserInfo, Err: IDL.Text });
+  const Metadata = IDL.Record({
+    owner: IDL.Opt(IDL.Principal),
+    canister_id: IDL.Text,
+    admin_list: IDL.Vec(IDL.Principal)
+  });
+  const Result_3 = IDL.Variant({ Ok: Metadata, Err: IDL.Text });
+  const BasicUserInfo = IDL.Record({
+    nid: IDL.Nat64,
+    nickname: IDL.Text,
+    intro: IDL.Text,
+    avatar: IDL.Text
+  });
   return IDL.Service({
     add_admin: IDL.Func([IDL.Principal], [Result], []),
     add_stake: IDL.Func([StakeItem], [Result_1], []),
@@ -71,11 +71,11 @@ export const idlFactory = ({ IDL }) => {
       [IDL.Vec(IDL.Tuple(IDL.Nat64, IDL.Text, IDL.Text))],
       ['query']
     ),
-    login: IDL.Func([IDL.Text], [Result_1], []),
-    metadata: IDL.Func([], [Result_2], ['query']),
+    login: IDL.Func([IDL.Text], [Result_2], []),
+    metadata: IDL.Func([], [Result_3], ['query']),
     system_time: IDL.Func([], [IDL.Nat64], ['query']),
     update_user_info: IDL.Func([BasicUserInfo], [Result], []),
-    user_info: IDL.Func([], [Result_3], ['query'])
+    user_info: IDL.Func([], [Result_2], ['query'])
   });
 };
 export const init = ({ IDL }) => {

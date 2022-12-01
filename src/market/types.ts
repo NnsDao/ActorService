@@ -140,7 +140,6 @@ export interface _SERVICE {
   tokens_ext: ActorMethod<[string, string], Result_6>;
   transfer: ActorMethod<
     [
-      Price,
       Principal,
       [] | [Array<number>],
       Principal,
