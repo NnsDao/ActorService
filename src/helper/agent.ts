@@ -15,6 +15,7 @@ export const anonymousAgent: HttpAgent = new HttpAgent({ host: onlineHost });
 export async function getActor<T>(props: getActorProps): Promise<T> {
   let { cid, idl, needAuth = false } = props;
   const loginType = storage.get('loginType');
+  // before plug request connect, window.ic.plug.createActor can`t respond  anything!!!
   const actor =
     loginType === 'plug' && needAuth
       ? await window.ic.plug.createActor({ canisterId: cid, interfaceFactory: idl })
