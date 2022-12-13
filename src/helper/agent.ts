@@ -16,7 +16,7 @@ export async function getActor<T>(props: getActorProps): Promise<T> {
   let { cid, idl, needAuth = false } = props;
   const loginType = storage.get('loginType');
   const actor =
-    loginType === 'plug'
+    loginType === 'plug' && needAuth
       ? await window.ic.plug.createActor({ canisterId: cid, interfaceFactory: idl })
       : Promise.resolve(Actor.createActor(idl, { agent: needAuth ? agent : anonymousAgent, canisterId: cid }));
   return actor;
