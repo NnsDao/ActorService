@@ -41,7 +41,6 @@ export const idlFactory = ({ IDL }) => {
     Ok: IDL.Tuple(CanisterStatusResponse),
     Err: IDL.Tuple(RejectionCode, IDL.Text)
   });
-  const Result_3 = IDL.Variant({ Ok: IDL.Text, Err: IDL.Text });
   const Votes = IDL.Variant({ No: IDL.Nat64, Yes: IDL.Nat64 });
   const ProposalState = IDL.Variant({
     Failed: IDL.Text,
@@ -63,8 +62,8 @@ export const idlFactory = ({ IDL }) => {
     proposer: IDL.Principal,
     proposal_state: ProposalState
   });
-  const Result_4 = IDL.Variant({ Ok: Proposal, Err: IDL.Text });
-  const Result_5 = IDL.Variant({
+  const Result_3 = IDL.Variant({ Ok: Proposal, Err: IDL.Text });
+  const Result_4 = IDL.Variant({
     Ok: IDL.Vec(IDL.Tuple(IDL.Nat64, Proposal)),
     Err: IDL.Text
   });
@@ -85,11 +84,17 @@ export const idlFactory = ({ IDL }) => {
     status_code: IDL.Int8,
     avatar: IDL.Text
   });
-  const Result_6 = IDL.Variant({ Ok: MemberItems, Err: IDL.Text });
-  const Result_7 = IDL.Variant({
+  const Result_5 = IDL.Variant({ Ok: MemberItems, Err: IDL.Text });
+  const Result_6 = IDL.Variant({
     Ok: IDL.Vec(MemberItems),
     Err: IDL.Text
   });
+  const Result_7 = IDL.Variant({ Ok: IDL.Text, Err: IDL.Text });
+  const ProposalLog = IDL.Record({
+    pending: IDL.Vec(IDL.Nat64),
+    finished: IDL.Vec(IDL.Tuple(IDL.Nat64, Result_7))
+  });
+  const Result_8 = IDL.Variant({ Ok: ProposalLog, Err: IDL.Text });
   const ProposalContent = IDL.Record({
     title: IDL.Text,
     content: IDL.Text,
@@ -106,20 +111,16 @@ export const idlFactory = ({ IDL }) => {
     add_owner: IDL.Func([IDL.Principal], [Result], []),
     dao_info: IDL.Func([], [Result_1], []),
     dao_status: IDL.Func([], [Result_2], []),
-    get_handled_proposal: IDL.Func(
-      [],
-      [IDL.Vec(IDL.Tuple(IDL.Nat64, Result_3))],
-      ['query']
-    ),
     get_owner: IDL.Func([], [IDL.Vec(IDL.Principal)], ['query']),
-    get_proposal: IDL.Func([IDL.Nat64], [Result_4], ['query']),
-    get_proposal_list: IDL.Func([], [Result_5], ['query']),
-    join: IDL.Func([JoinDaoParams], [Result_6], []),
-    member_list: IDL.Func([], [Result_7], []),
-    propose: IDL.Func([ProposalContent], [Result_4], []),
-    quit: IDL.Func([], [Result_6], []),
+    get_proposal: IDL.Func([IDL.Nat64], [Result_3], ['query']),
+    get_proposal_list: IDL.Func([], [Result_4], ['query']),
+    join: IDL.Func([JoinDaoParams], [Result_5], []),
+    member_list: IDL.Func([], [Result_6], []),
+    proposal_heartbeat_log: IDL.Func([], [Result_8], ['query']),
+    propose: IDL.Func([ProposalContent], [Result_3], []),
+    quit: IDL.Func([], [Result_5], []),
     update_dao_info: IDL.Func([DaoInfo], [Result_1], []),
-    user_info: IDL.Func([IDL.Opt(IDL.Principal)], [Result_6], []),
+    user_info: IDL.Func([IDL.Opt(IDL.Principal)], [Result_5], []),
     vote: IDL.Func([UserVoteArgs], [Result], [])
   });
 };

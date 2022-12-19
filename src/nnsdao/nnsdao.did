@@ -55,6 +55,10 @@ type ProposalContent = record {
   start_time : nat64;
   property : opt vec record { text; text };
 };
+type ProposalLog = record {
+  pending : vec nat64;
+  finished : vec record { nat64; Result_7 };
+};
 type ProposalState = variant {
   Failed : text;
   Open;
@@ -78,11 +82,12 @@ type Result_2 = variant {
   Ok : record { CanisterStatusResponse };
   Err : record { RejectionCode; text };
 };
-type Result_3 = variant { Ok : text; Err : text };
-type Result_4 = variant { Ok : Proposal; Err : text };
-type Result_5 = variant { Ok : vec record { nat64; Proposal }; Err : text };
-type Result_6 = variant { Ok : MemberItems; Err : text };
-type Result_7 = variant { Ok : vec MemberItems; Err : text };
+type Result_3 = variant { Ok : Proposal; Err : text };
+type Result_4 = variant { Ok : vec record { nat64; Proposal }; Err : text };
+type Result_5 = variant { Ok : MemberItems; Err : text };
+type Result_6 = variant { Ok : vec MemberItems; Err : text };
+type Result_7 = variant { Ok : text; Err : text };
+type Result_8 = variant { Ok : ProposalLog; Err : text };
 type Social = record { key : text; link : text };
 type Status = variant { stopped; stopping; running };
 type UserVoteArgs = record {
@@ -95,15 +100,15 @@ service : {
   add_owner : (principal) -> (Result);
   dao_info : () -> (Result_1);
   dao_status : () -> (Result_2);
-  get_handled_proposal : () -> (vec record { nat64; Result_3 }) query;
   get_owner : () -> (vec principal) query;
-  get_proposal : (nat64) -> (Result_4) query;
-  get_proposal_list : () -> (Result_5) query;
-  join : (JoinDaoParams) -> (Result_6);
-  member_list : () -> (Result_7);
-  propose : (ProposalContent) -> (Result_4);
-  quit : () -> (Result_6);
+  get_proposal : (nat64) -> (Result_3) query;
+  get_proposal_list : () -> (Result_4) query;
+  join : (JoinDaoParams) -> (Result_5);
+  member_list : () -> (Result_6);
+  proposal_heartbeat_log : () -> (Result_8) query;
+  propose : (ProposalContent) -> (Result_3);
+  quit : () -> (Result_5);
   update_dao_info : (DaoInfo) -> (Result_1);
-  user_info : (opt principal) -> (Result_6);
+  user_info : (opt principal) -> (Result_5);
   vote : (UserVoteArgs) -> (Result);
 }
