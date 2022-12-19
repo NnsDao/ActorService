@@ -6,7 +6,7 @@ export interface CanisterStatusResponse {
   memory_size: bigint;
   cycles: bigint;
   settings: DefiniteCanisterSettings;
-  module_hash: [] | [Array<number>];
+  module_hash: [] | [Uint8Array];
 }
 export type ControllerAction =
   | { add: Principal }
