@@ -52,11 +52,11 @@ export async function payWithICP(amount: bigint, receiver: string, memo?: bigint
  * @param accountID string
  * @returns bigint
  */
-export async function getICPBalance(accountID: string) {
+export async function getICPBalance(principal: Principal) {
   const ledger = LedgerCanister.create({ agent });
 
   const balance = await ledger.accountBalance({
-    accountIdentifier: AccountIdentifier.fromHex(accountID),
+    accountIdentifier: AccountIdentifier.fromPrincipal({ principal }),
   });
   console.log('ICP balance', balance);
   return balance;
@@ -72,7 +72,7 @@ export async function getTokenBalance(token: tokenType, principal: Principal): P
   const accountID = principalToAccountIdentifier(principal);
   const standard = getTokenItemInfo(token);
   if (standard?.standard === 'ICP') {
-    return getICPBalance(accountID);
+    return getICPBalance(principal);
   }
   if (standard?.standard == 'EXT') {
     const actor = await getEXTActor(true, standard.cid ?? '');
