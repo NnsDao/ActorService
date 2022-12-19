@@ -6,7 +6,7 @@ export interface CanisterStatusResponse {
   memory_size: bigint;
   cycles: bigint;
   settings: DefiniteCanisterSettings;
-  module_hash: [] | [Array<number>];
+  module_hash: [] | [Uint8Array];
 }
 export interface DaoInfo {
   option: [] | [Array<[string, string]>];
@@ -59,7 +59,7 @@ export interface ProposalContent {
   property: [] | [Array<[string, string]>];
 }
 export interface ProposalLog {
-  pending: Array<bigint>;
+  pending: BigUint64Array;
   finished: Array<[bigint, Result_6]>;
 }
 export type ProposalState =
