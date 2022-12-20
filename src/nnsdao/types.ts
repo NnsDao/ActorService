@@ -13,6 +13,7 @@ export interface DaoInfo {
   name: string;
   tags: Array<string>;
   canister_id: string;
+  created_at: bigint;
   intro: string;
   avatar: string;
   poster: string;
@@ -60,7 +61,7 @@ export interface ProposalContent {
 }
 export interface ProposalLog {
   pending: BigUint64Array;
-  finished: Array<[bigint, Result_7]>;
+  finished: Array<[bigint, Result_6]>;
 }
 export type ProposalState =
   | { Failed: string }
@@ -77,17 +78,18 @@ export type RejectionCode =
   | { Unknown: null }
   | { SysFatal: null }
   | { CanisterReject: null };
-export type Result = { Ok: null } | { Err: string };
-export type Result_1 = { Ok: DaoInfo } | { Err: string };
-export type Result_2 =
+export type Result = { Ok: DaoInfo } | { Err: string };
+export type Result_1 =
   | { Ok: [CanisterStatusResponse] }
   | { Err: [RejectionCode, string] };
-export type Result_3 = { Ok: Proposal } | { Err: string };
-export type Result_4 = { Ok: Array<[bigint, Proposal]> } | { Err: string };
-export type Result_5 = { Ok: MemberItems } | { Err: string };
-export type Result_6 = { Ok: Array<MemberItems> } | { Err: string };
-export type Result_7 = { Ok: string } | { Err: string };
-export type Result_8 = { Ok: ProposalLog } | { Err: string };
+export type Result_2 = { Ok: Proposal } | { Err: string };
+export type Result_3 = { Ok: Array<[bigint, Proposal]> } | { Err: string };
+export type Result_4 = { Ok: MemberItems } | { Err: string };
+export type Result_5 = { Ok: Array<MemberItems> } | { Err: string };
+export type Result_6 = { Ok: string } | { Err: string };
+export type Result_7 = { Ok: ProposalLog } | { Err: string };
+export type Result_8 = { Ok: null } | { Err: [RejectionCode, string] };
+export type Result_9 = { Ok: null } | { Err: string };
 export interface Social {
   key: string;
   link: string;
@@ -100,18 +102,19 @@ export interface UserVoteArgs {
 }
 export type Votes = { No: bigint } | { Yes: bigint };
 export interface _SERVICE {
-  add_owner: ActorMethod<[Principal], Result>;
-  dao_info: ActorMethod<[], Result_1>;
-  dao_status: ActorMethod<[], Result_2>;
+  add_owner: ActorMethod<[Principal], Array<Principal>>;
+  dao_info: ActorMethod<[], Result>;
+  dao_status: ActorMethod<[], Result_1>;
   get_owner: ActorMethod<[], Array<Principal>>;
-  get_proposal: ActorMethod<[bigint], Result_3>;
-  get_proposal_list: ActorMethod<[], Result_4>;
-  join: ActorMethod<[JoinDaoParams], Result_5>;
-  member_list: ActorMethod<[], Result_6>;
-  proposal_heartbeat_log: ActorMethod<[], Result_8>;
-  propose: ActorMethod<[ProposalContent], Result_3>;
-  quit: ActorMethod<[], Result_5>;
-  update_dao_info: ActorMethod<[DaoInfo], Result_1>;
-  user_info: ActorMethod<[[] | [Principal]], Result_5>;
-  vote: ActorMethod<[UserVoteArgs], Result>;
+  get_proposal: ActorMethod<[bigint], Result_2>;
+  get_proposal_list: ActorMethod<[], Result_3>;
+  join: ActorMethod<[JoinDaoParams], Result_4>;
+  member_list: ActorMethod<[], Result_5>;
+  proposal_heartbeat_log: ActorMethod<[], Result_7>;
+  propose: ActorMethod<[ProposalContent], Result_2>;
+  quit: ActorMethod<[], Result_4>;
+  update_controller: ActorMethod<[string], Result_8>;
+  update_dao_info: ActorMethod<[DaoInfo], Result>;
+  user_info: ActorMethod<[[] | [Principal]], Result_4>;
+  vote: ActorMethod<[UserVoteArgs], Result_9>;
 }

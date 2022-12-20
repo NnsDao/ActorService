@@ -10,6 +10,7 @@ type DaoInfo = record {
   name : text;
   tags : vec text;
   canister_id : text;
+  created_at : nat64;
   intro : text;
   avatar : text;
   poster : text;
@@ -57,7 +58,7 @@ type ProposalContent = record {
 };
 type ProposalLog = record {
   pending : vec nat64;
-  finished : vec record { nat64; Result_7 };
+  finished : vec record { nat64; Result_6 };
 };
 type ProposalState = variant {
   Failed : text;
@@ -76,18 +77,19 @@ type RejectionCode = variant {
   SysFatal;
   CanisterReject;
 };
-type Result = variant { Ok; Err : text };
-type Result_1 = variant { Ok : DaoInfo; Err : text };
-type Result_2 = variant {
+type Result = variant { Ok : DaoInfo; Err : text };
+type Result_1 = variant {
   Ok : record { CanisterStatusResponse };
   Err : record { RejectionCode; text };
 };
-type Result_3 = variant { Ok : Proposal; Err : text };
-type Result_4 = variant { Ok : vec record { nat64; Proposal }; Err : text };
-type Result_5 = variant { Ok : MemberItems; Err : text };
-type Result_6 = variant { Ok : vec MemberItems; Err : text };
-type Result_7 = variant { Ok : text; Err : text };
-type Result_8 = variant { Ok : ProposalLog; Err : text };
+type Result_2 = variant { Ok : Proposal; Err : text };
+type Result_3 = variant { Ok : vec record { nat64; Proposal }; Err : text };
+type Result_4 = variant { Ok : MemberItems; Err : text };
+type Result_5 = variant { Ok : vec MemberItems; Err : text };
+type Result_6 = variant { Ok : text; Err : text };
+type Result_7 = variant { Ok : ProposalLog; Err : text };
+type Result_8 = variant { Ok; Err : record { RejectionCode; text } };
+type Result_9 = variant { Ok; Err : text };
 type Social = record { key : text; link : text };
 type Status = variant { stopped; stopping; running };
 type UserVoteArgs = record {
@@ -97,18 +99,19 @@ type UserVoteArgs = record {
 };
 type Votes = variant { No : nat64; Yes : nat64 };
 service : {
-  add_owner : (principal) -> (Result);
-  dao_info : () -> (Result_1);
-  dao_status : () -> (Result_2);
+  add_owner : (principal) -> (vec principal);
+  dao_info : () -> (Result);
+  dao_status : () -> (Result_1);
   get_owner : () -> (vec principal) query;
-  get_proposal : (nat64) -> (Result_3) query;
-  get_proposal_list : () -> (Result_4) query;
-  join : (JoinDaoParams) -> (Result_5);
-  member_list : () -> (Result_6);
-  proposal_heartbeat_log : () -> (Result_8) query;
-  propose : (ProposalContent) -> (Result_3);
-  quit : () -> (Result_5);
-  update_dao_info : (DaoInfo) -> (Result_1);
-  user_info : (opt principal) -> (Result_5);
-  vote : (UserVoteArgs) -> (Result);
+  get_proposal : (nat64) -> (Result_2) query;
+  get_proposal_list : () -> (Result_3) query;
+  join : (JoinDaoParams) -> (Result_4);
+  member_list : () -> (Result_5);
+  proposal_heartbeat_log : () -> (Result_7) query;
+  propose : (ProposalContent) -> (Result_2);
+  quit : () -> (Result_4);
+  update_controller : (text) -> (Result_8);
+  update_dao_info : (DaoInfo) -> (Result);
+  user_info : (opt principal) -> (Result_4);
+  vote : (UserVoteArgs) -> (Result_9);
 }
