@@ -8,11 +8,24 @@ export interface CanisterStatusResponse {
   settings: DefiniteCanisterSettings;
   module_hash: [] | [Uint8Array];
 }
+export interface Comment {
+  principal: Principal;
+  content: string;
+  like: Array<Principal>;
+  update_at: bigint;
+}
+export interface DaoData {
+  status: CanisterStatusResponse;
+  owners: Array<string>;
+  info: DaoInfo;
+  member_list: Array<MemberItems>;
+}
 export interface DaoInfo {
-  option: [] | [Array<[string, string]>];
+  option: Array<[string, string]>;
   name: string;
   tags: Array<string>;
   canister_id: string;
+  created_at: bigint;
   intro: string;
   avatar: string;
   poster: string;
@@ -45,6 +58,7 @@ export interface Proposal {
   content: string;
   vote_data: Array<[Principal, Votes]>;
   end_time: bigint;
+  comment: Array<Comment>;
   start_time: bigint;
   timestamp: bigint;
   property: [] | [Array<[string, string]>];
@@ -57,10 +71,6 @@ export interface ProposalContent {
   end_time: bigint;
   start_time: bigint;
   property: [] | [Array<[string, string]>];
-}
-export interface ProposalLog {
-  pending: BigUint64Array;
-  finished: Array<[bigint, Result_6]>;
 }
 export type ProposalState =
   | { Failed: string }
@@ -77,17 +87,16 @@ export type RejectionCode =
   | { Unknown: null }
   | { SysFatal: null }
   | { CanisterReject: null };
-export type Result = { Ok: DaoInfo } | { Err: string };
-export type Result_1 =
-  | { Ok: [CanisterStatusResponse] }
-  | { Err: [RejectionCode, string] };
-export type Result_2 = { Ok: Proposal } | { Err: string };
-export type Result_3 = { Ok: Array<[bigint, Proposal]> } | { Err: string };
-export type Result_4 = { Ok: MemberItems } | { Err: string };
-export type Result_5 = { Ok: Array<MemberItems> } | { Err: string };
-export type Result_6 = { Ok: string } | { Err: string };
-export type Result_7 = { Ok: ProposalLog } | { Err: string };
-export type Result_8 = { Ok: null } | { Err: string };
+export type Result = { Ok: Proposal } | { Err: string };
+export type Result_1 = { Ok: DaoData } | { Err: string };
+export type Result_2 = { Ok: DaoInfo } | { Err: string };
+export type Result_3 = { Ok: CanisterStatusResponse } | { Err: string };
+export type Result_4 = { Ok: string } | { Err: string };
+export type Result_5 = { Ok: Array<[bigint, Proposal]> } | { Err: string };
+export type Result_6 = { Ok: MemberItems } | { Err: string };
+export type Result_7 = { Ok: Array<MemberItems> } | { Err: string };
+export type Result_8 = { Ok: null } | { Err: [RejectionCode, string] };
+export type Result_9 = { Ok: null } | { Err: string };
 export interface Social {
   key: string;
   link: string;
@@ -100,17 +109,21 @@ export interface UserVoteArgs {
 }
 export type Votes = { No: bigint } | { Yes: bigint };
 export interface _SERVICE {
-  dao_info: ActorMethod<[], Result>;
-  dao_status: ActorMethod<[], Result_1>;
-  get_owner: ActorMethod<[], Array<Principal>>;
-  get_proposal: ActorMethod<[bigint], Result_2>;
-  get_proposal_list: ActorMethod<[], Result_3>;
-  join: ActorMethod<[JoinDaoParams], Result_4>;
-  member_list: ActorMethod<[], Result_5>;
-  proposal_heartbeat_log: ActorMethod<[], Result_7>;
-  propose: ActorMethod<[ProposalContent], Result_2>;
-  quit: ActorMethod<[], Result_4>;
-  update_dao_info: ActorMethod<[DaoInfo], Result>;
-  user_info: ActorMethod<[[] | [Principal]], Result_4>;
-  vote: ActorMethod<[UserVoteArgs], Result_8>;
+  add_owner: ActorMethod<[Principal], Array<Principal>>;
+  comment_proposal: ActorMethod<[bigint, Comment], Result>;
+  dao_data: ActorMethod<[], Result_1>;
+  dao_info: ActorMethod<[], Result_2>;
+  dao_status: ActorMethod<[], Result_3>;
+  get_handled_proposal: ActorMethod<[], Array<[bigint, Result_4]>>;
+  get_owners: ActorMethod<[], Array<Principal>>;
+  get_proposal: ActorMethod<[bigint], Result>;
+  get_proposal_list: ActorMethod<[], Result_5>;
+  join: ActorMethod<[JoinDaoParams], Result_6>;
+  member_list: ActorMethod<[], Result_7>;
+  propose: ActorMethod<[ProposalContent], Result>;
+  quit: ActorMethod<[], Result_6>;
+  update_controller: ActorMethod<[string], Result_8>;
+  update_dao_info: ActorMethod<[DaoInfo], Result_2>;
+  user_info: ActorMethod<[], Result_6>;
+  vote: ActorMethod<[UserVoteArgs], Result_9>;
 }

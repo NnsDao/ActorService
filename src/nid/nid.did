@@ -1,6 +1,6 @@
 type BasicUserInfo = record {
-  nid : nat64;
   nickname : text;
+  social : vec record { text; text };
   intro : text;
   avatar : text;
 };
@@ -24,24 +24,28 @@ type StakeItemDuration = variant { LongTerm; Month : nat32 };
 type StakeItemStatus = variant { Banned; Valid; Expired };
 type TotalUserInfo = record {
   log : vec UserLog;
-  nid : nat64;
+  nid : text;
   nickname : text;
+  social : vec record { text; text };
   level : nat64;
   credit : nat64;
   stake : vec StakeItem;
   badge : vec text;
-  wallet : vec record { nat64; text; text };
+  wallet : vec record { text; text; text };
+  last_login_at : nat64;
   intro : text;
   avatar : text;
 };
 type UserItem = record {
   log : vec UserLog;
-  nid : nat64;
+  nid : text;
   nickname : text;
+  social : vec record { text; text };
   level : nat64;
   credit : nat64;
   stake : vec StakeItem;
   badge : vec text;
+  last_login_at : nat64;
   intro : text;
   avatar : text;
 };
@@ -49,11 +53,11 @@ type UserLog = record { time : int64; detail : text; event : text };
 service : {
   add_admin : (principal) -> (Result);
   add_stake : (StakeItem) -> (Result_1);
-  bind_wallet : (record { nat64; text; text }) -> (Result);
-  get_bind_wallet : () -> (vec record { nat64; text; text }) query;
+  bind_wallet : (record { text; text; text }) -> (Result);
+  get_bind_wallet : () -> (vec record { text; text; text }) query;
   login : (text) -> (Result_2);
   metadata : () -> (Result_3) query;
   system_time : () -> (nat64) query;
-  update_user_info : (BasicUserInfo) -> (Result);
+  update_user_info : (BasicUserInfo) -> (Result_2);
   user_info : () -> (Result_2) query;
 }
