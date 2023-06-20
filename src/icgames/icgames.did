@@ -1,0 +1,27 @@
+type GameItem = record {
+  tag : vec text;
+  is_delete : bool;
+  desc : text;
+  name : text;
+  banner : vec text;
+  follow : nat64;
+  avatar : text;
+};
+type Result = variant { Ok; Err : text };
+type Result_1 = variant { Ok : UserInfo; Err : text };
+type UserBaseInfo = record { name : text; avatar : text };
+type UserInfo = record { name : text; follow : vec nat64; avatar : text };
+service : {
+  add_owner : (principal) -> ();
+  cancel_follow : (nat64) -> (Result);
+  create_game : (GameItem) -> ();
+  delete_owner : (principal) -> ();
+  follow : (nat64) -> (Result);
+  get_game : (nat64) -> (opt GameItem) query;
+  get_game_list : () -> (vec record { nat64; GameItem }) query;
+  get_owner : () -> (vec principal) query;
+  get_user_info : () -> (Result_1) query;
+  set_heat : (nat64, nat64) -> (Result);
+  set_user_info : (UserBaseInfo) -> ();
+  update_game : (nat64, GameItem) -> (Result);
+};

@@ -11,5 +11,12 @@
     "nnsdao",
     "npmrc"
   ],
-  "emmet.excludeLanguages": ["markdown", "javascript", "sh"]
+  "emmet.excludeLanguages": [
+    "markdown",
+    "javascript",
+    "sh"
+  ],
+  "[candid]": {
+    "editor.defaultFormatter": "dfinity-foundation.vscode-motoko"
+  }
 }
