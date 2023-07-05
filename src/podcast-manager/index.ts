@@ -1,51 +1,39 @@
-export const idlFactory = ({ IDL }) => {
-  const RejectionCode = IDL.Variant({
-    NoError: IDL.Null,
-    CanisterError: IDL.Null,
-    SysTransient: IDL.Null,
-    DestinationInvalid: IDL.Null,
-    Unknown: IDL.Null,
-    SysFatal: IDL.Null,
-    CanisterReject: IDL.Null,
-  });
-  const Result = IDL.Variant({
-    Ok: IDL.Null,
-    Err: IDL.Tuple(RejectionCode, IDL.Text),
-  });
-  const CanisterStatusType = IDL.Variant({
-    stopped: IDL.Null,
-    stopping: IDL.Null,
-    running: IDL.Null,
-  });
-  const DefiniteCanisterSettings = IDL.Record({
-    freezing_threshold: IDL.Nat,
-    controllers: IDL.Vec(IDL.Principal),
-    memory_allocation: IDL.Nat,
-    compute_allocation: IDL.Nat,
-  });
-  const CanisterStatusResponse = IDL.Record({
-    status: CanisterStatusType,
-    memory_size: IDL.Nat,
-    cycles: IDL.Nat,
-    settings: DefiniteCanisterSettings,
-    idle_cycles_burned_per_day: IDL.Nat,
-    module_hash: IDL.Opt(IDL.Vec(IDL.Nat8)),
-  });
-  const Result_1 = IDL.Variant({
-    Ok: IDL.Tuple(CanisterStatusResponse),
-    Err: IDL.Tuple(RejectionCode, IDL.Text),
-  });
-  return IDL.Service({
-    create_podcast_canister: IDL.Func([], [Result], []),
-    deposit: IDL.Func([IDL.Principal, IDL.Nat], [Result], []),
-    get_address: IDL.Func([], [IDL.Text], []),
-    get_canister_status: IDL.Func([IDL.Principal], [Result_1], []),
-    get_podcast_canister: IDL.Func([], [IDL.Vec(IDL.Principal)], ['query']),
-    need_upgrade: IDL.Func([IDL.Principal], [IDL.Bool], ['query']),
-    notify_upgrade: IDL.Func([], [], []),
-    upgrade_podcast: IDL.Func([IDL.Principal], [Result], []),
-  });
-};
-export const init = ({ IDL }) => {
-  return [];
-};
+import type { Principal } from '@dfinity/principal';
+
+export interface CanisterStatusResponse {
+  status: CanisterStatusType;
+  memory_size: bigint;
+  cycles: bigint;
+  settings: DefiniteCanisterSettings;
+  idle_cycles_burned_per_day: bigint;
+  module_hash: [] | [Array<number>];
+}
+export type CanisterStatusType = { stopped: null } | { stopping: null } | { running: null };
+export interface DefiniteCanisterSettings {
+  freezing_threshold: bigint;
+  controllers: Array<Principal>;
+  memory_allocation: bigint;
+  compute_allocation: bigint;
+}
+export type RejectionCode =
+  | { NoError: null }
+  | { CanisterError: null }
+  | { SysTransient: null }
+  | { DestinationInvalid: null }
+  | { Unknown: null }
+  | { SysFatal: null }
+  | { CanisterReject: null };
+export type Result = { Ok: null } | { Err: [RejectionCode, string] };
+export type Result_1 = { Ok: [CanisterStatusResponse] } | { Err: [RejectionCode, string] };
+export default interface _SERVICE {
+  canister_start: (arg_0: Principal) => Promise<Result>;
+  canister_stop: (arg_0: Principal) => Promise<Result>;
+  create_podcast_canister: () => Promise<Result>;
+  deposit: (arg_0: Principal, arg_1: bigint) => Promise<Result>;
+  get_address: () => Promise<string>;
+  get_canister_status: (arg_0: Principal) => Promise<Result_1>;
+  get_podcast_canister: () => Promise<Array<Principal>>;
+  need_upgrade: (arg_0: Principal) => Promise<boolean>;
+  notify_upgrade: () => Promise<undefined>;
+  upgrade_podcast: (arg_0: Principal) => Promise<Result>;
+}
