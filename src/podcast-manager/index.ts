@@ -1,4 +1,4 @@
-export default ({ IDL }) => {
+export const idlFactory = ({ IDL }) => {
   const RejectionCode = IDL.Variant({
     NoError: IDL.Null,
     CanisterError: IDL.Null,
