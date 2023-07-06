@@ -1,5 +1,4 @@
 import type { Principal } from '@dfinity/principal';
-
 export interface CanisterStatusResponse {
   status: CanisterStatusType;
   memory_size: bigint;
@@ -35,5 +34,11 @@ export default interface _SERVICE {
   get_podcast_canister: () => Promise<Array<Principal>>;
   need_upgrade: (arg_0: Principal) => Promise<boolean>;
   notify_upgrade: () => Promise<undefined>;
+  update_canister_set: (
+    arg_0: Principal,
+    arg_1: [] | [bigint],
+    arg_2: [] | [bigint],
+    arg_3: [] | [bigint]
+  ) => Promise<Result>;
   upgrade_podcast: (arg_0: Principal) => Promise<Result>;
 }
