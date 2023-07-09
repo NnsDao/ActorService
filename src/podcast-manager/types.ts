@@ -32,6 +32,7 @@ export default interface _SERVICE {
   get_address: () => Promise<string>;
   get_canister_status: (arg_0: Principal) => Promise<Result_1>;
   get_podcast_canister: () => Promise<Array<Principal>>;
+  init_podcast: (arg_0: Principal) => Promise<Result>;
   need_upgrade: (arg_0: Principal) => Promise<boolean>;
   notify_upgrade: () => Promise<undefined>;
   update_canister_set: (
