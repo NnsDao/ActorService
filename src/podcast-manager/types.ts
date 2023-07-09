@@ -35,6 +35,7 @@ export default interface _SERVICE {
   init_podcast: (arg_0: Principal) => Promise<Result>;
   need_upgrade: (arg_0: Principal) => Promise<boolean>;
   notify_upgrade: () => Promise<undefined>;
+  reinstall_podcast: (arg_0: Principal) => Promise<Result>;
   update_canister_set: (
     arg_0: Principal,
     arg_1: [] | [bigint],

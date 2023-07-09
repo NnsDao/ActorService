@@ -46,6 +46,7 @@ export const idlFactory = ({ IDL }) => {
     init_podcast: IDL.Func([IDL.Principal], [Result], []),
     need_upgrade: IDL.Func([IDL.Principal], [IDL.Bool], ['query']),
     notify_upgrade: IDL.Func([], [], []),
+    reinstall_podcast: IDL.Func([IDL.Principal], [Result], []),
     update_canister_set: IDL.Func([IDL.Principal, IDL.Opt(IDL.Nat), IDL.Opt(IDL.Nat), IDL.Opt(IDL.Nat)], [Result], []),
     upgrade_podcast: IDL.Func([IDL.Principal], [Result], []),
   });
