@@ -10,12 +10,23 @@ export const idlFactory = ({ IDL }) => {
     rebegin: IDL.Bool,
   });
   const Result_1 = IDL.Variant({ Ok: CallNumberResp, Err: IDL.Text });
+  const SotPokerReq = IDL.Record({
+    cards: IDL.Vec(IDL.Nat32),
+    table_id: IDL.Nat64,
+  });
+  const SotPokerResp = IDL.Record({ is_end: IDL.Bool });
+  const Result_2 = IDL.Variant({ Ok: SotPokerResp, Err: IDL.Text });
   const TableStatus = IDL.Variant({
     Begining: IDL.Null,
     Calling: IDL.Null,
     Ending: IDL.Null,
     Ready: IDL.Null,
     Waiting: IDL.Null,
+  });
+  const Winner = IDL.Variant({
+    Farmer: IDL.Null,
+    Null: IDL.Null,
+    Landlord: IDL.Null,
   });
   const TableStatusResp = IDL.Record({
     status: TableStatus,
@@ -25,6 +36,7 @@ export const idlFactory = ({ IDL }) => {
     farmers: IDL.Vec(IDL.Principal),
     last_pokers: IDL.Vec(IDL.Nat32),
     gamers: IDL.Vec(IDL.Principal),
+    winner: Winner,
     biggest_num: IDL.Nat32,
     create_time: IDL.Nat64,
     multiple: IDL.Nat64,
@@ -40,6 +52,7 @@ export const idlFactory = ({ IDL }) => {
     greet: IDL.Func([IDL.Text], [IDL.Text], ['query']),
     re_begin: IDL.Func([TableId], [Result], []),
     search_table: IDL.Func([], [IDL.Nat64], []),
+    shot_poker: IDL.Func([SotPokerReq], [Result_2], []),
     table_status: IDL.Func([TableId], [TableStatusResp], ['query']),
   });
 };

@@ -11,6 +11,14 @@ export interface CallNumberResp {
 }
 export type Result = { Ok: boolean } | { Err: string };
 export type Result_1 = { Ok: CallNumberResp } | { Err: string };
+export type Result_2 = { Ok: SotPokerResp } | { Err: string };
+export interface SotPokerReq {
+  cards: Uint32Array | number[];
+  table_id: bigint;
+}
+export interface SotPokerResp {
+  is_end: boolean;
+}
 export interface TableId {
   table_id: bigint;
 }
@@ -28,6 +36,7 @@ export interface TableStatusResp {
   farmers: Array<Principal>;
   last_pokers: Uint32Array | number[];
   gamers: Array<Principal>;
+  winner: Winner;
   biggest_num: number;
   create_time: bigint;
   multiple: bigint;
@@ -35,6 +44,7 @@ export interface TableStatusResp {
   call_number: Array<[Principal, number]>;
   pokers: Uint32Array | number[];
 }
+export type Winner = { Farmer: null } | { Null: null } | { Landlord: null };
 export interface _SERVICE {
   begin: ActorMethod<[TableId], Result>;
   call_number: ActorMethod<[CallNumberReq], Result_1>;
@@ -43,5 +53,6 @@ export interface _SERVICE {
   greet: ActorMethod<[string], string>;
   re_begin: ActorMethod<[TableId], Result>;
   search_table: ActorMethod<[], bigint>;
+  shot_poker: ActorMethod<[SotPokerReq], Result_2>;
   table_status: ActorMethod<[TableId], TableStatusResp>;
 }
