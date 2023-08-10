@@ -8,10 +8,12 @@ export interface CallNumberReq {
 export interface CallNumberResp {
   next_index: number;
   rebegin: boolean;
+  begin: boolean;
 }
 export type Result = { Ok: boolean } | { Err: string };
 export type Result_1 = { Ok: CallNumberResp } | { Err: string };
-export type Result_2 = { Ok: SotPokerResp } | { Err: string };
+export type Result_2 = { Ok: null } | { Err: string };
+export type Result_3 = { Ok: SotPokerResp } | { Err: string };
 export interface SotPokerReq {
   cards: Uint32Array | number[];
   table_id: bigint;
@@ -51,8 +53,9 @@ export interface _SERVICE {
   cancel_gamer: ActorMethod<[], undefined>;
   destroy_table: ActorMethod<[TableId], undefined>;
   greet: ActorMethod<[string], string>;
+  pass: ActorMethod<[TableId], Result_2>;
   re_begin: ActorMethod<[TableId], Result>;
   search_table: ActorMethod<[], bigint>;
-  shot_poker: ActorMethod<[SotPokerReq], Result_2>;
+  shot_poker: ActorMethod<[SotPokerReq], Result_3>;
   table_status: ActorMethod<[TableId], TableStatusResp>;
 }
