@@ -36,6 +36,7 @@ export interface TableStatusResp {
   biggest_gamer: [] | [Principal];
   cards: Uint32Array | number[];
   farmers: Array<Principal>;
+  gamer_cards_len: Array<[Principal, number]>;
   last_pokers: Uint32Array | number[];
   gamers: Array<Principal>;
   winner: Winner;

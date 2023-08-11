@@ -36,6 +36,7 @@ export const idlFactory = ({ IDL }) => {
     biggest_gamer: IDL.Opt(IDL.Principal),
     cards: IDL.Vec(IDL.Nat32),
     farmers: IDL.Vec(IDL.Principal),
+    gamer_cards_len: IDL.Vec(IDL.Tuple(IDL.Principal, IDL.Nat32)),
     last_pokers: IDL.Vec(IDL.Nat32),
     gamers: IDL.Vec(IDL.Principal),
     winner: Winner,
