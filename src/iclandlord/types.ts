@@ -40,6 +40,7 @@ export interface TableStatusResp {
   last_pokers: Uint32Array | number[];
   gamers: Array<Principal>;
   winner: Winner;
+  shot_log_round: Array<[Principal, Uint32Array | number[]]>;
   biggest_num: number;
   create_time: bigint;
   multiple: bigint;

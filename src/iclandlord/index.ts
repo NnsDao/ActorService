@@ -40,6 +40,7 @@ export const idlFactory = ({ IDL }) => {
     last_pokers: IDL.Vec(IDL.Nat32),
     gamers: IDL.Vec(IDL.Principal),
     winner: Winner,
+    shot_log_round: IDL.Vec(IDL.Tuple(IDL.Principal, IDL.Vec(IDL.Nat32))),
     biggest_num: IDL.Nat32,
     create_time: IDL.Nat64,
     multiple: IDL.Nat64,
